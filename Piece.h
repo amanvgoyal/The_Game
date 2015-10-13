@@ -17,7 +17,7 @@
  *********************************************************
 */
 // Determines the color of the pieces
-enum Color = { WHITE, BLACK };
+enum Color { WHITE, BLACK };
 
 // Determines the location of the board of the piece
 struct Position

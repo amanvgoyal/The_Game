@@ -12,12 +12,13 @@
 */
 #include <string>
 #include <fstream>
+#include <iostream>
 /*
  *********************************************************
 **    ENUMERATIONS & STRUCTS    ***************************
  *********************************************************
 */
-enum Message_Type = { ERROR, WARNING, INFORMATION }
+enum Message_Type { ERROR, WARNING, INFORMATION };
 /*
  *********************************************************
 **    CLASS DECLARATION    ********************************
@@ -26,7 +27,7 @@ enum Message_Type = { ERROR, WARNING, INFORMATION }
 class Log
 {
 	std::fstream log;
-	bool open;
+	bool file_open;
 public:
 	/*    CONSTRUCTOR    */
 	Log();

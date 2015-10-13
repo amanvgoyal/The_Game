@@ -3,7 +3,7 @@
 **    Piece.cpp    ****************************************
 **  Description: This class will represent the pieces    **
 **  on the board and will contain information about the  **
-**  piece                                                **
+**  piece.                                               **
  *********************************************************
 */
 /*

@@ -22,10 +22,10 @@
  *********************************************************
 */
 // Movement directions, left and right move diagonally
-enum Direction = { FORWARD, LEFT, RIGHT };
+enum Direction { FORWARD, LEFT, RIGHT };
 
 // Specify the output format
-enum Output = { FILE, SHELL, STRING };
+enum Output { FILE, SHELL, STRING };
 
 // Contains the piece and direction the piece will move
 struct Move
@@ -54,8 +54,8 @@ class Board
 	bool game_aborted;							// will be set to true if the game did not finish
 	
 	/*    PRIVATE MEMBER FUNCTIONS    */
-	bool add_piece(Piece piece);				// adds pieces to the board
-	bool remove_piece(Piece piece);				// removes pieces from the board
+	bool add_piece(Position position);			// adds pieces to the board
+	bool remove_piece(Position position);		// removes pieces from the board
 	bool check_move(Move move);					// check if the move is valid
 	bool check_game();							// check game conditions
 	bool end_turn();							// end the current turn and switch to the other player

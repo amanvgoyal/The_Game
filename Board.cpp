@@ -11,8 +11,10 @@
 **    HEADER FILES    *************************************
  *********************************************************
 */
+#include <iostream>
 #include <vector>
 #include <string>
+#include "Board.h"
 #include "Piece.h"
 
 using namespace std;
@@ -25,22 +27,27 @@ using namespace std;
 Board::Board(unsigned int rows, unsigned int columns)
 {	// initialize the board
 	// open log file for output and set to clear previous run
+	string function = "Board";
 	game_log.open("board_log.txt", fstream::out | fstream::trunc);
-	if(!log.is_open())
+	if(!game_log.is_open())
 	{	// do not output to log if file cannot be opened
 		// this must be checked in each section that outputs to this file
 		cerr << "Error creating board_log.txt. Game activity will not be recorded.\n";
+	}
+	else
+	{
+		game_log.print(INFORMATION, function, string("Log file created successfully."));
 	}
 	init(rows, columns);
 }
 
 /*    PRIVATE MEMBER FUNCTIONS    */
-bool Board::add_piece(Piece piece)
+bool Board::add_piece(Position pos)
 {	// adds pieces to the board
 	
 }
 
-bool Board::remove_piece(Piece piece)
+bool Board::remove_piece(Position pos)
 {
 	
 }
@@ -49,6 +56,7 @@ bool Board::check_move(Move move)
 {
 	// returns true if the move is valid or
 	// false if a move is invalid
+	string function = "check_move";
 	if (move.piece.color() == turn)
 	{	// the player is not trying to move a piece that is not theirs
 		switch(move.direction)
@@ -59,18 +67,19 @@ bool Board::check_move(Move move)
 				break;
 			case LEFT:
 				break;
-			default:		// the code should not reach this pointer
+			default:		// the code should not reach this point
+				game_log.print(ERROR, function, string("The default case was reached when checking move direction.\tmove.direction = " + move.direction));
 				return false;
 				break;
 		}
 	}
 	else
 	{
-		
+		game_log.print(WARNING, function, string("The player attempted to move a piece that is not theirs."));
 	}
 }
 
-bool Board::check_game();
+bool Board::check_game()
 {
 	
 }
@@ -99,7 +108,7 @@ bool Board::init(unsigned int rows, unsigned int columns)
 {	// initialize the board for a new game
 	// returns true if no errors were found
 	// set the size of the board
-	pieces = vector<vector<Piece*> >(rows, vector<string>(columns, null_ptr));
+	pieces = vector<vector<Piece*> >(rows, vector<Piece*>(columns, NULL));
 	// add the pieces to the board
 
 }
@@ -110,12 +119,12 @@ bool Board::clear()
 	
 }
 
-bool Board::move_piece(Color color, Move move)
+bool Board::move_piece(Move move)
 {	// moves the specified piece 
 	
 }
 
-bool Board::show_moves(Color color, Piece piece)
+bool Board::show_moves(Piece piece)
 {	// show the valid moves for the selected piece
 	
 }
@@ -135,7 +144,7 @@ void Board::display_board()
 	
 }
 
-string Board::output_game_state(Output output_type);
+string Board::output_game_state(Output output_type)
 {	// outputs the game state to the specified output medium
 	// returns and empty string if FILE is not selected
 	
