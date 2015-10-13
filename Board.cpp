@@ -24,23 +24,50 @@ using namespace std;
 /*    CONSTRUCTOR    */
 Board::Board(unsigned int rows, unsigned int columns)
 {	// initialize the board
+	// open log file for output and set to clear previous run
+	game_log.open("board_log.txt", fstream::out | fstream::trunc);
+	if(!log.is_open())
+	{	// do not output to log if file cannot be opened
+		// this must be checked in each section that outputs to this file
+		cerr << "Error creating board_log.txt. Game activity will not be recorded.\n";
+	}
 	init(rows, columns);
 }
 
 /*    PRIVATE MEMBER FUNCTIONS    */
-bool Board::add_piece(Color color, Piece piece)
+bool Board::add_piece(Piece piece)
 {	// adds pieces to the board
 	
 }
 
-bool Board::remove_piece(Color color, Piece piece)
+bool Board::remove_piece(Piece piece)
 {
 	
 }
 
 bool Board::check_move(Move move)
-	// returns true if the move is valid
-	
+{
+	// returns true if the move is valid or
+	// false if a move is invalid
+	if (move.piece.color() == turn)
+	{	// the player is not trying to move a piece that is not theirs
+		switch(move.direction)
+		{
+			case FORWARD:
+				break;
+			case RIGHT:
+				break;
+			case LEFT:
+				break;
+			default:		// the code should not reach this pointer
+				return false;
+				break;
+		}
+	}
+	else
+	{
+		
+	}
 }
 
 bool Board::check_game();
