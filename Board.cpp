@@ -12,6 +12,7 @@
  *********************************************************
 */
 #include <iostream>
+#include <iomanip>
 #include <exception>
 #include <vector>
 #include <string>
@@ -24,6 +25,45 @@ using namespace std;
 **    CLASS DEFINITIONS    ********************************
  *********************************************************
 */
+/*    History    */
+/*    MEMBER FUNCTIONS    */
+void History::move(Move move)
+{
+	move_history.push_back(move);
+}
+
+Move History::move(int turn)
+{
+	return move_history[turn - 1];
+}
+
+void History::capture(Piece* piece)
+{
+	capture_history.push_back(piece);
+}
+
+Piece* History::capture(int turn)
+{
+	return capture_history[turn - 1];
+}
+
+void History::board_state(vector<vector<Piece*>> board)
+{
+	board_state_history.push_back(board);
+}
+
+vector<vector<Piece*>> History::board_state(int turn)
+{
+	return board_state_history[turn - 1];
+}
+
+void History::clear_history()
+{
+	move_history.clear();
+	capture_history.clear();
+	board_state_history.clear();
+}
+/*    Board    */
 /*    CONSTRUCTOR    */
 Board::Board()
 {// initialize the board
@@ -39,6 +79,7 @@ Board::Board()
 	num_white_pieces = 0;
 	game_end = false;
 	game_aborted = false;
+	turn_num = 1;
 	game_log.open("board_log.txt", fstream::out | fstream::trunc);
 	if (!game_log.is_open())
 	{	// do not output to log if file cannot be opened
@@ -65,6 +106,7 @@ Board::Board(unsigned int rows, unsigned int columns)
 	num_white_pieces = 0;
 	game_end = false;
 	game_aborted = false;
+	turn_num = 1;
 	/* The top variables should be set to this when clearing the board */
 	game_log.open("board_log.txt", fstream::out | fstream::trunc);
 	
@@ -299,11 +341,12 @@ bool Board::clear()
 
 	// set all the variables that were modified during the game to the default value
 	// check Board::Board() for the variables
+	string function = "clear";
 }
 
-bool set_size(unsigned int rows, unsigned int cols)
+bool Board::set_size(unsigned int rows, unsigned int cols)
 {	// set the size of the board before starting a new game
-
+	string function = "set_size";
 }
 
 bool Board::move_piece(Move move)
@@ -363,36 +406,208 @@ bool Board::move_piece(Move move)
 
 bool Board::show_moves(Piece* piece)
 {	// show the valid moves for the selected piece
-	
+	string function = "show_moves";
 }
 
 bool Board::undo_move()
-{	// undoes the previous move
+{	// undoes the previous two turns
+	string function = "undo_move";
 	
+	game_log.print(INFORMATION, function, string("Undoing the last two moves. . ."));
+	if (turn_num < 3)
+	{
+		game_log.print(WARNING, function, string("Player attempted to undo on the first round."));
+		return false;
+	}
+	board_spaces = history.board_state(turn_num - 2);
+	turn_num -= 2;
+	return true;
 }
 
 void Board::show_results()
 {	// shows the results of the game
-	
+	string function = "show_results";
 }
 
 void Board::display_board()
 {	// output the board on the command line and in a file called recent_game.txt
-	
+	// Expected output:
+	// Current turn number: 1		White player's turn
+	//
+	//
+	//      A B C D E F G H
+	//      _ _ _ _ _ _ _ _
+	//   8 |X|X|X|X|X|X|X|X|
+	//   7 |X|X|X|X|X|X|X|X|
+	//   6 |_|_|_|_|_|_|_|_|		Your total number of pieces:  16
+	//   5 |_|_|_|_|_|_|_|_|		Enemy total number of pieces: 16
+	//   4 |_|_|_|_|_|_|_|_|
+	//   3 |_|_|_|_|_|_|_|_|
+	//   2 |O|O|O|O|O|O|O|O|
+	//   1 |O|O|O|O|O|O|O|O|
+	//
+	string function = "display_board";
+	string cur_turn = turn == Color::WHITE ? "White" : "Black";
+	int cur_player_pieces = turn == Color::WHITE ? num_white_pieces : num_black_pieces;
+	int en_player_pieces = turn == Color::WHITE ? num_black_pieces : num_white_pieces;
+	char col_label = 'A';
+	int row_label = 8;
+
+	game_log.print(INFORMATION, function, string("Displaying board. . ."));
+	cout << "Current turn number: " << turn_num << '\t\t' << cur_turn << " player's turn\n\n\n";
+	for (int i = -2; i < row; ++i)
+	{
+		cout << setw(4) << right;
+		if (i > -1)
+		{	// add the row numbers
+			cout << row_label << ' ' << left;
+			--row_label;
+		}
+		for (int j = 0; j < col; ++j)
+		{	// draw the board
+			if (i == -2)
+			{
+				cout << ' ' << col_label;
+				++col_label;
+			}
+			else if (i == -1)
+			{
+				cout << " _";
+			}
+			else
+			{
+				Piece* cur_space = board_spaces[i][j];
+				cout << '|';
+				if (cur_space == nullptr)
+				{	// empty space
+					cout << '_';
+				}
+				else if (cur_space->color == Color::WHITE)
+				{	// white piece (indicated by O)
+					cout << 'O';
+				}
+				else if (cur_space->color == Color::BLACK)
+				{	// black piece (indicated by X)
+					cout << 'X';
+				}
+				if (j == col - 1)
+				{
+					cout << '|';
+				}
+			}
+
+		}
+		if (i == 2)
+		{
+			cout << "\t\tYour total number of pieces:  " << cur_player_pieces;
+		}
+		else if (i == 3)
+		{
+			cout << "\t\tEnemy total number of pieces: " << en_player_pieces;
+		}
+		cout << '\n';
+	}
+	cout << '\n';
 }
 
-string Board::output_game_state(Output output_type)
-{	// outputs the game state to the specified output medium
-	// returns and empty string if FILE is not selected
-	
-}
-
-string Board::output_history(Output output_type)
+string Board::output_history()
 {	// outputs the history of the game to the specified medium
-	
+	string function = "output_history";
+}
+
+string Board::output_board()
+{
+	output_board(board_spaces);
+}
+
+string Board::output_board(vector<vector<Piece*>> game_board)
+{
+	// Expected output:
+	// Current turn number: 1		White player's turn
+	//
+	//
+	//      A B C D E F G H
+	//      _ _ _ _ _ _ _ _
+	//   8 |X|X|X|X|X|X|X|X|
+	//   7 |X|X|X|X|X|X|X|X|
+	//   6 |_|_|_|_|_|_|_|_|		Your total number of pieces:  16
+	//   5 |_|_|_|_|_|_|_|_|		Enemy total number of pieces: 16
+	//   4 |_|_|_|_|_|_|_|_|
+	//   3 |_|_|_|_|_|_|_|_|
+	//   2 |O|O|O|O|O|O|O|O|
+	//   1 |O|O|O|O|O|O|O|O|
+	//
+	string function = "output_board";
+	string cur_turn = turn == Color::WHITE ? "White" : "Black";
+	string output;
+	int cur_player_pieces = turn == Color::WHITE ? num_white_pieces : num_black_pieces;
+	int en_player_pieces = turn == Color::WHITE ? num_black_pieces : num_white_pieces;
+	char col_label = 'A';
+	int row_label = 8;
+
+	game_log.print(INFORMATION, function, string("Outputting board. . ."));
+	output = "Current turn number: " + turn_num + '\t\t' + cur_turn + " player's turn\n\n\n";
+	for (int i = -2; i < row; ++i)
+	{
+		output += "  ";
+		if (i > -1)
+		{	// add the row numbers
+			output += row_label + ' ';
+			--row_label;
+		}
+		else
+		{
+			output += "  ";
+		}
+		for (int j = 0; j < col; ++j)
+		{	// draw the board
+			if (i == -2)
+			{
+				output += ' ' + col_label;
+				++col_label;
+			}
+			else if (i == -1)
+			{
+				output += " _";
+			}
+			else
+			{
+				Piece* cur_space = board_spaces[i][j];
+				output += '|';
+				if (cur_space == nullptr)
+				{	// empty space
+					output += '_';
+				}
+				else if (cur_space->color == Color::WHITE)
+				{	// white piece (indicated by O)
+					output += 'O';
+				}
+				else if (cur_space->color == Color::BLACK)
+				{	// black piece (indicated by X)
+					output += 'X';
+				}
+				if (j == col - 1)
+				{
+					output += '|';
+				}
+			}
+
+		}
+		if (i == 2)
+		{
+			output += "\t\tYour total number of pieces:  " + cur_player_pieces;
+		}
+		else if (i == 3)
+		{
+			output += "\t\tEnemy total number of pieces: " + en_player_pieces;
+		}
+		output += '\n';
+	}
+	output += '\n';
+	return output;
 }
 
 string Board::game_state()
 {	// outputs the current game_state in preparation to be sent over the network
-	
+	string function = "game_state";
 }
