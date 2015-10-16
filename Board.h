@@ -41,7 +41,7 @@ enum Output { FILE, SHELL, STRING };
 // Contains the piece and direction the piece will move
 struct Move
 {
-	Piece piece;
+	Piece *piece;
 	Direction direction;
 };
 /*
@@ -53,17 +53,20 @@ class History
 {
 	std::vector<Move> move_history;
 	std::vector<Piece*> capture_history;
-	std::vector<std::vector<std::vector<Piece*> > > board_state_history;
+	std::vector<std::vector<std::vector<Piece*>>> board_state_history;
 public:
-	void move(Move move);
+	void move(Move move);										// add the moves performed
+	Move move(int turn);										// returns the move performed at the specified turn
 	void capture(Piece* piece);									// add the captured pieces
-	void board_state(std::vector<std::vector<Piece*> > board);	// add the board state
+	Piece* capture(int turn);									// returns the piece captured at the specified turn or NULL if it is empty
+	void board_state(std::vector<std::vector<Piece*>> board);	// add the board state
+	std::vector<std::vector<Piece*>> board_state(int turn);		// returns the board state at the specified turn
 };
 
 class Board
 {	
 	Log game_log;										// keeps a log of the game's activity and errors
-	std::vector<std::vector<Piece*> > board_spaces;		// keeps track of the pieces on the board
+	std::vector<std::vector<Piece*>> board_spaces;		// keeps track of the pieces on the board
 	History history;									// will keep track of the move history
 	Color turn;											// keeps track of who's turn it is
 	Color winner;										// will be set to the player who wins
@@ -76,8 +79,6 @@ class Board
 	bool game_aborted;									// will be set to true if the game did not finish
 	
 	/*    PRIVATE MEMBER FUNCTIONS    */
-	bool add_piece(Piece piece);				// adds pieces to the board
-	bool remove_piece(Position position);		// removes pieces from the board
 	bool check_move(Move move);					// check if the move is valid
 	bool check_game();							// check game conditions
 	void end_turn();							// end the current turn and switch to the other player
@@ -93,7 +94,7 @@ public:
 	bool clear();										// clear the board
 	bool set_size(unsigned int rows, unsigned int cols);// set the size of the board
 	bool move_piece(Move move);							// move the specified piece
-	bool show_moves(Piece piece);						// show the valid moves for the specified piece
+	bool show_moves(Piece* piece);						// show the valid moves for the specified piece
 	bool undo_move();									// undo the previous move
 	void show_results();								// show the results of the game
 	void display_board();								// display the board in the command line window

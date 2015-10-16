@@ -25,6 +25,13 @@ void Piece::position(Position space)
 	return;
 }
 
+void Piece::position(int row, int col)
+{
+	pos.row = row;
+	pos.col = col;
+	return;
+}
+
 Position Piece::position()
 {	// returns the position of the piece
 	return pos;
