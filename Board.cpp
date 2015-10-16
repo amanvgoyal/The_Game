@@ -12,6 +12,7 @@
  *********************************************************
 */
 #include <iostream>
+#include <exception>
 #include <vector>
 #include <string>
 #include "Board.h"
@@ -24,10 +25,45 @@ using namespace std;
  *********************************************************
 */
 /*    CONSTRUCTOR    */
+Board::Board()
+{// initialize the board
+	// open log file for output and set to clear previous run
+	string function = "Board";
+
+	// initialize private members
+	turn = Color::WHITE;
+	winner = Color::WHITE;
+	row = 8;
+	col = 8;
+	num_white_pieces = 0;
+	num_white_pieces = 0;
+	game_end = false;
+	game_aborted = false;
+	game_log.open("board_log.txt", fstream::out | fstream::trunc);
+	if (!game_log.is_open())
+	{	// do not output to log if file cannot be opened
+		// this must be checked in each section that outputs to this file
+		cerr << "Error creating board_log.txt. Game activity will not be recorded.\n";
+	}
+	else
+	{
+		game_log.print(INFORMATION, function, string("Log file created successfully."));
+	}
+	init();
+}
 Board::Board(unsigned int rows, unsigned int columns)
 {	// initialize the board
 	// open log file for output and set to clear previous run
 	string function = "Board";
+
+	turn = Color::WHITE;
+	winner = Color::WHITE;
+	row = rows;
+	col = columns;
+	num_white_pieces = 0;
+	num_white_pieces = 0;
+	game_end = false;
+	game_aborted = false;
 	game_log.open("board_log.txt", fstream::out | fstream::trunc);
 	if(!game_log.is_open())
 	{	// do not output to log if file cannot be opened
@@ -38,58 +74,195 @@ Board::Board(unsigned int rows, unsigned int columns)
 	{
 		game_log.print(INFORMATION, function, string("Log file created successfully."));
 	}
-	init(rows, columns);
+	init();
 }
 
 /*    PRIVATE MEMBER FUNCTIONS    */
-bool Board::add_piece(Position pos)
+bool Board::add_piece(Piece piece)
 {	// adds pieces to the board
-	
+	// returns false if error occurs
+	string function = "add_piece";
+	try
+	{
+		board_spaces[piece.position().row][piece.position().col] = &piece;
+		return true;
+	}
+	catch(exception &e)
+	{
+		game_log.print(ERROR, function, e.what());
+		return false;
+	}
 }
 
 bool Board::remove_piece(Position pos)
-{
-	
+{	// remove piece from board
+	// returns false if error occurs
+	string function = "remove_piece";
+	try
+	{
+		board_spaces[pos.row][pos.col] = NULL;
+		return true;
+	}
+	catch (exception &e)
+	{
+		game_log.print(ERROR, function, e.what());
+		return false;
+	}
 }
 
 bool Board::check_move(Move move)
-{
-	// returns true if the move is valid or
+{	// returns true if the move is valid or
 	// false if a move is invalid
 	string function = "check_move";
+
+	bool check_up = (turn == WHITE) ? true : false;
+	int r = check_up ? move.piece.position().row + 1 : move.piece.position().row - 1;
+	game_log.print(INFORMATION, function, string("Checking move. . ."));
 	if (move.piece.color() == turn)
 	{	// the player is not trying to move a piece that is not theirs
 		switch(move.direction)
 		{
 			case FORWARD:
+			{
+				if (board_spaces[r][move.piece.position().col] != NULL)
+				{
+					game_log.print(WARNING, function, string("Forward move is invalid; enemy piece in the way."));
+					return false;
+				}
+				else
+				{
+					game_log.print(INFORMATION, function, string("Forward move is valid."));
+					return true;
+				}
 				break;
+			}
 			case RIGHT:
+			{
+				int c = move.piece.position().col + 1;
+				if (board_spaces[r][c] != NULL)
+				{
+					if (board_spaces[r][c]->color == turn)
+					{
+						game_log.print(WARNING, function, string("Diagonally right move is invalid; friendly piece in the way."));
+						return false;
+					}
+					else
+					{
+						game_log.print(INFORMATION, function, string("Diagonally right move is valid; enemy piece will be captured."));
+						return true;
+					}
+				}
+				else
+				{
+					game_log.print(INFORMATION, function, string("Diagonally right move is valid."));
+					return true;
+				}
 				break;
+			}
 			case LEFT:
+			{
+				int c = move.piece.position().col - 1;
+				if (board_spaces[r][c] != NULL)
+				{
+					if (board_spaces[r][c]->color == turn)
+					{
+						game_log.print(WARNING, function, string("Diagonally left move is invalid; friendly piece in the way."));
+						return false;
+					}
+					else
+					{
+						game_log.print(INFORMATION, function, string("Diagonally left move is valid. enemy piece will be captured."));
+						return true;
+					}
+				}
+				else
+				{
+					game_log.print(INFORMATION, function, string("Diagonally left move is valid."));
+					return true;
+				}
 				break;
+			}
 			default:		// the code should not reach this point
+			{
 				game_log.print(ERROR, function, string("The default case was reached when checking move direction.\tmove.direction = " + move.direction));
 				return false;
 				break;
+			}
 		}
 	}
 	else
 	{
 		game_log.print(WARNING, function, string("The player attempted to move a piece that is not theirs."));
+		return false;
 	}
 }
 
 bool Board::check_game()
-{
-	
+{	// check for victory conditions
+	// returns true if victory conditions are met
+	string function = "check_game";
+
+	game_log.print(INFORMATION, function, string("Checking victory conditions . . ."));
+	if (num_white_pieces == 0 && num_black_pieces == 0)
+	{	// this condition should never be hit
+		game_log.print(ERROR, function, string("Victory condition hit; both players have no more pieces on board."));
+		return true;
+	}
+	else if (num_white_pieces == 0)
+	{
+		game_log.print(INFORMATION, function, string("Victory condition hit; white player has no more pieces on board."));
+		winner = Color::BLACK;
+		return true;
+	}
+	else if (num_black_pieces == 0)
+	{
+		game_log.print(INFORMATION, function, string("Victory condition hit; black player has no more pieces on board."));
+		winner = Color::WHITE;
+		return true;
+	}
+	else
+	{	// check if either player has reached the last row for them
+		for (int i = 0; i < col; ++i)
+		{	// both players should not have pieces on the enemy home row at the same time
+			// since this function is called at the end of each player's turn
+			// iterate through the white home row
+			if (board_spaces[0][i]->color == BLACK)
+			{
+				game_log.print(INFORMATION, function, string("Victory condition hit; black player has reached the white home row."));
+				winner = Color::BLACK;
+				return true;
+			}
+			// iterate through the black home row
+			if (board_spaces[row - 1][i]->color == WHITE)
+			{
+				game_log.print(INFORMATION, function, string("Victory condition hit; white player has reached the black home row."));
+				winner = Color::WHITE;
+				return true;
+			}
+		}
+		game_log.print(INFORMATION, function, string("No victory conditions were met."));
+		return false;
+	}
 }
 
-bool end_turn()
-{
-	
+void Board::end_turn()
+{	// checks victory conditions and displays the results if they are met
+	// or switches to the other player's turn
+	string function = "end_turn";
+	if (check_game())
+	{	// victory conditions were found
+		game_end = true;
+		show_results();
+	}
+	else
+	{	// switch turns
+		turn = turn == WHITE ? Color::BLACK : Color::WHITE;
+		string cur_player = turn == WHITE ? "white" : "black";
+		game_log.print(INFORMATION, function, string("Switching turns; it is the " + cur_player + " player's turn now."));
+	}
 }
 
-int column_inx(char index)
+int Board::column_inx(char index)
 {	// converts the letter index of the column to an integer
 	// for the vector
 	index = toupper(index);
@@ -97,20 +270,49 @@ int column_inx(char index)
 	else return index - 65;
 }
 
-char column_inx(int index)
+char Board::column_inx(int index)
 {	// converts the integer index of the column to a character
 	if (index < 0 || index > 26) return '\0';
 	else return index + 65;
 }
 
 /*    MEMBER FUNCTIONS    */
-bool Board::init(unsigned int rows, unsigned int columns)
+bool Board::init()
 {	// initialize the board for a new game
 	// returns true if no errors were found
 	// set the size of the board
-	pieces = vector<vector<Piece*> >(rows, vector<Piece*>(columns, NULL));
-	// add the pieces to the board
+	string function = "init";
+	int piece_id = 1;
+	Position cur_space;
 
+	game_log.print(INFORMATION, function, string("Adding the pieces to the board."));
+	board_spaces = vector<vector<Piece*> >(row, vector<Piece*>(col, NULL));
+	// add the black pieces to the board
+	for (int i = row - 3; i < row; ++i)
+	{	// iterate through the top two rows of the board
+		for (int j = 0; j < col; ++j)
+		{	// iterate through the columns
+			// add pieces to the board
+			cur_space.row = i;
+			cur_space.col = j;
+			board_spaces[i][j] = new Piece(piece_id, Color::BLACK, cur_space, true);
+			++piece_id;
+			++num_black_pieces;
+		}
+	}
+	// add the white pieces to the board
+	for (int i = 0; i < 2; ++i)
+	{	// iterate through the bottom two rows of the board
+		for (int j = 0; j < col; ++j)
+		{	// iterate through the columns
+			// add pieces to the board
+			cur_space.row = i;
+			cur_space.col = j;
+			board_spaces[i][j] = new Piece(piece_id, Color::WHITE, cur_space, true);
+			++piece_id;
+			++num_white_pieces;
+		}
+	}
 }
 
 bool Board::clear()

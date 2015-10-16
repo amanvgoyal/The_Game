@@ -20,8 +20,9 @@
 enum Color { WHITE, BLACK };
 
 // Determines the location of the board of the piece
+// Values refer to the indices of the board_spaces structure
 struct Position
-{	// 0 if not on board
+{	// -1 if not on board
 	int col;
 	int row;
 };
