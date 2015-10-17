@@ -405,8 +405,124 @@ bool Board::move_piece(Move move)
 }
 
 bool Board::show_moves(Piece* piece)
-{	// show the valid moves for the selected piece
+{	// show the valid moves for the selected piece regardless of color
 	string function = "show_moves";
+
+	if (piece != nullptr)
+	{
+		bool can_move_fwd = false;
+		bool can_move_right = false;
+		bool can_move_left = false;
+		bool check_up = (turn == Color::WHITE) ? true : false;
+		int r = check_up ? piece->position().row + 1 : piece->position().row - 1;
+		int c = piece->position().col;
+
+		game_log.print(INFORMATION, function, string("Showing moves. . ."));
+		// check forward
+		if (board_spaces[r][c] == nullptr)
+		{
+			can_move_fwd = true;
+		}
+		c += 1;
+		// check right
+		if (board_spaces[r][c] == nullptr)
+		{
+			can_move_right = true;
+		}
+		c -= 2;
+		if (board_spaces[r][c] == nullptr)
+		{
+			can_move_left = true;
+		}
+		// display board
+		string cur_turn = turn == Color::WHITE ? "White" : "Black";
+		int cur_player_pieces = turn == Color::WHITE ? num_white_pieces : num_black_pieces;
+		int en_player_pieces = turn == Color::WHITE ? num_black_pieces : num_white_pieces;
+		char col_label = 'A';
+		int row_label = 8;
+
+		game_log.print(INFORMATION, function, string("Displaying board. . ."));
+		cout << "Current turn number: " << turn_num << '\t\t' << cur_turn << " player's turn\n\n\n";
+		for (int i = -2; i < row; ++i)
+		{
+			cout << setw(4) << right;
+			if (i > -1)
+			{	// add the row numbers
+				cout << row_label << ' ' << left;
+				--row_label;
+			}
+			for (int j = 0; j < col; ++j)
+			{	// draw the board
+				if (i == -2)
+				{
+					cout << ' ' << col_label;
+					++col_label;
+				}
+				else if (i == -1)
+				{
+					cout << " _";
+				}
+				else
+				{
+					Piece* cur_space = board_spaces[i][j];
+					cout << '|';
+					if (cur_space == nullptr)
+					{	// empty space
+						cout << '_';
+					}
+					else if (cur_space->color == Color::WHITE)
+					{	// white piece (indicated by O)
+						cout << 'O';
+					}
+					else if (cur_space->color == Color::BLACK)
+					{	// black piece (indicated by X)
+						cout << 'X';
+					}
+					if (j == col - 1)
+					{
+						cout << '|';
+					}
+				}
+
+			}
+			if (i == 2)
+			{
+				cout << "\t\tYour total number of pieces:  " << cur_player_pieces;
+			}
+			else if (i == 3)
+			{
+				cout << "\t\tEnemy total number of pieces: " << en_player_pieces;
+			}
+			else if (i == 5)
+			{
+				int rr = piece->position().row + 1;
+				char cc = column_inx(piece->position().col);
+				cout << "\t\tPiece located at row " << rr << ", " << cc << " can move:";
+			}
+			else if (i == 6)
+			{
+				cout << "\t\t";
+				if (can_move_fwd)
+				{
+					cout << "FORWARD ";
+				}
+				if (can_move_right)
+				{
+					cout << "RIGHT ";
+				}
+				if (can_move_left)
+				{
+					cout << "LEFT";
+				}
+			}
+			cout << '\n';
+		}
+		cout << '\n';
+	}
+	else
+	{
+		game_log.print(WARNING, function, string("No piece was selected."));
+	}
 }
 
 bool Board::undo_move()
