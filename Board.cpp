@@ -339,8 +339,40 @@ bool Board::clear()
 	// set all the spaces to point to nullptr
 
 	// set all the variables that were modified during the game to the default value
-	// check Board::Board() for the variables
+	
 	string function = "clear";
+	int piece_id = 1;
+	Position cur_space;
+
+	game_log.print(INFORMATION, function, string("resetting for new game"));
+	vector<vector<Piece*>> new_board(row, vector<Piece*>(col, nullptr));
+	board_spaces = new_board;
+	// add the black pieces to the board
+	for (int i = row - 3; i < row; ++i)
+	{	// iterate through the top two rows of the board
+		for (int j = 0; j < col; ++j)
+		{	// iterate through the columns
+			// add pieces to the board
+			cur_space.row = i;
+			cur_space.col = j;
+			board_spaces[i][j] = new Piece(piece_id, Color::BLACK, cur_space, true);
+			++piece_id;
+			++num_black_pieces;
+		}
+	}
+	// add the white pieces to the board
+	for (int i = 0; i < 2; ++i)
+	{	// iterate through the bottom two rows of the board
+		for (int j = 0; j < col; ++j)
+		{	// iterate through the columns
+			// add pieces to the board
+			cur_space.row = i;
+			cur_space.col = j;
+			board_spaces[i][j] = new Piece(piece_id, Color::WHITE, cur_space, true);
+			++piece_id;
+			++num_white_pieces;
+		}
+	}
 }
 
 bool Board::set_size(unsigned int rows, unsigned int cols)
