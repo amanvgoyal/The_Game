@@ -352,7 +352,7 @@ bool Board::clear()
 	game_log.print(INFORMATION, function, string("resetting for new game"));
 	vector<vector<Piece*>> new_board(row, vector<Piece*>(col, nullptr));
 	board_spaces = new_board;
-	
+	clear_history();
 
 	return 1;
 }
