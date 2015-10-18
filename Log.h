@@ -5,6 +5,8 @@
 **  of the program's activity and errors.                **
  *********************************************************
 */
+#ifndef LOG
+#define LOG
 /*
  *********************************************************
 **    HEADER FILES    *************************************
@@ -42,3 +44,4 @@ public:
 	bool is_open();
 	std::string timestamp();
 };
+#endif

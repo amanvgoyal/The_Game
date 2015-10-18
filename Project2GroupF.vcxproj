@@ -119,6 +119,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Board.cpp" />
+    <ClCompile Include="Game_State.cpp" />
     <ClCompile Include="Game_Test.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -126,6 +127,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h" />
+    <ClInclude Include="Game_State.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="Piece.h" />
     <ClInclude Include="Token.h" />

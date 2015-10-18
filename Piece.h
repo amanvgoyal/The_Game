@@ -6,6 +6,8 @@
 **  piece                                                **
  *********************************************************
 */
+#ifndef PIECE
+#define PIECE
 /*
  *********************************************************
 **    HEADER FILES    *************************************
@@ -52,3 +54,4 @@ public:
 	bool color(Color col);					// set the color of the piece
 	Color color();							// returns the color of the piece
 };
+#endif

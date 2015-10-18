@@ -17,6 +17,8 @@
 **  1 |_|_|_|_|_|_|_|_|                                  **
  *********************************************************
 */
+#ifndef BOARD
+#define BOARD
 /*
  *********************************************************
 **    HEADER FILES    *************************************
@@ -104,3 +106,4 @@ public:
 	string output_board(std::vector<std::vector<Piece*>> game_board);	// output the specified board
 	string game_state();									// output the current game state
 };
+#endif

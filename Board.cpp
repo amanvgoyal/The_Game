@@ -83,7 +83,6 @@ Board::Board()
 	game_log.open("board_log.txt", fstream::out | fstream::trunc);
 	if (!game_log.is_open())
 	{	// do not output to log if file cannot be opened
-		// this must be checked in each section that outputs to this file
 		cerr << "Error creating board_log.txt. Game activity will not be recorded.\n";
 	}
 	else
@@ -394,6 +393,7 @@ bool Board::move_piece(Move move)
 		piece_to_move->position(r, c);
 		if (board_spaces[r][c] != nullptr)
 		{	// enemy piece to be captured; store in history
+			board_spaces[r][c]->on_board(false);
 			history.capture(board_spaces[r][c]);
 		}
 		else
