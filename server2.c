@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
          if (pid == 0)  {
              close(sockfd);
              dostuff(newsockfd);
-             exit(0);
+	     exit(0);
          }
          else close(newsockfd);
      } /* end of while */

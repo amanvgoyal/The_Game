@@ -2006,7 +2006,7 @@ void yyfree (void * ptr )
 using namespace std;
 void parse(string S);
 int main(int argc,  char** argv) {
-      system("./server2 5010");
+    system("./server2 5010");
 /*
     ++argv, --argc;
     if ( argc > 0 )
@@ -2059,10 +2059,10 @@ bool Parser::par_program(stack<Token>& theStack, int error_count){
   if(error_count==0){ //If tokenizer caught errors it i 
     while(!ordered.empty()){ //Keep popping until nothing is left 
       if(!par_line()){ //call Par_line which calls query or commands
-		par_empty();//empty the stack becase statement is invalid
+	par_empty();//empty the stack becase statement is invalid
       }
-    else cout<<"Done"<<endl;
-		par_empty();
+      else cout<<"Done"<<endl;
+      par_empty();
     }
   }
   if(error_count>0){// if there were errors found ABORT
@@ -2084,110 +2084,110 @@ int Parser::par_stacksize(){
 bool Parser::par_line(){
   Token temp = ordered.top();
   if(temp.get_type()==T_IDENTIFIER){
-      return true;
+    return true;
   }
   if(temp.get_type()==T_EXIT){
-      return true;
+    return true;
   }
   if(temp.get_type()==T_DISPLAY){
-      return true;
+    return true;
   }
   if(temp.get_type()==T_UNDO){
-      return true;
+    return true;
   }
   if(temp.get_type()==T_HUMANAI){
-      ordered.pop();
-  		temp = ordered.top();
-  		if(temp.get_type()==T_EASY||temp.get_type()==T_MEDIUM||temp.get_type()==T_HARD){
-  			switch(temp.get_type()){
-  				case T_EASY:{
-  					ordered.pop();
-  					random();
-  					return true;
-  					break;
-  				}
-  				case T_MEDIUM:{
-  					ordered.pop();
-  					mini_max();
-  					return true;
-  					break;
-  				}
-  				case T_HARD:{
-  					ordered.pop();
-  					alpha_beta();
-  					return true;
-  					break;
-  				}
-  				default : return false;
-  			}
-  		}
-  		else return true;
+    ordered.pop();
+    temp = ordered.top();
+    if(temp.get_type()==T_EASY||temp.get_type()==T_MEDIUM||temp.get_type()==T_HARD){
+      switch(temp.get_type()){
+      case T_EASY:{
+	ordered.pop();
+	random();
+	return true;
+	break;
+      }
+      case T_MEDIUM:{
+	ordered.pop();
+	mini_max();
+	return true;
+	break;
+      }
+      case T_HARD:{
+	ordered.pop();
+	alpha_beta();
+	return true;
+	break;
+      }
+      default : return false;
+      }
+    }
+    else return true;
   }
   temp =ordered.top();
-   if(temp.get_type()==T_AIAI){
-  		ordered.pop();
-  		temp = ordered.top();
-  		if(temp.get_type()==T_IP){
-  			string  server = temp.get_string_value(); 
-  			ordered.pop();
-  			temp = ordered.top();
-  			if(temp.get_type()==T_INTVALUE){
-  				int port = temp.get_num();
-  				ordered.pop();
-  				temp = ordered.top();
-  				if(temp.get_type()==T_IDENTIFIER){
-  					string password = temp.get_string_value();
-  					ordered.pop();
-  					temp = ordered.top();
-  					if(temp.get_type()==T_EASY||temp.get_type()==T_MEDIUM||temp.get_type()==T_HARD){
-  						string my_difficulty;
-  						switch(temp.get_type()){
-			  				case T_EASY:{
-			  					ordered.pop();
-			  					my_difficulty = "EASY";
-			  					break;
-			  				}
-			  				case T_MEDIUM:{
-			  					ordered.pop();
-			  					my_difficulty = "MEDIUM";
-			  					break;
-			  				}
-			  				case T_HARD:{
-			  					ordered.pop();
-			  					my_difficulty = "Hard";
-			  					break;
-			  				}
-			  				default : return false;
-			  			}
-  						temp = ordered.top();
-  						string opp_difficulty;
-  						if(temp.get_type()==T_EASY||temp.get_type()==T_MEDIUM||temp.get_type()==T_HARD){
-	  								switch(temp.get_type()){
-				  				case T_EASY:{
-				  					ordered.pop();
-				  					opp_difficulty = "EASY";
-				  					break;
-				  				}
-				  				case T_MEDIUM:{
-				  					ordered.pop();
-				  					opp_difficulty = "MEDIUM";
-				  					break;
-				  				}
-				  				case T_HARD:{
-				  					ordered.pop();
-				  					opp_difficulty = "Hard";
-				  					break;
-				  				}
-				  				default : return false;
-				  			}
-				  			//server(server name, port number, password, my_difficulty, opponenet difficulty)
-				  			return true;
-  						}
-  					}
-  				}
+  if(temp.get_type()==T_AIAI){
+    ordered.pop();
+    temp = ordered.top();
+    if(temp.get_type()==T_IP){
+      string  server = temp.get_string_value(); 
+      ordered.pop();
+      temp = ordered.top();
+      if(temp.get_type()==T_INTVALUE){
+	int port = temp.get_num();
+	ordered.pop();
+	temp = ordered.top();
+	if(temp.get_type()==T_IDENTIFIER){
+	  string password = temp.get_string_value();
+	  ordered.pop();
+	  temp = ordered.top();
+	  if(temp.get_type()==T_EASY||temp.get_type()==T_MEDIUM||temp.get_type()==T_HARD){
+	    string my_difficulty;
+	    switch(temp.get_type()){
+	    case T_EASY:{
+	      ordered.pop();
+	      my_difficulty = "EASY";
+	      break;
+	    }
+	    case T_MEDIUM:{
+	      ordered.pop();
+	      my_difficulty = "MEDIUM";
+	      break;
+	    }
+	    case T_HARD:{
+	      ordered.pop();
+	      my_difficulty = "Hard";
+	      break;
+	    }
+	    default : return false;
+	    }
+	    temp = ordered.top();
+	    string opp_difficulty;
+	    if(temp.get_type()==T_EASY||temp.get_type()==T_MEDIUM||temp.get_type()==T_HARD){
+	      switch(temp.get_type()){
+	      case T_EASY:{
+		ordered.pop();
+		opp_difficulty = "EASY";
+		break;
+	      }
+	      case T_MEDIUM:{
+		ordered.pop();
+		opp_difficulty = "MEDIUM";
+		break;
+	      }
+	      case T_HARD:{
+		ordered.pop();
+		opp_difficulty = "Hard";
+		break;
+	      }
+	      default : return false;
+	      }
+	      //server(server name, port number, password, my_difficulty, opponenet difficulty)
+	      return true;
+	    }
+	  }
+	}
 
-  			}
-  		}
+      }
+    }
   }
 
   return false; //if none of the above conditions match its not part of our language
@@ -2201,3 +2201,4 @@ void Parser::mini_max(){
 void Parser::alpha_beta(){
 	
 }
+

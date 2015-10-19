@@ -15,7 +15,7 @@
 using namespace std;
 void parse(string S);
 int main(int argc,  char** argv) {
-      system("./server2 5010");
+    system("./server2 5010");
 /*
     ++argv, --argc;
     if ( argc > 0 )
