@@ -1,13 +1,15 @@
 #include "AI.h"
+#include <vector>
+#include "Piece.h"
+#include "Board.h"
+#include "Game_State.h"
+#include "Log.h"
 
 using namespace std;
 
 int main() {
   AI a;
-  string s = "A8b,B8b,C8b,D8b,E8b,F8b,G8b,H8w";
-  string diff = "EASY";
-
-  a.move(s, diff);
-
+  vector<vector<Piece*>> v = {};
+  string s = a.move(v, "HARD");
   return 0;
 }

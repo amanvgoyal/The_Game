@@ -12,6 +12,7 @@
 */
 #include <string>
 #include <ctime>
+#include <iostream>
 #include "Log.h"
 
 using namespace std;
@@ -23,34 +24,34 @@ using namespace std;
 /*    CONSTRUCTOR    */
 Log::Log()
 {	// no file has been opened
-	open = false;
+	file_open = false;
 }
 
 Log::Log(const char* filename, ios_base::openmode mode = fstream::out | fstream:: trunc)
 {
 	log.open(filename, mode);
-	open = log.is_open();
+	file_open = log.is_open();
 }
 
 Log::Log(string filename, ios_base::openmode mode = fstream::out | fstream::trunc)
 {
 	log.open(filename, mode);
-	open = log.is_open();
+	file_open = log.is_open();
 }
 
 /*    MEMBER FUNCTIONS    */
-void open(const char* filename, ios_base::openmode mode = fstream::out | fstream::trunc)
+void Log::open(const char* filename, ios_base::openmode mode = fstream::out | fstream::trunc)
 {
 	string fn(filename);
 	open(fn, mode);
 }
 
-void open(string filename, ios_base::openmode mode = fstream::out | fstream::trunc)
+void Log::open(string filename, ios_base::openmode mode = fstream::out | fstream::trunc)
 {
 	log.open(filename, mode);
 }
 
-void Log::print(Message_Type type, const char* function, const char* message);
+void Log::print(Message_Type type, const char* function, const char* message)
 {
 	string func(function);
 	string msg(message);
@@ -79,7 +80,7 @@ void Log::print(Message_Type type, string function, string message)
 
 bool Log::is_open()
 {
-	return open;
+	return file_open;
 }
 
 // Borrowed from http://stackoverflow.com/questions/997946/how-to-get-current-time-and-date-in-c

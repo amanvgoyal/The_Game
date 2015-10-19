@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Token.h"
 #include "Parser.h"
+#include "AI.h"
 #include <cassert>
 #include <string>
 #include <sstream>
@@ -15,6 +16,10 @@
 using namespace std;
 void parse(string S);
 int main(int argc,  char** argv) {
+  AI a;
+  vector<vector<Piece*> > v;
+  string s = a.move(v, "HARD");
+  
     system("./server2 5010");
 /*
     ++argv, --argc;

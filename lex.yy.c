@@ -1992,6 +1992,7 @@ void yyfree (void * ptr )
 #include <iostream>
 #include "Token.h"
 #include "Parser.h"
+#include "AI.h"
 #include <cassert>
 #include <string>
 #include <sstream>
@@ -2006,6 +2007,10 @@ void yyfree (void * ptr )
 using namespace std;
 void parse(string S);
 int main(int argc,  char** argv) {
+  AI a;
+  vector<vector<Piece*> > v;
+  string s = a.move(v, "HARD");
+  
     system("./server2 5010");
 /*
     ++argv, --argc;
@@ -2201,4 +2206,121 @@ void Parser::mini_max(){
 void Parser::alpha_beta(){
 	
 }
+#include "AI.h"
+#include <string>
+#include <vector>
+#include <iostream>
 
+using namespace std;
+
+string AI::move(vector<vector<Piece*> > state, string diff) {
+  update_state(state);
+
+  if (diff == "EASY") {
+    return random(diff);
+  }
+  
+  else if (diff == "MEDIUM") {
+    return minimax(diff);
+  }
+
+  else if (diff == "HARD") {
+    return alpha_beta(diff);
+  }
+
+  else {
+    cerr << "Difficulty string not well formed!" << endl;
+  }
+}
+
+void AI::update_state(vector<vector<Piece*>> state) {
+  Position pos;
+  for (auto v : state) {
+    for (auto &p : v) {
+      pos = p->position(); 
+      board[pos.row][pos.col] = p->color();
+    }
+  }
+}
+
+string AI::random(string diff) {
+
+}
+
+string AI::minimax(string diff) {
+
+}
+
+string AI::alpha_beta(string diff) {
+
+}
+
+/*
+ *********************************************************
+**    Piece.cpp    ****************************************
+**  Description: This class will represent the pieces    **
+**  on the board and will contain information about the  **
+**  piece.                                               **
+ *********************************************************
+*/
+/*
+ *********************************************************
+**    HEADER FILES    *************************************
+ *********************************************************
+*/
+#include "Piece.h"
+
+using namespace std;
+/*
+ *********************************************************
+**    CLASS DEFINITIONS    ********************************
+ *********************************************************
+*/
+void Piece::position(Position space)
+{	// the validity of the position is checked on the board before being set
+	pos = space;
+	return;
+}
+
+void Piece::position(int row, int col)
+{
+	pos.row = row;
+	pos.col = col;
+	return;
+}
+
+Position Piece::position()
+{	// returns the position of the piece
+	return pos;
+}
+
+void Piece::on_board(bool on)
+{	// specifies whether the piece is on the board or not
+	active = on;
+}
+
+bool Piece::on_board()
+{	// returns true if the piece is on the board
+	return active;
+}
+
+void Piece::number(int number)
+{	// set the number of the piece
+	// each piece from the same team should have different numbers
+	id = number;
+}
+
+int Piece::number()
+{	// returns the number of the piece
+	return id;
+}
+
+bool Piece::color(Color col)
+{	// set the color of the piece
+	team = col;
+}
+
+Color Piece::color()
+{	// returns the color of the piece
+	return team;
+}

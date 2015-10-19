@@ -3,7 +3,7 @@
 **    Piece.cpp    ****************************************
 **  Description: This class will represent the pieces    **
 **  on the board and will contain information about the  **
-**  piece                                                **
+**  piece.                                               **
  *********************************************************
 */
 /*
@@ -22,6 +22,13 @@ using namespace std;
 void Piece::position(Position space)
 {	// the validity of the position is checked on the board before being set
 	pos = space;
+	return;
+}
+
+void Piece::position(int row, int col)
+{
+	pos.row = row;
+	pos.col = col;
 	return;
 }
 

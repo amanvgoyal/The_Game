@@ -6,6 +6,8 @@
 **  piece                                                **
  *********************************************************
 */
+#ifndef PIECE
+#define PIECE
 /*
  *********************************************************
 **    HEADER FILES    *************************************
@@ -17,11 +19,12 @@
  *********************************************************
 */
 // Determines the color of the pieces
-enum Color = { WHITE, BLACK };
+enum class Color { WHITE, BLACK };
 
 // Determines the location of the board of the piece
+// Values refer to the indices of the board_spaces structure
 struct Position
-{	// 0 if not on board
+{	// -1 if not on board
 	int col;
 	int row;
 };
@@ -42,6 +45,7 @@ public:
 	: id(number), team(color), pos(position), active(on_board) { };
 	/*    HELPER FUNCTIONS    */
 	void position(Position space);			// set the position
+	void position(int row, int col);		// set the position
 	Position position();					// returns the position of the piece
 	void on_board(bool on);					// set whether the piece is on the board or not
 	bool on_board();						// returns the board status
@@ -50,3 +54,4 @@ public:
 	bool color(Color col);					// set the color of the piece
 	Color color();							// returns the color of the piece
 };
+#endif

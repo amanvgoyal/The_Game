@@ -1,23 +1,23 @@
-1;2802;0c#include "AI.h"
+#include "AI.h"
 #include <string>
 #include <vector>
 #include <iostream>
 
 using namespace std;
 
-string AI::move(string state, string diff) {
+string AI::move(vector<vector<Piece*> > state, string diff) {
   update_state(state);
 
   if (diff == "EASY") {
-    return random(state, diff);
+    return random(diff);
   }
   
   else if (diff == "MEDIUM") {
-    return minimax(state, diff);
+    return minimax(diff);
   }
 
   else if (diff == "HARD") {
-    return alpha_beta(state, deff);
+    return alpha_beta(diff);
   }
 
   else {
@@ -25,45 +25,25 @@ string AI::move(string state, string diff) {
   }
 }
 
-void AI::update_state(string state) {
-  size_t pos = 0;
-  string delim = ",";
-  string tok;
-
-  vector <string> toks;
-
-  while ((pos = state.find(delim)) != string::npos) {
-    tok = state.substr(0, pos);
-    toks.push_back(tok);
-    state.erase(0, pos + delim.length());
-  }
-      
-  // black piece
-  for (auto tok : toks) {
-    if (tok[2] == "b") {
-      cout << "black" << endl;
-    }
-
-    // white piece
-    else if (tok[2] == "w") {
-      cout << "white" << endl;
-    }
-
-    else {
-      cerr << "Invalid piece type char!" << endl;
+void AI::update_state(vector<vector<Piece*>> state) {
+  Position pos;
+  for (auto v : state) {
+    for (auto &p : v) {
+      pos = p->position(); 
+      board[pos.row][pos.col] = p->color();
     }
   }
 }
 
-string AI::random(string state, string diff) {
+string AI::random(string diff) {
 
 }
 
-string AI::minimax(string state, string diff) {
+string AI::minimax(string diff) {
 
 }
 
-string AI::alpha_beta(string state, string diff) {
+string AI::alpha_beta(string diff) {
 
 }
 
