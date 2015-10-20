@@ -19,7 +19,7 @@
  *********************************************************
 */
 // Determines the color of the pieces
-enum class Color { WHITE, BLACK };
+enum class Color { WHITE, BLACK, NONE };
 
 // Determines the location of the board of the piece
 // Values refer to the indices of the board_spaces structure
@@ -28,6 +28,7 @@ struct Position
 	int col;
 	int row;
 };
+
 /*
  *********************************************************
 **    CLASS DECLARATION    ********************************

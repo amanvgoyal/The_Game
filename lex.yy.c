@@ -1993,6 +1993,7 @@ void yyfree (void * ptr )
 #include "Token.h"
 #include "Parser.h"
 #include "AI.h"
+#include "Piece.h"
 #include <cassert>
 #include <string>
 #include <sstream>
@@ -2006,46 +2007,76 @@ void yyfree (void * ptr )
 #include <sys/time.h>
 using namespace std;
 void parse(string S);
-int main(int argc,  char** argv) {
+int main(int argc,  char** argv) { 
   AI a;
-  vector<vector<Piece*> > v;
-  string s = a.move(v, "HARD");
+  int row = 8;
+  int col = 8;
+  vector<vector<Piece*> > v(row, vector<Piece*>(col, NULL));;
+  /*
+  int piece_id = 1;
+  Position cur_space;// = NULL;
+  for (int i = 5; i < 8; ++i) {   // iterate through the top two rows of the board 
+    for (int j = 0; j < 8; ++j) {       
+      // iterate through the columns                     
+      // add pieces to the board   
+      cur_space.row = i;
+      cur_space.col = j;
+      v[i][j] = new Piece(piece_id, Color::BLACK, cur_space, true);
+      ++piece_id;
+    }
+  }
+  // add the white pieces to the board                                             
+  for (int i = 0; i < 2; ++i) {
+    // iterate through the bottom two rows of the board     
+    for (int j = 0; j < 8; ++j) {
+      // iterate through the columns                                
+      // add pieces to the board                                                
+      cur_space.row = i;
+      cur_space.col = j;
+      v[i][j] = new Piece(piece_id, Color::WHITE, cur_space, true);
+      ++piece_id;
+    }
+  }
+*/
+  string s = a.move(v, "HARD", "BLACK");
   
-    system("./server2 5010");
-/*
-    ++argv, --argc;
+  //  system("./server2 5010");
+  /*++argv, --argc;
     if ( argc > 0 )
-            yyin = fopen( argv[0], "r" );
+    yyin = fopen( argv[0], "r" );
     else{
-            yyin = stdin;
-        }
+    yyin = stdin;
+    }
     yylex();
     cout<<"Token Stack Size:"<<tokens.size()<<endl;
-    Parser dp;
-    dp.par_program(tokens,errors);
-    while(!tokens.empty()){
-      tokens.pop();
-    }
-    dp.par_empty();*/
-  return 0;
+  Parser dp;
+  dp.par_program(tokens,errors);
+  while(!tokens.empty()){
+  tokens.pop();
+  }
+  dp.par_empty();*/
+return 0;
 }
+/*
 void parse(string S){
   Parser dp;
   const char * c = S.c_str();
-    YY_BUFFER_STATE bp = yy_scan_string(c);
-    yy_switch_to_buffer(bp);
-    yylex();
+  YY_BUFFER_STATE bp = yy_scan_string(c);
+  yy_switch_to_buffer(bp);
+  yylex();
 
-    dp.par_program(tokens,errors);
-    yy_delete_buffer(bp);
-    errors =0;
-    while(!tokens.empty()){
-      tokens.pop();
-    }
-    dp.par_empty();
+  dp.par_program(tokens,errors);
+  yy_delete_buffer(bp);
+  errors =0;
+  while(!tokens.empty()){
+
+    tokens.pop();
+  }
+  dp.par_empty();
 
 }
 
+*/
 #include <iostream>
 #include <map>
 #include <algorithm>
@@ -2207,51 +2238,229 @@ void Parser::alpha_beta(){
 	
 }
 #include "AI.h"
+#include "Piece.h"
 #include <string>
 #include <vector>
 #include <iostream>
 
 using namespace std;
 
-string AI::move(vector<vector<Piece*> > state, string diff) {
-  update_state(state);
+const int rows = 8;
+const int cols = 8;
 
+string AI::move(vector<vector<Piece*> > state, string diff, string color) {
+  ai_color = color;
+  update_state(state);
+  /*
   if (diff == "EASY") {
-    return random(diff);
+    return random(color);
   }
   
   else if (diff == "MEDIUM") {
-    return minimax(diff);
+    return minimax(color);
   }
 
   else if (diff == "HARD") {
-    return alpha_beta(diff);
+    return alpha_beta(color);
   }
 
   else {
     cerr << "Difficulty string not well formed!" << endl;
-  }
+    }*/
+  return "";
 }
 
 void AI::update_state(vector<vector<Piece*>> state) {
-  Position pos;
+  /*Position pos;
   for (auto v : state) {
-    for (auto &p : v) {
+    for (auto p : v) {
       pos = p->position(); 
       board[pos.row][pos.col] = p->color();
     }
   }
+  */
+
+  for (int i = 0; i < rows; ++i) {
+    for (int j = 0; j < cols; ++j) {
+      if (i == 0 || i == 1) {
+	brd[i][j] = Color::BLACK;
+      }
+      
+      else if (i == 6 || i == 7) {
+	brd[i][j] = Color::WHITE;
+      }
+      
+      else {
+	brd[i][j] = Color::NONE;
+      }
+    }
+  }
+
+  print_board(brd);
+  cout << endl;
+  vector<board> bs = generate_moves(brd, Color::BLACK);
+  cout << bs.size() << endl;;
+  /*for (auto v : bs) {
+    print_board(v);
+    cout << endl;
+    }*/
+} 
+
+Color AI::win(board b) {
+  for (int i = 0; i < rows; ++i) {
+    if (b[0][i] == Color::WHITE) {
+      return Color::WHITE; // White has won
+    }
+    
+    if (b[7][i] == Color::BLACK) {
+      return Color::BLACK; // Black has won
+    }
+  }
+
+  return Color::NONE; // No one has won
 }
 
-string AI::random(string diff) {
+vector<board> AI::generate_moves(board b, Color player_color) {
+  //board b_copy = b;
+  vector<board> ret;
+  Color original;
+  int ct = 0;
+  for (int i = 0; i < rows; ++i) {
+    for (int j = 0; j < cols; ++j) {
+      if (b[i][j] == player_color) {
+	
+	if (player_color == Color::WHITE) {
+	  // Can go up
+	  if (i > 0) {
+	    if (b[i-1][j] == Color::NONE) {
+	      b[i-1][j] = player_color;
+	      b[i][j] = Color::NONE;
+	      ret.push_back(b);
+	      b[i-1][j] = Color::NONE;
+	      b[i][j] = player_color;
+	    }
+	  }
+
+	  // Can go diag left
+	  if (i > 0 && j > 0) {
+	    if (b[i-1][j-1] != player_color) {
+	      original = b[i-1][j-1];
+	      b[i-1][j-1] = player_color;
+	      b[i][j] = Color::NONE;
+	      ret.push_back(b);
+	      b[i][j] = player_color;
+	      b[i-1][j-1] = original;
+	    }
+	  }
+      
+
+	  // Can go diag right
+	  if (i > 0 && j < 7) {
+	    if (b[i-1][j+1] != player_color) {
+	      original = b[i-1][j+1];
+	      b[i-1][j+1] = player_color;
+	      b[i][j] = Color::NONE;
+	      ret.push_back(b);
+	      b[i-1][j+1] = original;
+	      b[i][j] = player_color;
+	    }
+	  }
+	}
+
+	if (player_color == Color::BLACK) {
+	  // Can go down 
+	  if (i < 7) {
+	    if (b[i+1][j] == Color::NONE) {
+	      original = b[i+1][j];
+	      b[i+1][j] = player_color;
+	      b[i][j] = Color::NONE;
+	      ret.push_back(b);
+	      b[i+1][j] = original;
+	      b[i][j] = player_color;
+	    }
+	  }
+
+	  // Can go diag left
+	  if (i < 7 && j > 0) {
+	    if (b[i+1][j-1] != player_color) {
+	      original = b[i+1][j-1];
+	      b[i+1][j-1] = player_color;
+	      b[i][j] = Color::NONE;
+	      ret.push_back(b);
+	      b[i+1][j-1] = original;
+	      b[i][j] = player_color;	    
+	    }
+	  }
+
+	  // Can go diag right
+	  if (i < 7 && j < 7) {
+	    if (b[i+1][j+1] != player_color) {
+	      original = b[i+1][j+1];
+	      b[i+1][j+1] = player_color;
+	      b[i][j] = Color::NONE;
+	      ret.push_back(b);
+	      b[i+1][j+1] = original;
+	      b[i][j] = player_color;
+	    }
+	  }
+	}
+      }
+    }
+  }
+  return ret;
+} 
+
+int AI::board_val(board b, Color player_color) {
+  // First check for wins
+  if (win(b) == player_color) return 99999999;
+
+  // Now check features
+  for (int i = 0; i < rows; ++i) {
+    for (int j = 0; j < cols; ++j) {
+      if (b[i][j] == Color::NONE) {
+	continue; // No Piece on this square
+      }
+
+      else if (b[i][j] == Color::WHITE) {
+
+      }
+
+      else if (b[i][j] == Color::BLACK) {
+
+      }
+    }
+  }
+}
+
+void AI::print_board(board b) {
+  for (int i = 0; i < rows; ++i) {
+    for (int j = 0; j < cols; ++j) {
+      //      cout << '(' << i << ", " << j << "): ";                               
+      if (b[i][j] == Color::WHITE) {
+        cout << "w ";
+      }
+
+      else if (b[i][j] == Color::BLACK) {
+        cout << "b ";
+      }
+
+      else {
+        cout << "n ";
+      }
+    }
+    cout << endl;
+  }
+}
+ 
+string AI::random(string color) {
 
 }
 
-string AI::minimax(string diff) {
+string AI::minimax(string color) {
 
 }
 
-string AI::alpha_beta(string diff) {
+string AI::alpha_beta(string color) {
 
 }
 

@@ -1,4 +1,4 @@
-#include <iostream>
+#innclude <iostream>
 #include "Token.h"
 #include "Parser.h"
 #include "AI.h"
@@ -18,13 +18,13 @@ using namespace std;
 void parse(string S);
 int main(int argc,  char** argv) { 
   AI a;
-  int row = 8;
-  int col = 8;
-  vector<vector<Piece*> > v(row, vector<Piece*>(col, NULL));;
-  /*
+  vector<vector<Piece*> > v(row, vector<Piece*>(col, nullptr));;
+
   int piece_id = 1;
   Position cur_space;// = NULL;
-  for (int i = 5; i < 8; ++i) {   // iterate through the top two rows of the board 
+  cur_space.row = -1;
+  cur_space.col = -1;
+  for (int i = 5; i < 8; ++i) {   // iterate through the top two rows of the board                            
     for (int j = 0; j < 8; ++j) {       
       // iterate through the columns                     
       // add pieces to the board   
@@ -46,10 +46,10 @@ int main(int argc,  char** argv) {
       ++piece_id;
     }
   }
-*/
-  string s = a.move(v, "HARD", "BLACK");
+
+  string s = a.move(v, "HARD");
   
-  //  system("./server2 5010");
+  system("./server2 5010");
   /*++argv, --argc;
     if ( argc > 0 )
     yyin = fopen( argv[0], "r" );
