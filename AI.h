@@ -29,6 +29,9 @@ class AI {
   Color win(board);
   std::vector<board> generate_moves(board, Color);
   int board_val(board, Color);
+  int threat_level(board, int, int);
+  int mobility_level(board, int, int);
+  int piece_val(board, int, int);
 
   void print_board(board);
 };
