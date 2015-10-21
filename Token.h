@@ -12,7 +12,7 @@ typedef enum {
 
    T_FWD , T_LEFT, T_RIGHT, T_EASY, T_MEDIUM , T_HARD , T_IP, T_COMMENT , T_COLUMN ,
 
-   T_ROW , T_INTVALUE
+   T_ROW , T_INTVALUE , T_MOVE
 } TokenType;
 
 string TokenType_Name[] = {
@@ -20,7 +20,7 @@ string TokenType_Name[] = {
 
    "T_FWD" , "T_LEFT", "T_RIGHT", "T_EASY", "T_MEDIUM" , "T_HARD" , "T_IP", "T_COMMENT" , "T_COLUMN" ,
 
-   "T_ROW" , "T_NULL" ,"T_INTVALUE"
+   "T_ROW" , "T_NULL" ,"T_INTVALUE" , "T_MOVE"
 };
 
 class Token

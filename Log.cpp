@@ -27,26 +27,26 @@ Log::Log()
 	file_open = false;
 }
 
-Log::Log(const char* filename, ios_base::openmode mode = fstream::out | fstream:: trunc)
+Log::Log(const char* filename, ios_base::openmode mode)
 {
 	log.open(filename, mode);
 	file_open = log.is_open();
 }
 
-Log::Log(string filename, ios_base::openmode mode = fstream::out | fstream::trunc)
+Log::Log(string filename, ios_base::openmode mode)
 {
 	log.open(filename, mode);
 	file_open = log.is_open();
 }
 
 /*    MEMBER FUNCTIONS    */
-void Log::open(const char* filename, ios_base::openmode mode = fstream::out | fstream::trunc)
+void Log::open(const char* filename, ios_base::openmode mode)
 {
 	string fn(filename);
 	open(fn, mode);
 }
 
-void Log::open(string filename, ios_base::openmode mode = fstream::out | fstream::trunc)
+void Log::open(string filename, ios_base::openmode mode)
 {
 	log.open(filename, mode);
 }

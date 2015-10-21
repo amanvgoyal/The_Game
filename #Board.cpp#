@@ -453,7 +453,7 @@ bool Board::move_piece(int rows, char cols, Direction direction)
   return move_piece(move);
 }
 
-bool Board::move_piece(Move move)
+bool Boajrd::move_piece(Move move)
 {	// moves the specified piece after checking the validity of the move
   string function = "move_piece";
 

@@ -21,11 +21,9 @@ string AI::move(vector<vector<Piece*> > state, string diff, string color) {
   else if (diff == "MEDIUM") {
     return minimax(color);
   }
-
   else if (diff == "HARD") {
     return alpha_beta(color);
   }
-
   else {
     cerr << "Difficulty string not well formed!" << endl;
     }*/
@@ -401,4 +399,3 @@ string AI::minimax(string color) {
 string AI::alpha_beta(string color) {
 
 }
-

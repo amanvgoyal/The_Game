@@ -11,14 +11,6 @@
 typedef std::array<std::array<Color, 8>, 8> board;
 
 class AI {
- public:
-  std::string move(std::vector<std::vector<Piece*> >, std::string, std::string);
-
-  std::string random(std::string diff);
-  std::string minimax(std::string diff);
-  std::string alpha_beta(std::string diff);
-    
-  void update_state(std::vector<std::vector<Piece*>>);
  private:
   std::vector<std::vector<Piece*>> game_state;
   
@@ -34,6 +26,15 @@ class AI {
   int piece_val(board, int, int);
 
   void print_board(board);
+
+public:
+  std::string move(std::vector<std::vector<Piece*> >, std::string, std::string);
+
+  std::string random(std::string diff);
+  std::string minimax(std::string diff);
+  std::string alpha_beta(std::string diff);
+    
+  void update_state(std::vector<std::vector<Piece*>>);
 };
 
 #endif

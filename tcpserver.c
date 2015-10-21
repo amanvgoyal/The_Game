@@ -1,5 +1,3 @@
-/* tcpserver.c */
-
 #include <sys/types.h>
 #include <iostream>
 #include <sys/socket.h>
@@ -11,9 +9,13 @@
 #include <errno.h>
 #include <string.h>
 #include <string>
+#include <vector>
 using namespace std;
+
+void parse(string S);
+
 int main()
-{
+{       
         int sock, connected, bytes_recieved , truea = 1;  
         string send_data;
         char recv_data[1024];       
@@ -68,6 +70,7 @@ int main()
                 do{
                 send_data = "Password:";
                 send(connected, send_data.c_str(),send_data.length(), 0);
+                memset(recv_data, 0, sizeof recv_data);
                 bytes_recieved = recv(connected,recv_data,1024,0);
                 recv_data[bytes_recieved] = '\0';
                 string temp = recv_data;
@@ -79,11 +82,13 @@ int main()
                 else{
                   send_data = "\nPassword Incorrect, Try Again:";
                   send(connected, send_data.c_str(),send_data.length(), 0);
+                  memset(recv_data, 0, sizeof recv_data);
                   bytes_recieved = recv(connected,recv_data,1024,0);
                   recv_data[bytes_recieved] = '\0';
                   string temp = recv_data;
                   temp.erase(temp.begin()+8,temp.end());
-                  if(recv_data=="password"){
+                  //cout<<"TEMP:"<<temp;
+                  if(temp=="password"){
                         done = true;
                         count++;
                   }
@@ -94,22 +99,28 @@ int main()
                 send_data.clear();
                 send_data = "WELCOME:";
                 send(connected, send_data.c_str(),send_data.length(), 0);
-                bytes_recieved = recv(connected,recv_data,1024,0);
-                recv_data[bytes_recieved] = '\0';
-                string temp = recv_data;
+                //bytes_recieved = recv(connected,recv_data,1024,0);
+                //recv_data[bytes_recieved] = '\0';
+                //string temp = recv_data;
                 //cout<<"\n"<<temp<<endl;
               }
-             
-
+              memset(recv_data, 0, sizeof recv_data);
               bytes_recieved = recv(connected,recv_data,1024,0);
-
               recv_data[bytes_recieved] = '\0';
+              string temp = recv_data;
               cout<<"\n RECIEVED DATA = " <<recv_data;
               if(recv_data!=" "||recv_data!="\0"){
               send_data.clear();
-              send_data ="OK";
+              send_data ="OK\n";
               cout<<"\n SENDING: "<<send_data;
-              
+             /* vector<string> lol;
+              for(int i =0;i<10;++i){
+                string temp;
+                lol.push_back("-------"+to_string(i)+"-----------\n");
+              }
+              for(int i =0;i<10;++i){
+                send(connected, lol[i].c_str(),lol[i].length(), 0);
+              }  */            
               send(connected, send_data.c_str(),send_data.length(), 0); 
             }
               fflush(stdout);
