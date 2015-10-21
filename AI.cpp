@@ -10,8 +10,12 @@ using namespace std;
 const int rows = 8;
 const int cols = 8;
 
+const int MAX_DEPTH = 3;
+
 string AI::move(vector<vector<Piece*> > state, string diff, string color) {
-  ai_color = color;
+  Color c;
+  if (color == "BLACK") {c = Color::BLACK;}
+  else if (color == "WHITE") {c = Color::WHITE;}
   update_state(state);
   /*
   if (diff == "EASY") {
@@ -21,11 +25,9 @@ string AI::move(vector<vector<Piece*> > state, string diff, string color) {
   else if (diff == "MEDIUM") {
     return minimax(color);
   }
-
   else if (diff == "HARD") {
     return alpha_beta(color);
   }
-
   else {
     cerr << "Difficulty string not well formed!" << endl;
     }*/
@@ -394,11 +396,37 @@ string AI::random(string color) {
   }
 }
 
-string AI::minimax(string color) {
+int AI::minimax(board cur_board, int depth, Color cur_player, Color max_player) {
+  int score = 0;
+  int best_score = 0;
+  vector<board> moves;
 
+  Color enemy;
+  if (cur_player == Color::BLACK) {enemy = Color::WHITE;}
+  else {enemy = Color::WHITE;}
+
+  if (depth == MAX_DEPTH || win(cur_board) != Color::NONE) {
+    score = board_val(cur_board, cur_player);
+  }
+
+  if (cur_player == max_player) {
+    score = -99999;
+    moves = generate_moves(cur_board, max_player);
+    for (auto b : moves) {
+      score = minimax(b, depth - 1, enemy, max_player);
+      if (score > best_score) {best_score = score;}
+    }
+  }
+
+  else {
+    score = 99999;
+    moves = generate_moves(cur_board, cur_player);
+    if (score < best_score) {best_score = score;}
+  }
+
+  return best_score;
 }
 
 string AI::alpha_beta(string color) {
 
 }
-

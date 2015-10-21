@@ -59,7 +59,7 @@ EXIT|DISPLAY|UNDO|HUMAN-AI|AI-AI  {
 }
 FWD|LEFT|RIGHT  {
             // Push string identifier type token to stack 
-            cout<<"Move "<<yytext<<endl;
+            cout<<"DIRECTION: "<<yytext<<endl;
             string s(yytext);
             for(int i =0;i<s.length();++i)
                 s[i] = toupper(s[i]);
@@ -118,14 +118,11 @@ IP+" "{ID}    {
         tokens.push(temp);
 }
 {MOVE}  { 
-        cout<<"Move:"<<yytext<<endl;
+        cout<<"Move:";
         string s(yytext);
-        Token temp(T_COLUMN,s[0]);
+        Token temp(T_MOVE,s);
+        cout<<s<<endl;
         tokens.push(temp);
-        s.erase(0,1);
-        int value = atoi(s.c_str());
-        Token temp2(T_ROW,value);
-        tokens.push(temp2);
 }
 {ID} {
             cout<<"An IDENTIFIER: " <<yytext<<endl;

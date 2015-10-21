@@ -875,7 +875,7 @@ YY_RULE_SETUP
 #line 60 "scanner.l"
 {
             // Push string identifier type token to stack 
-            cout<<"Move "<<yytext<<endl;
+            cout<<"DIRECTION: "<<yytext<<endl;
             string s(yytext);
             for(int i =0;i<s.length();++i)
                 s[i] = toupper(s[i]);
@@ -955,19 +955,16 @@ case 10:
 YY_RULE_SETUP
 #line 120 "scanner.l"
 { 
-        cout<<"Move:"<<yytext<<endl;
+        cout<<"Move:";
         string s(yytext);
-        Token temp(T_COLUMN,s[0]);
+        Token temp(T_MOVE,s);
+        cout<<s<<endl;
         tokens.push(temp);
-        s.erase(0,1);
-        int value = atoi(s.c_str());
-        Token temp2(T_ROW,value);
-        tokens.push(temp2);
 }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 130 "scanner.l"
+#line 127 "scanner.l"
 {
             cout<<"An IDENTIFIER: " <<yytext<<endl;
             string s(yytext);
@@ -977,7 +974,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 136 "scanner.l"
+#line 133 "scanner.l"
 {
     cout<<"INPUT ERROR"<<endl;
     ++errors;
@@ -985,10 +982,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 140 "scanner.l"
+#line 137 "scanner.l"
 ECHO;
 	YY_BREAK
-#line 992 "lex.yy.c"
+#line 989 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1986,14 +1983,12 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 140 "scanner.l"
+#line 137 "scanner.l"
 
 
 #include <iostream>
 #include "Token.h"
 #include "Parser.h"
-#include "AI.h"
-#include "Piece.h"
 #include <cassert>
 #include <string>
 #include <sstream>
@@ -2005,81 +2000,199 @@ void yyfree (void * ptr )
 #include <unistd.h>
 #include <sys/wait.h>
 #include <sys/time.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <errno.h>
+#include <string.h>
+#include <vector>
+#include <ctype.h>
+#include "Board.h"
+
 using namespace std;
-void parse(string S);
-int main(int argc,  char** argv) { 
-  AI a;
-  int row = 8;
-  int col = 8;
-  vector<vector<Piece*> > v(row, vector<Piece*>(col, NULL));;
-  /*
-  int piece_id = 1;
-  Position cur_space;// = NULL;
-  for (int i = 5; i < 8; ++i) {   // iterate through the top two rows of the board 
-    for (int j = 0; j < 8; ++j) {       
-      // iterate through the columns                     
-      // add pieces to the board   
-      cur_space.row = i;
-      cur_space.col = j;
-      v[i][j] = new Piece(piece_id, Color::BLACK, cur_space, true);
-      ++piece_id;
+
+/*string parse(string S);*/
+int server();
+Parser run;
+int main(int argc,  char** argv) {
+    server();
+/*    printf("--beginning of program\n");
+    int counter = 0;
+    pid_t pid = fork();
+
+    if (pid == 0)
+    {
+        // child process
+        //game.start();
     }
-  }
-  // add the white pieces to the board                                             
-  for (int i = 0; i < 2; ++i) {
-    // iterate through the bottom two rows of the board     
-    for (int j = 0; j < 8; ++j) {
-      // iterate through the columns                                
-      // add pieces to the board                                                
-      cur_space.row = i;
-      cur_space.col = j;
-      v[i][j] = new Piece(piece_id, Color::WHITE, cur_space, true);
-      ++piece_id;
+    else if (pid > 0)
+    {
+        // parent process
+        server();
     }
-  }
-*/
-  string s = a.move(v, "HARD", "BLACK");
-  
-  //  system("./server2 5010");
-  /*++argv, --argc;
-    if ( argc > 0 )
-    yyin = fopen( argv[0], "r" );
-    else{
-    yyin = stdin;
+    else
+    {
+        printf("fork() failed!\n");
+        return 1;
     }
-    yylex();
-    cout<<"Token Stack Size:"<<tokens.size()<<endl;
-  Parser dp;
-  dp.par_program(tokens,errors);
-  while(!tokens.empty()){
-  tokens.pop();
-  }
-  dp.par_empty();*/
-return 0;
+    printf("--end of program--\n");*/
+  return 0;
 }
-/*
-void parse(string S){
+/*string parse(string S){
   Parser dp;
   const char * c = S.c_str();
-  YY_BUFFER_STATE bp = yy_scan_string(c);
-  yy_switch_to_buffer(bp);
-  yylex();
+    YY_BUFFER_STATE bp = yy_scan_string(c);
+    yy_switch_to_buffer(bp);
+    yylex();
 
-  dp.par_program(tokens,errors);
-  yy_delete_buffer(bp);
-  errors =0;
-  while(!tokens.empty()){
+    string temp = dp.par_program(tokens,errors);
+    yy_delete_buffer(bp);
+    errors =0;
+    while(!tokens.empty()){
+      tokens.pop();
+    }
+    dp.par_empty();
+    return temp;
 
-    tokens.pop();
-  }
-  dp.par_empty();
+}*/
+int server()
+{     
+        int sock, connected, bytes_recieved , truea = 1;  
+        string send_data;
+        char recv_data[1024];       
 
-}
+        struct sockaddr_in server_addr,client_addr;    
+        socklen_t sin_size;
+        
+        if ((sock = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
+            perror("Socket");
+            exit(1);
+        }
 
-*/
+        if (setsockopt(sock,SOL_SOCKET,SO_REUSEADDR,&truea,sizeof(int)) == -1) {
+            perror("Setsockopt");
+            exit(1);
+        }
+        
+        server_addr.sin_family = AF_INET;         
+        server_addr.sin_port = htons(5000);     
+        server_addr.sin_addr.s_addr = INADDR_ANY; 
+        bzero(&(server_addr.sin_zero),8); 
+
+        if (bind(sock, (struct sockaddr *)&server_addr, sizeof(struct sockaddr))
+                                                                       == -1) {
+            perror("Unable to bind");
+            exit(1);
+        }
+
+        if (listen(sock, 5) == -1) {
+            perror("Listen");
+            exit(1);
+        }
+        
+          printf("\nTCPServer Waiting for client on port 5000");
+        fflush(stdout);
+
+
+        while(1)
+        {  
+
+            sin_size = sizeof(struct sockaddr_in);
+
+            connected = accept(sock, (struct sockaddr *)&client_addr,&sin_size);
+
+            printf("\n Connection from (%s , %d)",
+                   inet_ntoa(client_addr.sin_addr),ntohs(client_addr.sin_port));
+            cout<<"\n";
+            int count =-1;
+            while (1)
+            {
+              bool done = false;
+              if(count ==-1){
+                do{
+                send_data = "Password:";
+                send(connected, send_data.c_str(),send_data.length(), 0);
+                memset(recv_data, 0, sizeof recv_data);
+                bytes_recieved = recv(connected,recv_data,1024,0);
+                recv_data[bytes_recieved] = '\0';
+                string temp = recv_data;
+                temp.erase(temp.begin()+8,temp.end());
+                if(run.check_pass(temp)){
+                      done = true;
+                      count++;
+                }
+                else{
+                  send_data = "\nPassword Incorrect, Try Again:";
+                  send(connected, send_data.c_str(),send_data.length(), 0);
+                  memset(recv_data, 0, sizeof recv_data);
+                  bytes_recieved = recv(connected,recv_data,1024,0);
+                  recv_data[bytes_recieved] = '\0';
+                  string temp = recv_data;
+                  temp.erase(temp.begin()+8,temp.end());
+                  if(run.check_pass(temp)){
+                        done = true;
+                        count++;
+                  }
+
+                }
+                  
+              }while(!done);
+                send_data.clear();
+                    send_data = "WELCOME:";
+                send(connected, send_data.c_str(),send_data.length(), 0);
+              }
+              memset(recv_data, 0, sizeof recv_data);
+              bytes_recieved = recv(connected,recv_data,1024,0);
+              recv_data[bytes_recieved] = '\0';
+              string temp;
+              string check_pass = recv_data;
+               for (std::string::size_type i=0; i<check_pass.length(); ++i)
+                  {
+                    if (iswprint(check_pass[i]))
+                            temp+=check_pass[i];
+                  }
+              //temp.erase(temp.begin()+temp.length()-2,temp.end());
+              cout<<"Parsing this:"<<temp<<endl;
+              if(temp.length()>0){
+                  string value = run.parse(temp);
+                  if(value=="FALSE"){
+                    send_data.clear();
+                    send_data = "INVALID INPUT\n";
+                    send(connected, send_data.c_str(),send_data.length(), 0);
+                  }
+                  else if(value == "EXIT"){
+                        send_data.clear();
+                        send_data = "BYE\n";
+                        send(connected, send_data.c_str(),send_data.length(), 0);
+                        close(connected);
+                        break;
+                  }
+                  else{
+                    send_data.clear();
+                    send_data = value+"\n";
+                    send(connected, send_data.c_str(),send_data.length(), 0);
+                  }
+              }
+              cout<<"\n RECIEVED DATA = " <<temp;
+              if(recv_data!=" "||recv_data!="\0"){
+              send_data.clear();
+              send_data ="OK\n";
+              cout<<"\n SENDING: "<<send_data;
+              send(connected, send_data.c_str(),send_data.length(), 0); 
+            }
+              fflush(stdout);
+            }
+        }       
+
+      close(sock);
+      return 0;
+} 
+
+
 #include <iostream>
 #include <map>
 #include <algorithm>
+#include "Parser.h"
 
 bool Parser::reverse_order(stack<Token>& theStack){
   size_t temp = theStack.size();
@@ -2090,19 +2203,50 @@ bool Parser::reverse_order(stack<Token>& theStack){
   if(temp == ordered.size()) return true;
   return false;
 }
-bool Parser::par_program(stack<Token>& theStack, int error_count){
+bool Parser::check_pass(string s){
+  if(s==password)return true;
+  else return false;
+}
+string Parser::parse(string S){
+  Parser dp;
+  const char * c = S.c_str();
+    YY_BUFFER_STATE bp = yy_scan_string(c);
+    yy_switch_to_buffer(bp);
+    yylex();
+
+    string temp = dp.par_program(tokens,errors);
+    yy_delete_buffer(bp);
+    errors =0;
+    while(!tokens.empty()){
+      tokens.pop();
+    }
+    dp.par_empty();
+    return temp;
+
+}
+void Parser::set_pass(string s){
+  password = s;
+}
+string Parser::par_program(stack<Token>& theStack, int error_counter){
   reverse_order(theStack); // Swap stack from abc to cba
-  if(error_count==0){ //If tokenizer caught errors it i 
+  if(error_counter==0){ //If tokenizer caught errors it i 
     while(!ordered.empty()){ //Keep popping until nothing is left 
-      if(!par_line()){ //call Par_line which calls query or commands
-	par_empty();//empty the stack becase statement is invalid
+      string temp;
+      temp = par_line();
+      if(temp=="FALSE"){ //call Par_line which calls query or commands
+		par_empty();//empty the stack becase statement is invalid
+    return "FALSE";
       }
-      else cout<<"Done"<<endl;
-      par_empty();
+    else {
+      cout<<"Done"<<endl;
+      return temp;
+    }
+		par_empty();
     }
   }
-  if(error_count>0){// if there were errors found ABORT
+  if(error_counter>0){// if there were errors found ABORT
     par_empty();//empty the stack
+    return "FALSE";
   }
 }
 bool Parser::par_empty(){
@@ -2117,116 +2261,185 @@ bool Parser::par_empty(){
 int Parser::par_stacksize(){
   return ordered.size();
 }
-bool Parser::par_line(){
+string Parser::par_display(){
+  if(counter!=-1){
+  string temp = Game.output_board();
+  return temp;
+  }
+  string temp = "NO GAME HAS STARTED";
+  return temp;
+}
+string Parser::par_line(){
   Token temp = ordered.top();
   if(temp.get_type()==T_IDENTIFIER){
-    return true;
-  }
-  if(temp.get_type()==T_EXIT){
-    return true;
-  }
-  if(temp.get_type()==T_DISPLAY){
-    return true;
-  }
-  if(temp.get_type()==T_UNDO){
-    return true;
-  }
-  if(temp.get_type()==T_HUMANAI){
-    ordered.pop();
-    temp = ordered.top();
-    if(temp.get_type()==T_EASY||temp.get_type()==T_MEDIUM||temp.get_type()==T_HARD){
-      switch(temp.get_type()){
-      case T_EASY:{
-	ordered.pop();
-	random();
-	return true;
-	break;
-      }
-      case T_MEDIUM:{
-	ordered.pop();
-	mini_max();
-	return true;
-	break;
-      }
-      case T_HARD:{
-	ordered.pop();
-	alpha_beta();
-	return true;
-	break;
-      }
-      default : return false;
-      }
+        return "FALSE";
     }
-    else return true;
-  }
-  temp =ordered.top();
-  if(temp.get_type()==T_AIAI){
-    ordered.pop();
-    temp = ordered.top();
-    if(temp.get_type()==T_IP){
-      string  server = temp.get_string_value(); 
+  if(counter!=-1){
+    string move;
+    if(temp.get_type()==T_EASY||temp.get_type()==T_MEDIUM||temp.get_type()==T_HARD){
+        return "TRUE";
+    }
+    if(temp.get_type()==T_MOVE){
+      move = temp.get_string_value();
+      cout<<"Move"<<move<<endl;
       ordered.pop();
       temp = ordered.top();
-      if(temp.get_type()==T_INTVALUE){
-	int port = temp.get_num();
-	ordered.pop();
-	temp = ordered.top();
-	if(temp.get_type()==T_IDENTIFIER){
-	  string password = temp.get_string_value();
-	  ordered.pop();
-	  temp = ordered.top();
-	  if(temp.get_type()==T_EASY||temp.get_type()==T_MEDIUM||temp.get_type()==T_HARD){
-	    string my_difficulty;
-	    switch(temp.get_type()){
-	    case T_EASY:{
-	      ordered.pop();
-	      my_difficulty = "EASY";
-	      break;
-	    }
-	    case T_MEDIUM:{
-	      ordered.pop();
-	      my_difficulty = "MEDIUM";
-	      break;
-	    }
-	    case T_HARD:{
-	      ordered.pop();
-	      my_difficulty = "Hard";
-	      break;
-	    }
-	    default : return false;
-	    }
-	    temp = ordered.top();
-	    string opp_difficulty;
-	    if(temp.get_type()==T_EASY||temp.get_type()==T_MEDIUM||temp.get_type()==T_HARD){
-	      switch(temp.get_type()){
-	      case T_EASY:{
-		ordered.pop();
-		opp_difficulty = "EASY";
-		break;
-	      }
-	      case T_MEDIUM:{
-		ordered.pop();
-		opp_difficulty = "MEDIUM";
-		break;
-	      }
-	      case T_HARD:{
-		ordered.pop();
-		opp_difficulty = "Hard";
-		break;
-	      }
-	      default : return false;
-	      }
-	      //server(server name, port number, password, my_difficulty, opponenet difficulty)
-	      return true;
-	    }
-	  }
-	}
-
-      }
+      //bool move_piece(int rows, char cols, Direction direction);
+        if(temp.get_type()==T_FWD){
+          ordered.pop();
+          cout<<"MOVE[0] "<<move[0]<<" MOVE[1]"<<move[1]<<endl;
+          string row;
+          row.insert(0,1,move[1]);
+          cout<<"This is what row has:"<<row<<endl;
+          if(Game.move_piece(atoi(row.c_str()),move[0],FORWARD)){
+            Game.end_turn();
+            return par_display();
+          }
+          else return "FALSE";
+        }
+        else if(temp.get_type()==T_LEFT){
+          ordered.pop();
+          cout<<"MOVE[0] "<<move[0]<<" MOVE[1]"<<move[1]<<endl;
+          string row;
+          row.insert(0,1,move[1]);
+          if(Game.move_piece(atoi(row.c_str()),move[0],LEFT)){
+            Game.end_turn();
+            return par_display();
+          }
+          else return "FALSE";
+        }
+        else if(temp.get_type()==T_RIGHT){
+          ordered.pop();
+          cout<<"MOVE[0] "<<move[0]<<" MOVE[1]"<<move[1]<<endl;
+          string row;
+          row.insert(0,1,move[1]);
+          if(Game.move_piece(atoi(row.c_str()),move[0],RIGHT)){
+            Game.end_turn();
+            return par_display();
+          }
+          else return "FALSE";
+        }
+    }
+    if(temp.get_type()==T_EXIT){
+        ordered.pop();
+        return "EXIT";
+    }
+    if(temp.get_type()==T_DISPLAY){
+        ordered.pop();
+        string temp = par_display();
+        return temp;
+    }
+    if(temp.get_type()==T_UNDO){
+        ordered.pop();
+        if(Game.undo_move()){
+          return par_display();
+        }
+        return "FALSE";
     }
   }
+  if(temp.get_type()==T_HUMANAI){
+      ordered.pop();
+  		temp = ordered.top();
+  		if(temp.get_type()==T_EASY||temp.get_type()==T_MEDIUM||temp.get_type()==T_HARD){
+  			switch(temp.get_type()){
+  				case T_EASY:{
+  					ordered.pop();
+            ++counter;
+  					random();
+  					return "TRUE";
+  					break;
+  				}
+  				case T_MEDIUM:{
+  					ordered.pop();
+            ++counter;
+  					mini_max();
+  					return "TRUE";
+  					break;
+  				}
+  				case T_HARD:{
+  					ordered.pop();
+            ++counter;
+  					alpha_beta();
+  					return "TRUE";
+  					break;
+  				}
+  				default : return "FALSE";
+  			}
+  		}
+  		else return "FALSE";
+  }
+  temp =ordered.top();
+   if(temp.get_type()==T_AIAI){
+  		ordered.pop();
+      if(ordered.empty()) return "FALSE";
+  		temp = ordered.top();
+  		if(temp.get_type()==T_IP){
+  			string  server = temp.get_string_value(); 
+  			ordered.pop();
+  			temp = ordered.top();
+  			if(temp.get_type()==T_INTVALUE){
+  				int port = temp.get_num();
+  				ordered.pop();
+  				temp = ordered.top();
+  				if(temp.get_type()==T_IDENTIFIER){
+  					string password = temp.get_string_value();
+  					ordered.pop();
+  					temp = ordered.top();
+  					if(temp.get_type()==T_EASY||temp.get_type()==T_MEDIUM||temp.get_type()==T_HARD){
+  						string my_difficulty;
+  						switch(temp.get_type()){
+			  				case T_EASY:{
+			  					ordered.pop();
+			  					my_difficulty = "EASY";
+			  					break;
+			  				}
+			  				case T_MEDIUM:{
+			  					ordered.pop();
+			  					my_difficulty = "MEDIUM";
+			  					break;
+			  				}
+			  				case T_HARD:{
+			  					ordered.pop();
+			  					my_difficulty = "Hard";
+			  					break;
+			  				}
+			  				default : return "FALSE";
+			  			}
+  						temp = ordered.top();
+  						string opp_difficulty;
+  						if(temp.get_type()==T_EASY||temp.get_type()==T_MEDIUM||temp.get_type()==T_HARD){
+	  								switch(temp.get_type()){
+				  				case T_EASY:{
+				  					ordered.pop();
+                    ++counter;
+				  					opp_difficulty = "EASY";
+				  					break;
+				  				}
+				  				case T_MEDIUM:{
+				  					ordered.pop();
+                    ++counter;
+				  					opp_difficulty = "MEDIUM";
+				  					break;
+				  				}
+				  				case T_HARD:{
+				  					ordered.pop();
+                    ++counter;
+				  					opp_difficulty = "Hard";
+				  					break;
+				  				}
+				  				default : return "FALSE";
+				  			}
+				  			//server(server name, port number, password, my_difficulty, opponenet difficulty)
+				  			return "TRUE";
+  						}
+  					}
+  				}
 
-  return false; //if none of the above conditions match its not part of our language
+  			}
+  		}
+  }
+  else if(counter==-1) return par_display();
+  return "FALSE"; //if none of the above conditions match its not part of our language
 }
 void Parser::random(){
 
@@ -2236,477 +2449,4 @@ void Parser::mini_max(){
 }
 void Parser::alpha_beta(){
 	
-}
-#include "AI.h"
-#include "Piece.h"
-#include <string>
-#include <vector>
-#include <stdlib.h>
-#include <iostream>
-
-using namespace std;
-
-const int rows = 8;
-const int cols = 8;
-
-string AI::move(vector<vector<Piece*> > state, string diff, string color) {
-  ai_color = color;
-  update_state(state);
-  /*
-  if (diff == "EASY") {
-    return random(color);
-  }
-  
-  else if (diff == "MEDIUM") {
-    return minimax(color);
-  }
-
-  else if (diff == "HARD") {
-    return alpha_beta(color);
-  }
-
-  else {
-    cerr << "Difficulty string not well formed!" << endl;
-    }*/
-  return "";
-}
-
-void AI::update_state(vector<vector<Piece*>> state) {
-  /*Position pos;
-  for (auto v : state) {
-    for (auto p : v) {
-      pos = p->position(); 
-      board[pos.row][pos.col] = p->color();
-    }
-  }
-  */
-
-  for (int i = 0; i < rows; ++i) {
-    for (int j = 0; j < cols; ++j) {
-      if (i == 0 || i == 1) {
-	brd[i][j] = Color::BLACK;
-      }
-      
-      else if (i == 6 || i == 7) {
-	brd[i][j] = Color::WHITE;
-      }
-      
-      else {
-	brd[i][j] = Color::NONE;
-      }
-    }
-  }
-
-  print_board(brd);
-  cout << endl;
-  //vector<board> bs = generate_moves(brd, Color::BLACK);
-  //cout << bs.size() << endl;
-
-  cout << random("BLACK") << endl;
-
-  /*for (auto v : bs) {
-    print_board(v);
-    cout << endl;
-    }*/
-} 
-
-Color AI::win(board b) {
-  for (int i = 0; i < rows; ++i) {
-    if (b[0][i] == Color::WHITE) {
-      return Color::WHITE; // White has won
-    }
-    
-    if (b[7][i] == Color::BLACK) {
-      return Color::BLACK; // Black has won
-    }
-  }
-
-  return Color::NONE; // No one has won
-}
-
-vector<board> AI::generate_moves(board b, Color player_color) {
-  //board b_copy = b;
-  vector<board> ret;
-  Color original;
-  int ct = 0;
-  for (int i = 0; i < rows; ++i) {
-    for (int j = 0; j < cols; ++j) {
-      if (b[i][j] == player_color) {
-	
-	if (player_color == Color::WHITE) {
-	  // Can go up
-	  if (i > 0) {
-	    if (b[i-1][j] == Color::NONE) {
-	      b[i-1][j] = player_color;
-	      b[i][j] = Color::NONE;
-	      ret.push_back(b);
-	      b[i-1][j] = Color::NONE;
-	      b[i][j] = player_color;
-	    }
-	  }
-
-	  // Can go diag left
-	  if (i > 0 && j > 0) {
-	    if (b[i-1][j-1] != player_color) {
-	      original = b[i-1][j-1];
-	      b[i-1][j-1] = player_color;
-	      b[i][j] = Color::NONE;
-	      ret.push_back(b);
-	      b[i][j] = player_color;
-	      b[i-1][j-1] = original;
-	    }
-	  }
-      
-
-	  // Can go diag right
-	  if (i > 0 && j < 7) {
-	    if (b[i-1][j+1] != player_color) {
-	      original = b[i-1][j+1];
-	      b[i-1][j+1] = player_color;
-	      b[i][j] = Color::NONE;
-	      ret.push_back(b);
-	      b[i-1][j+1] = original;
-	      b[i][j] = player_color;
-	    }
-	  }
-	}
-
-	if (player_color == Color::BLACK) {
-	  // Can go down 
-	  if (i < 7) {
-	    if (b[i+1][j] == Color::NONE) {
-	      original = b[i+1][j];
-	      b[i+1][j] = player_color;
-	      b[i][j] = Color::NONE;
-	      ret.push_back(b);
-	      b[i+1][j] = original;
-	      b[i][j] = player_color;
-	    }
-	  }
-
-	  // Can go diag left
-	  if (i < 7 && j > 0) {
-	    if (b[i+1][j-1] != player_color) {
-	      original = b[i+1][j-1];
-	      b[i+1][j-1] = player_color;
-	      b[i][j] = Color::NONE;
-	      ret.push_back(b);
-	      b[i+1][j-1] = original;
-	      b[i][j] = player_color;	    
-	    }
-	  }
-
-	  // Can go diag right
-	  if (i < 7 && j < 7) {
-	    if (b[i+1][j+1] != player_color) {
-	      original = b[i+1][j+1];
-	      b[i+1][j+1] = player_color;
-	      b[i][j] = Color::NONE;
-	      ret.push_back(b);
-	      b[i+1][j+1] = original;
-	      b[i][j] = player_color;
-	    }
-	  }
-	}
-      }
-    }
-  }
-  return ret;
-} 
-
-// IMPROVE THIS
-int AI::threat_level(board b, int x, int y) {
-  int val = 0;
-
-  if (b[x][y] == Color::WHITE) {
-    // Check if protected
-    if (x < 7 && y > 0) {
-      if (b[x+1][y-1] == Color::WHITE) {
-	val += 1;
-      }
-    }
-    
-    if (x < 7 && y < 7) {
-      if (b[x+1][y+1] == Color::WHITE) {
-	val += 1;
-      }
-    }
-    
-    // Check for Attackers
-    if (x < 7 && y > 0) {
-      if (b[x+1][y-1] == Color::BLACK) {
-	val -= 1;
-      }
-    }
-    if (x < 7 && y < 7) {
-      if (b[x+1][y+1] == Color::BLACK) {
-	val -= 1;
-      }
-    }
-  }
-  
-  else if (b[x][y] == Color::BLACK) {
-    // Check if protected
-    if (x > 0 && y > 0) {
-      if (b[x-1][y-1] == Color::BLACK) {
-	val += 1;
-      }
-    }
-    if (x > 0 && y < 7) {
-      if (b[x-1][y+1] == Color::BLACK) {
-	val += 1;
-      }
-    }
-    
-    // Check for Attackers
-    if (x > 0 && y > 0) {
-      if (b[x-1][y-1] == Color::WHITE) {
-	val -= 1;
-      }
-    }
-    if (x > 0 && y < 7) {
-      if (b[x-1][y+1] == Color::WHITE) {
-	val -= 1;
-      }
-    }
-  }
-
-  else {cerr << "no piece there!" << endl;}
-}
-
-// MAYBE CHECK IF X, Y, IN RANGE
-// SUPPOSED TO STOP GAME IF WE GET TO THE ENDS
-int AI::mobility_level(board b, int x, int y) {
-  int mobi_val = 0;
-  
-  if (b[x][y] == Color::WHITE && b[x-1][y] == Color::NONE) {
-    return 2; 
-  }
-  else {return -2;}
-  
-  if (b[x][y] == Color::BLACK && b[x+1][y] == Color::NONE) {
-    return 2;
-  }
-  else {return -2;}
-}
-
-int AI::piece_val(board b, int x, int y) {
-  int piece_val = 0;
-  piece_val += threat_level(b, x, y);
-  piece_val += mobility_level(b, x, y);
-
-  return piece_val;
-}
-
-int AI::board_val(board b, Color player_color) {
-  int board_val = 0;
-  
-  // First check for wins??
-  if (win(b) == player_color) return 99999999;
-
-  // Now check features
-  for (int i = 0; i < rows; ++i) {
-    for (int j = 0; j < cols; ++j) {
-      if (b[i][j] == Color::NONE) {
-	continue; // No Piece on this square
-      }
-
-      else if (b[i][j] == player_color) {
-	board_val += piece_val(b, i, j); //???
-      }
-
-      else if (b[i][j] != player_color) {
-	board_val -= piece_val(b, i, j); //???
-      }
-    }
-  }
-}
-
-void AI::print_board(board b) {
-  for (int i = 0; i < rows; ++i) {
-    for (int j = 0; j < cols; ++j) {
-
-      if (b[i][j] == Color::WHITE) {
-        cout << "w ";
-      }
-
-      else if (b[i][j] == Color::BLACK) {
-        cout << "b ";
-      }
-
-      else {
-        cout << "n ";
-      }
-    }
-    cout << endl;
-  }
-}
- 
-string AI::random(string color) {
-  srand(time(NULL));
-
-  vector<string> possible_moves;
-  vector<string> eat_moves;
-
-  Color player_color;
-  if (color == "BLACK") {player_color = Color::BLACK;}
-  else {player_color = Color::WHITE;}
-
-  for (int i = 0; i < rows; ++i) {
-    for (int j = 0; j < cols; ++j) {
-      if (brd[i][j] == player_color) {
-	
-	if (player_color == Color::WHITE) {
-	  // Can go up
-	  if (i > 0) {
-	    if (brd[i-1][j] == Color::NONE) {
-	      possible_moves.push_back("("+to_string(j)+", "+to_string(i)+")*("+to_string(j)+", "+to_string(i-1)+")");
-	    }
-	  }
-
-	  // Can go diag left
-	  if (i > 0 && j > 0) {
-	    if (brd[i-1][j-1] != player_color) {
-	      if (brd[i-1][j-1] != Color::NONE) {
-		eat_moves.push_back("("+to_string(j)+", "+to_string(i)+")*("+to_string(j-1)+", "+to_string(i-1)+")");
-	      }
-	      else {
-		possible_moves.push_back("("+to_string(j)+", "+to_string(i)+")*("+to_string(j-1)+", "+to_string(i-1)+")");
-	      }
-	    }
-	  }
-      
-	  // Can go diag right
-	  if (i > 0 && j < 7) {
-	    if (brd[i-1][j+1] != player_color) {
-	      if (brd[i-1][j+1] != Color::NONE) {
-		eat_moves.push_back("("+to_string(j)+", "+to_string(i)+")*("+to_string(j+1)+", "+to_string(i-1)+")");
-	      }
-	      else {possible_moves.push_back("("+to_string(j)+", "+to_string(i)+")*("+to_string(j+1)+", "+to_string(i-1)+")");}
-	    }
-	  }
-	}
-
-	if (player_color == Color::BLACK) {
-	  // Can go down 
-	  if (i < 7) {
-	    if (brd[i+1][j] == Color::NONE) {
-	      possible_moves.push_back("("+to_string(j)+", "+to_string(i)+")*("+to_string(j)+", "+to_string(i+1)+")");
-	    }
-	  }
-
-	  // Can go diag left
-	  if (i < 7 && j > 0) {
-	    if (brd[i+1][j-1] != player_color) {
-	      if (brd[i+1][j-1] != Color::NONE) {
-		eat_moves.push_back("("+to_string(j)+", "+to_string(i)+")*("+to_string(j-1)+", "+to_string(i+1)+")");
-	      }
-	      else {possible_moves.push_back("("+to_string(j)+", "+to_string(i)+")*("+to_string(j-1)+", "+to_string(i+1)+")");}
-	    }
-	  }
-
-	  // Can go diag right
-	  if (i < 7 && j < 7) {
-	    if (brd[i+1][j+1] != player_color) {
-	      if (brd[i+1][j+1] != Color::NONE) {
-		eat_moves.push_back("("+to_string(j)+", "+to_string(i)+")*("+to_string(j+1)+", "+to_string(i+1)+")");
-	      }
-	      else {possible_moves.push_back("("+to_string(j)+", "+to_string(i)+")*("+to_string(j+1)+", "+to_string(i+1)+")");}
-	    }
-	  }
-	}
-      }
-    }
-  }
-  
-  cout << possible_moves.size() << endl;
-  cout << eat_moves.size() << endl;
-
-  int index = 0;
-  if (eat_moves.size() > 0) {
-    index = rand() % eat_moves.size();
-    return eat_moves[index];
-  }
-  else {
-    index = rand() % possible_moves.size();
-    return possible_moves[index];
-  }
-}
-
-string AI::minimax(string color) {
-
-}
-
-string AI::alpha_beta(string color) {
-
-}
-
-/*
- *********************************************************
-**    Piece.cpp    ****************************************
-**  Description: This class will represent the pieces    **
-**  on the board and will contain information about the  **
-**  piece.                                               **
- *********************************************************
-*/
-/*
- *********************************************************
-**    HEADER FILES    *************************************
- *********************************************************
-*/
-#include "Piece.h"
-
-using namespace std;
-/*
- *********************************************************
-**    CLASS DEFINITIONS    ********************************
- *********************************************************
-*/
-void Piece::position(Position space)
-{	// the validity of the position is checked on the board before being set
-	pos = space;
-	return;
-}
-
-void Piece::position(int row, int col)
-{
-	pos.row = row;
-	pos.col = col;
-	return;
-}
-
-Position Piece::position()
-{	// returns the position of the piece
-	return pos;
-}
-
-void Piece::on_board(bool on)
-{	// specifies whether the piece is on the board or not
-	active = on;
-}
-
-bool Piece::on_board()
-{	// returns true if the piece is on the board
-	return active;
-}
-
-void Piece::number(int number)
-{	// set the number of the piece
-	// each piece from the same team should have different numbers
-	id = number;
-}
-
-int Piece::number()
-{	// returns the number of the piece
-	return id;
-}
-
-bool Piece::color(Color col)
-{	// set the color of the piece
-	team = col;
-}
-
-Color Piece::color()
-{	// returns the color of the piece
-	return team;
 }

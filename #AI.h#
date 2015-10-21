@@ -10,6 +10,12 @@
 //typedef Color board [8][8];
 typedef std::array<std::array<Color, 8>, 8> board;
 
+struct Node {
+  board cur_board;
+  std::vector<board> branches;
+  int depth;
+}
+
 class AI {
  private:
   std::vector<std::vector<Piece*>> game_state;
@@ -31,7 +37,7 @@ public:
   std::string move(std::vector<std::vector<Piece*> >, std::string, std::string);
 
   std::string random(std::string);
-  int minimax(board, int, Color, Color);
+  std::string minimax(std::string, string);
   std::string alpha_beta(std::string);
     
   void update_state(std::vector<std::vector<Piece*>>);
