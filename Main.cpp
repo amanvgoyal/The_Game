@@ -18,47 +18,55 @@
 #include <errno.h>
 #include <string.h>
 #include <vector>
+#include <ctype.h>
+#include "Board.h"
 
 using namespace std;
 
-void parse(string S);
+/*string parse(string S);*/
 int server();
-
+Parser run;
 int main(int argc,  char** argv) {
     server();
-/*
-    ++argv, --argc;
-    if ( argc > 0 )
-            yyin = fopen( argv[0], "r" );
-    else{
-            yyin = stdin;
-        }
-    yylex();
-    cout<<"Token Stack Size:"<<tokens.size()<<endl;
-    Parser dp;
-    dp.par_program(tokens,errors);
-    while(!tokens.empty()){
-      tokens.pop();
+/*    printf("--beginning of program\n");
+    int counter = 0;
+    pid_t pid = fork();
+
+    if (pid == 0)
+    {
+        // child process
+        //game.start();
     }
-    dp.par_empty();*/
+    else if (pid > 0)
+    {
+        // parent process
+        server();
+    }
+    else
+    {
+        printf("fork() failed!\n");
+        return 1;
+    }
+    printf("--end of program--\n");*/
   return 0;
 }
-void parse(string S){
+/*string parse(string S){
   Parser dp;
   const char * c = S.c_str();
     YY_BUFFER_STATE bp = yy_scan_string(c);
     yy_switch_to_buffer(bp);
     yylex();
 
-    dp.par_program(tokens,errors);
+    string temp = dp.par_program(tokens,errors);
     yy_delete_buffer(bp);
     errors =0;
     while(!tokens.empty()){
       tokens.pop();
     }
     dp.par_empty();
+    return temp;
 
-}
+}*/
 int server()
 {     
         int sock, connected, bytes_recieved , truea = 1;  
@@ -121,7 +129,7 @@ int server()
                 recv_data[bytes_recieved] = '\0';
                 string temp = recv_data;
                 temp.erase(temp.begin()+8,temp.end());
-                if(temp=="password"){
+                if(run.check_pass(temp)){
                       done = true;
                       count++;
                 }
@@ -133,7 +141,7 @@ int server()
                   recv_data[bytes_recieved] = '\0';
                   string temp = recv_data;
                   temp.erase(temp.begin()+8,temp.end());
-                  if(temp=="password"){
+                  if(run.check_pass(temp)){
                         done = true;
                         count++;
                   }
@@ -142,17 +150,42 @@ int server()
                   
               }while(!done);
                 send_data.clear();
-                send_data = "WELCOME:";
+                    send_data = "WELCOME:";
                 send(connected, send_data.c_str(),send_data.length(), 0);
               }
               memset(recv_data, 0, sizeof recv_data);
               bytes_recieved = recv(connected,recv_data,1024,0);
               recv_data[bytes_recieved] = '\0';
-              string temp = recv_data;
-              temp.erase(temp.begin()+temp.length()-2,temp.end());
+              string temp;
+              string check_pass = recv_data;
+               for (std::string::size_type i=0; i<check_pass.length(); ++i)
+                  {
+                    if (iswprint(check_pass[i]))
+                            temp+=check_pass[i];
+                  }
+              //temp.erase(temp.begin()+temp.length()-2,temp.end());
               cout<<"Parsing this:"<<temp<<endl;
-              parse(temp);
-              cout<<"\n RECIEVED DATA = " <<recv_data;
+              if(temp.length()>0){
+                  string value = run.parse(temp);
+                  if(value=="FALSE"){
+                    send_data.clear();
+                    send_data = "INVALID INPUT\n";
+                    send(connected, send_data.c_str(),send_data.length(), 0);
+                  }
+                  else if(value == "EXIT"){
+                        send_data.clear();
+                        send_data = "BYE\n";
+                        send(connected, send_data.c_str(),send_data.length(), 0);
+                        close(connected);
+                        break;
+                  }
+                  else{
+                    send_data.clear();
+                    send_data = value+"\n";
+                    send(connected, send_data.c_str(),send_data.length(), 0);
+                  }
+              }
+              cout<<"\n RECIEVED DATA = " <<temp;
               if(recv_data!=" "||recv_data!="\0"){
               send_data.clear();
               send_data ="OK\n";

@@ -5,6 +5,11 @@
 #include <iostream>
 #include <vector>
 #include "Token.h"
+#include "Board.h"
+
+
+Board Game;
+int counter =-1;
 
 class Parser
 {
@@ -14,15 +19,15 @@ class Parser
  public:
   /*------------MAINTENANCE------------------------*/
   bool reverse_order(std::stack<Token>& theStack);
-  bool par_line();
+  std::string par_line();
   bool par_empty();
   int  par_stacksize();
   bool check_pass(std::string s);
   void set_pass(std::string s);
-  void parse(std::string S);
+  std::string parse(std::string S);
   /*------------PROGRAM----------------------------*/
-  bool par_program(std::stack<Token>& theStack, int error_count);
-  bool par_statment();
+  std::string par_program(std::stack<Token>& theStack, int error_count);
+  std::string par_statment();
   std::string par_display();
   /*------------Difficulty----------------------------*/
   void random();
