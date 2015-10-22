@@ -4,6 +4,7 @@
 #include <vector>
 #include <stdlib.h>
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
 
@@ -173,6 +174,8 @@ vector<state> AI::generate_moves(board b, Color player_color) {
       }
     }
   }
+
+  random_shuffle(ret.begin(), ret.end()); // MAYBE DONT DO THIS
   return ret;
 } 
 
