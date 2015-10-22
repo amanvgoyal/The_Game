@@ -49,35 +49,8 @@ void AI::update_state(vector<vector<Piece*>> state) {
       }
     }
   }
-  
-  /*
-  for (int i = 0; i < rows; ++i) {
-    for (int j = 0; j < cols; ++j) {
-      if (i == 0 || i == 1) {
-	brd[i][j] = Color::BLACK;
-      }
-      
-      else if (i == 6 || i == 7) {
-	brd[i][j] = Color::WHITE;
-      }
-      
-      else {
-	brd[i][j] = Color::NONE;
-      }
-    }
-  }*/
 
   print_board(brd);
-  //cout << endl;
-  //vector<board> bs = generate_moves(brd, Color::BLACK);
-  //cout << bs.size() << endl;
-
-  //cout << random("BLACK") << endl;
-
-  /*for (auto v : bs) {
-    print_board(v);
-    cout << endl;
-    }*/
 } 
 
 Color AI::win(board b) {
@@ -242,6 +215,8 @@ int AI::threat_level(board b, int x, int y) {
   }
 
   else {cerr << "no piece there!" << endl;}
+
+  return val;
 }
 
 // MAYBE CHECK IF X, Y, IN RANGE
@@ -249,14 +224,10 @@ int AI::threat_level(board b, int x, int y) {
 int AI::mobility_level(board b, int x, int y) {
   int mobi_val = 0;
   
-  if (b[x][y] == Color::WHITE && b[x-1][y] == Color::NONE) {
-    return 2; 
-  }
+  if (b[x][y] == Color::WHITE && b[x-1][y] == Color::NONE) {return 2;}
   else {return -2;}
   
-  if (b[x][y] == Color::BLACK && b[x+1][y] == Color::NONE) {
-    return 2;
-  }
+  if (b[x][y] == Color::BLACK && b[x+1][y] == Color::NONE) {return 2;}
   else {return -2;}
 }
 
@@ -265,6 +236,7 @@ int AI::piece_val(board b, int x, int y) {
   piece_val += threat_level(b, x, y);
   piece_val += mobility_level(b, x, y);
 
+  cout << "PIECE @ (" << x << ", " << y << ") VAL: " << piece_val << endl;
   return piece_val;
 }
 
@@ -398,9 +370,6 @@ string AI::random(string color) {
     }
   }
   
-  cout << possible_moves.size() << endl;
-  cout << eat_moves.size() << endl;
-
   int index = 0;
   if (eat_moves.size() > 0) {
     index = rand() % eat_moves.size();

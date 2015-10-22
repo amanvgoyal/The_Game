@@ -10,6 +10,16 @@
 //typedef Color board [8][8];
 typedef std::array<std::array<Color, 8>, 8> board;
 
+struct scored_move {
+  int score;
+  std::string move;
+};
+
+struct state {
+  board b;
+  std::string move;
+};
+
 class AI {
  private:
   std::vector<std::vector<Piece*>> game_state;
