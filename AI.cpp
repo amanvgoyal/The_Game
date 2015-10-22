@@ -10,11 +10,11 @@ using namespace std;
 const int rows = 8;
 const int cols = 8;
 
-const int MAX_DEPTH = 3;
+const int MAX_DEPTH = 2;
 
-string AI::move(vector<vector<Piece*> > state, string diff, string color) {
+string AI::move(vector<vector<Piece*> > board_state, string diff, string color) {
   ai_color = color;
-  update_state(state);
+  update_state(board_state);
   /*
   if (diff == "EASY") {
     return random(color);
@@ -28,9 +28,15 @@ string AI::move(vector<vector<Piece*> > state, string diff, string color) {
   }
   else {
     cerr << "Difficulty string not well formed!" << endl;
-    }*/
+    }
   cout << "MINIMAX: " << minimax(brd, 3, Color::BLACK, Color::BLACK).move << endl;
-  return random("BLACK");
+  */
+  state s;
+  s.change = brd;
+  s.move = "";
+  //cout << "MINIMAX: " << minimax(s, 3, Color::BLACK, Color::BLACK).move << endl;
+  return minimax(s, 3, Color::BLACK, Color::BLACK).move;
+  //return random("BLACK");
 }
 
 void AI::update_state(vector<vector<Piece*>> state) {
@@ -249,7 +255,7 @@ int AI::piece_val(board b, int x, int y) {
   piece_val += threat_level(b, x, y);
   piece_val += mobility_level(b, x, y);
 
-  cout << "PIECE @ (" << x << ", " << y << ") VAL: " << piece_val << endl;
+  //cout << "PIECE @ (" << x << ", " << y << ") VAL: " << piece_val << endl;
   return piece_val;
 }
 
@@ -394,7 +400,7 @@ string AI::random(string color) {
   }
 }
 
-scored_move AI::minimax(
+/*scored_move AI::minimax(
 	    board cur_board, int depth, Color cur_player, Color max_player) {
   int score = 0;
   int best_score = 0;
@@ -413,7 +419,7 @@ scored_move AI::minimax(
     score = -99999;
     moves = generate_moves(cur_board, max_player);
     for (auto s : moves) {
-      score = minimax(s.change, depth - 1, enemy, max_player).score;
+      score = minimax(s.change, depth + 1, enemy, max_player).score;
       if (score > best_score) {
 	best_score = score;
 	best_move = s.move;
@@ -425,7 +431,7 @@ scored_move AI::minimax(
     score = 99999;
     moves = generate_moves(cur_board, cur_player);
     for (auto s : moves) {
-      score = minimax(s.change, depth - 1, cur_player, max_player).score;
+      score = minimax(s.change, depth + 1, cur_player, max_player).score;
       if (score < best_score) {
 	best_score = score;
 	best_move = s.move;
@@ -437,7 +443,57 @@ scored_move AI::minimax(
   best.move = best_move;
 
   return best;
+  }*/
+
+scored_move AI::minimax(state s, int depth, Color cur_player, Color max_player) {
+  scored_move m, temp;
+  int cur_score;
+  string move;
+  vector<state> moves;
+  Color enemy;
+
+  if (cur_player == Color::BLACK) {enemy = Color::WHITE;}
+  else {enemy = Color::BLACK;}
+
+  if (depth == 0 || win(s.change) != Color::NONE) {
+    m.move = s.move;
+    m.score = board_val(s.change, cur_player);
+    return m;
+  }
+
+  if (cur_player == max_player) {
+    cur_score = -99999;
+    moves = generate_moves(s.change, cur_player);
+    for (auto mov : moves) {
+      //cout << mov.move << endl;
+      temp = minimax(mov, depth - 1, enemy, max_player);
+      if (temp.score > cur_score) {
+	cur_score = temp.score;
+	move = mov.move;
+      }
+    }
+    m.move = move;
+    m.score = cur_score;
+    return m;
+  }
+
+  else if (cur_player != max_player) {
+    cur_score = 99999;
+    moves = generate_moves(s.change, cur_player);
+    for (auto mov : moves) {
+      //cout << mov.move << endl;
+      temp = minimax(mov, depth - 1, enemy, max_player);
+      if (temp.score < cur_score) {
+	cur_score = temp.score;
+	move = mov.move;
+      }
+    }
+    m.move = move;
+    m.score = cur_score;
+    return m;
+  }
 }
+
 
 string AI::alpha_beta(string color) {
 
