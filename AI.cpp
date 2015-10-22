@@ -29,7 +29,7 @@ string AI::move(vector<vector<Piece*> > state, string diff, string color) {
   else {
     cerr << "Difficulty string not well formed!" << endl;
     }*/
-  cout << "MINIMAX: " << minimax(brd, 3, Color::WHITE, Color::BLACK) << endl;
+  cout << "MINIMAX: " << minimax(brd, 3, Color::BLACK, Color::BLACK).move << endl;
   return random("BLACK");
 }
 
@@ -67,11 +67,12 @@ Color AI::win(board b) {
   return Color::NONE; // No one has won
 }
 
-vector<board> AI::generate_moves(board b, Color player_color) {
+vector<state> AI::generate_moves(board b, Color player_color) {
   //board b_copy = b;
-  vector<board> ret;
+  vector<state> ret;
   Color original;
   int ct = 0;
+  state temp;
   for (int i = 0; i < rows; ++i) {
     for (int j = 0; j < cols; ++j) {
       if (b[i][j] == player_color) {
@@ -82,7 +83,9 @@ vector<board> AI::generate_moves(board b, Color player_color) {
 	    if (b[i-1][j] == Color::NONE) {
 	      b[i-1][j] = player_color;
 	      b[i][j] = Color::NONE;
-	      ret.push_back(b);
+	      temp.change = b;
+	      temp.move = move_str(i,j,i-1,j);
+	      ret.push_back(temp);
 	      b[i-1][j] = Color::NONE;
 	      b[i][j] = player_color;
 	    }
@@ -94,7 +97,9 @@ vector<board> AI::generate_moves(board b, Color player_color) {
 	      original = b[i-1][j-1];
 	      b[i-1][j-1] = player_color;
 	      b[i][j] = Color::NONE;
-	      ret.push_back(b);
+	      temp.change = b;
+	      temp.move = move_str(i,j,i-1,j-1);
+	      ret.push_back(temp);
 	      b[i][j] = player_color;
 	      b[i-1][j-1] = original;
 	    }
@@ -107,7 +112,9 @@ vector<board> AI::generate_moves(board b, Color player_color) {
 	      original = b[i-1][j+1];
 	      b[i-1][j+1] = player_color;
 	      b[i][j] = Color::NONE;
-	      ret.push_back(b);
+	      temp.change = b;
+	      temp.move = move_str(i,j,i-1,j+1);
+	      ret.push_back(temp);
 	      b[i-1][j+1] = original;
 	      b[i][j] = player_color;
 	    }
@@ -121,7 +128,9 @@ vector<board> AI::generate_moves(board b, Color player_color) {
 	      original = b[i+1][j];
 	      b[i+1][j] = player_color;
 	      b[i][j] = Color::NONE;
-	      ret.push_back(b);
+	      temp.change = b;
+	      temp.move = move_str(i,j,i+1,j);
+	      ret.push_back(temp);
 	      b[i+1][j] = original;
 	      b[i][j] = player_color;
 	    }
@@ -133,7 +142,9 @@ vector<board> AI::generate_moves(board b, Color player_color) {
 	      original = b[i+1][j-1];
 	      b[i+1][j-1] = player_color;
 	      b[i][j] = Color::NONE;
-	      ret.push_back(b);
+	      temp.change = b;
+	      temp.move = move_str(i,j,i+1,j-1);
+	      ret.push_back(temp);
 	      b[i+1][j-1] = original;
 	      b[i][j] = player_color;	    
 	    }
@@ -145,7 +156,9 @@ vector<board> AI::generate_moves(board b, Color player_color) {
 	      original = b[i+1][j+1];
 	      b[i+1][j+1] = player_color;
 	      b[i][j] = Color::NONE;
-	      ret.push_back(b);
+	      temp.change = b;
+	      temp.move = move_str(i,j,i+1,j+1);
+	      ret.push_back(temp);
 	      b[i+1][j+1] = original;
 	      b[i][j] = player_color;
 	    }
@@ -309,7 +322,7 @@ string AI::random(string color) {
 	  // Can go up
 	  if (i > 0) {
 	    if (brd[i-1][j] != Color::NONE) {
-	      possible_moves.push_back("("+to_string(j)+", "+to_string(i)+")*("+to_string(j)+", "+to_string(i-1)+")");
+	      possible_moves.push_back(move_str(i,j,i-1,j));
 	    }
 	  }
 
@@ -317,10 +330,10 @@ string AI::random(string color) {
 	  if (i > 0 && j > 0) {
 	    if (brd[i-1][j-1] != player_color) {
 	      if (brd[i-1][j-1] == enemy_color) {
-		eat_moves.push_back("("+to_string(j)+", "+to_string(i)+")*("+to_string(j-1)+", "+to_string(i-1)+")");
+		eat_moves.push_back(move_str(i,j,i-1,j-1));
 	      }
 	      else {
-		possible_moves.push_back("("+to_string(j)+", "+to_string(i)+")*("+to_string(j-1)+", "+to_string(i-1)+")");
+		possible_moves.push_back(move_str(i,j,i-1,j-1));
 	      }
 	    }
 	  }
@@ -329,9 +342,9 @@ string AI::random(string color) {
 	  if (i > 0 && j < 7) {
 	    if (brd[i-1][j+1] != player_color) {
 	      if (brd[i-1][j+1] == enemy_color) {
-		eat_moves.push_back("("+to_string(j)+", "+to_string(i)+")*("+to_string(j+1)+", "+to_string(i-1)+")");
+		eat_moves.push_back(move_str(i,j,i-1,j+1));
 	      }
-	      else {possible_moves.push_back("("+to_string(j)+", "+to_string(i)+")*("+to_string(j+1)+", "+to_string(i-1)+")");}
+	      else {possible_moves.push_back(move_str(i,j,i-1,j+1));}
 	    }
 	  }
 	}
@@ -340,7 +353,7 @@ string AI::random(string color) {
 	  // Can go down 
 	  if (i < 7) {
 	    if (brd[i+1][j] == Color::NONE) {
-	      possible_moves.push_back("("+to_string(j)+", "+to_string(i)+")*("+to_string(j)+", "+to_string(i+1)+")");
+	      possible_moves.push_back(move_str(i,j,i+1,j));
 	    }
 	  }
 
@@ -349,9 +362,9 @@ string AI::random(string color) {
 	    if (brd[i+1][j-1] != player_color) {
 	      if (brd[i+1][j-1] == enemy_color) {
 		cout << "EATING!!!!!!!!!!!!!!!!!" << endl;
-		eat_moves.push_back("("+to_string(j)+", "+to_string(i)+")*("+to_string(j-1)+", "+to_string(i+1)+")");
+		eat_moves.push_back(move_str(i,j,i+1,j-1));
 	      }
-	      else {possible_moves.push_back("("+to_string(j)+", "+to_string(i)+")*("+to_string(j-1)+", "+to_string(i+1)+")");}
+	      else {possible_moves.push_back(move_str(i,j,i+1,j-1));}
 	    }
 	  }
 
@@ -360,9 +373,9 @@ string AI::random(string color) {
 	    if (brd[i+1][j+1] != player_color) {
 	      if (brd[i+1][j+1] == enemy_color) {
 		cout << "EATING!!!!!!!!!!!!!!!!!" << endl;
-		eat_moves.push_back("("+to_string(j)+", "+to_string(i)+")*("+to_string(j+1)+", "+to_string(i+1)+")");
+		eat_moves.push_back(move_str(i,j,i+1,j+1));
 	      }
-	      else {possible_moves.push_back("("+to_string(j)+", "+to_string(i)+")*("+to_string(j+1)+", "+to_string(i+1)+")");}
+	      else {possible_moves.push_back(move_str(i,j,i+1,j+1));}
 	    }
 	  }
 	}
@@ -381,12 +394,14 @@ string AI::random(string color) {
   }
 }
 
-int AI::minimax(board cur_board, int depth, Color cur_player, Color max_player) {
+scored_move AI::minimax(
+	    board cur_board, int depth, Color cur_player, Color max_player) {
   int score = 0;
   int best_score = 0;
-  vector<board> moves;
-
+  vector<state> moves;
+  string best_move;
   Color enemy;
+  scored_move best;
   if (cur_player == Color::BLACK) {enemy = Color::WHITE;}
   else {enemy = Color::WHITE;}
 
@@ -397,21 +412,39 @@ int AI::minimax(board cur_board, int depth, Color cur_player, Color max_player) 
   if (cur_player == max_player) {
     score = -99999;
     moves = generate_moves(cur_board, max_player);
-    for (auto b : moves) {
-      score = minimax(b, depth - 1, enemy, max_player);
-      if (score > best_score) {best_score = score;}
+    for (auto s : moves) {
+      score = minimax(s.change, depth - 1, enemy, max_player).score;
+      if (score > best_score) {
+	best_score = score;
+	best_move = s.move;
+      }
     }
   }
 
   else {
     score = 99999;
     moves = generate_moves(cur_board, cur_player);
-    if (score < best_score) {best_score = score;}
+    for (auto s : moves) {
+      score = minimax(s.change, depth - 1, cur_player, max_player).score;
+      if (score < best_score) {
+	best_score = score;
+	best_move = s.move;
+      }
+    }
   }
 
-  return best_score;
+  best.score = best_score;
+  best.move = best_move;
+
+  return best;
 }
 
 string AI::alpha_beta(string color) {
 
+}
+
+string AI::move_str(int x1, int y1, int x2, int y2) {
+  string mov = "("+to_string(y1)+", "+to_string(x1)+")*("+to_string(y2)+", "+
+    to_string(x2)+")";
+  return mov;
 }

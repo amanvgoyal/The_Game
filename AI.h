@@ -16,7 +16,7 @@ struct scored_move {
 };
 
 struct state {
-  board b;
+  board change;
   std::string move;
 };
 
@@ -29,7 +29,7 @@ class AI {
   std::string ai_color;
 
   Color win(board);
-  std::vector<board> generate_moves(board, Color);
+  std::vector<state> generate_moves(board, Color);
   int board_val(board, Color);
   int threat_level(board, int, int);
   int mobility_level(board, int, int);
@@ -37,11 +37,12 @@ class AI {
 
   void print_board(board);
 
+  std::string move_str(int, int, int, int);
 public:
   std::string move(std::vector<std::vector<Piece*> >, std::string diff, std::string color);
 
   std::string random(std::string diff);
-  int minimax(board, int, Color, Color);
+  scored_move minimax(board, int, Color, Color);
   std::string alpha_beta(std::string diff);
     
   void update_state(std::vector<std::vector<Piece*>>);
