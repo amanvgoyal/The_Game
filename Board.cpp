@@ -27,12 +27,12 @@ using namespace std;
 */
 /*    History    */
 /*    MEMBER FUNCTIONS    */
-void History::move(Move move)
+void History::move(Move_Hist move)
 {
   move_history.push_back(move);
 }
 
-Move History::move(int turn)
+Move_Hist History::move(int turn)
 {
   return move_history[turn - 1];
 }
@@ -238,26 +238,31 @@ bool Board::check_game()
 	{	// both players should not have pieces on the enemy home row at the same time
 	  // since this function is called at the end of each player's turn
 	  // iterate through the white home row
-	  if (board_spaces[0][i]->color() == Color::BLACK)
+	  if(board_spaces[0][i]!=nullptr)
 	    {
-	      game_log.print(INFORMATION, function, string("Victory condition hit; black player has reached the white home row."));
-	      winner = Color::BLACK;
-	      return true;
+	      if (board_spaces[0][i]->color() == Color::BLACK)
+		{
+		  game_log.print(INFORMATION, function, string("Victory condition hit; black player has reached the white home row."));
+		  winner = Color::BLACK;
+		  return true;
+		}
+	      if (board_spaces[row-1][i] != nullptr) {
+		// iterate through the black home row
+		if (board_spaces[row - 1][i]->color() == Color::WHITE)
+		  {
+		    game_log.print(INFORMATION, function, string("Victory condition hit; white player has reached the black home row."));
+		    winner = Color::WHITE;
+		    return true;
+		  }
+	      
+	      }
 	    }
-	  // iterate through the black home row
-	  if (board_spaces[row - 1][i]->color() == Color::WHITE)
-	    {
-	      game_log.print(INFORMATION, function, string("Victory condition hit; white player has reached the black home row."));
-	      winner = Color::WHITE;
-	      return true;
-	    }
+	  game_log.print(INFORMATION, function, string("No victory conditions were met."));
+	  return false;
 	}
-      game_log.print(INFORMATION, function, string("No victory conditions were met."));
-      return false;
     }
 }
-
-int Board::column_inx(char index)
+  int Board::column_inx(char index)
 {	// converts the letter index of the column to an integer
 	// for the vector
   index = toupper(index);
@@ -435,6 +440,37 @@ bool Board::set_size(int rows, int cols)
   return true;
 }
 
+bool Board::move_piece(int piece_row, char piece_col, int move_row, char move_col)
+{
+  // figure out direction that piece is moving
+  int fwd_r = (turn == Color::WHITE) ? piece_row + 1 : piece_row - 1;
+  if (piece_col == move_col)
+    {	// piece is moving forward
+      cout << "Piece at " << piece_row << ',' << piece_col << "moves forward to " << move_row << ',' << move_col << ".\n";
+      return move_piece(piece_row, piece_col, FORWARD);
+    }
+  else
+    {	// piece is moving left or right
+      int right_c = (turn == Color::WHITE) ? piece_col + 1 : piece_col - 1;
+      int left_c = (turn == Color::WHITE) ? piece_col - 1 : piece_col + 1;
+      if (right_c == move_col) 
+	{
+	  cout << "Piece at " << piece_row << ',' << piece_col << "moves fwd-right to " << move_row << ',' << move_col << ".\n";
+	  return move_piece(piece_row, piece_col, RIGHT);
+	}
+      else if(left_c == move_col)
+	{
+	  cout << "Piece at " << piece_row << ',' << piece_col << "moves fwd-left to " << move_row << ',' << move_col << ".\n";
+	  return move_piece(piece_row, piece_col, LEFT);
+	}
+      else 
+	{
+	  cout << "Invalid move: Piece at " << piece_row << ',' << piece_col << " to " << move_row << ',' << move_col << ".\n";
+	  return false;
+	}
+    }
+}
+
 bool Board::move_piece(int rows, char cols, Direction direction)
 {	// assumes the rows starts at 1 and cols start at A
   Move move;
@@ -467,7 +503,10 @@ bool Board::move_piece(Move move)
       int orig_r = piece_to_move->position().row;
       int orig_c = piece_to_move->position().col;
       // add the move to the move history
-      history.move(move);
+      Move_Hist mv_hist;
+      mv_hist.piece = *move.piece;
+      mv_hist.direction = move.direction;
+      history.move(mv_hist);
       switch (move.direction)
 	{
 	case FORWARD:
@@ -512,6 +551,20 @@ bool Board::move_piece(Move move)
     }
   return false;
 }
+void Board::ai_turn(){
+  string s = smart.move(board_spaces,"EASY","BLACK");
+  //bool move_piece(int piece_row, char piece_col, int move_row, char move_col);
+  cout<<"THIS IS S:"<<s<<endl;
+  for(int i=0;i<s.length();++i)
+    cout<<"S["<<i<<"]:"<<s[i]<<endl;
+  string a,b;
+  a.insert(0,1,s[4]);
+  b.insert(0,1,s[11]);
+  cout<<"This is what row  a has:"<<a<<endl;
+  cout<<"This is what row  b has:"<<b<<endl;
+  if(move_piece(8-atoi(a.c_str()),(s[1]-'0')+'A',8-atoi(b.c_str()),(s[8]-'0')+'A'))
+    cout<<"BLACK PIECE MOVED CORRECTLY"<<endl;
+}
 
 void Board::end_turn()
 {	// checks victory conditions and displays the results if they are met
@@ -523,7 +576,7 @@ void Board::end_turn()
   if (check_game())
     {	// victory conditions were found
       game_end = true;
-      show_results();
+      //show_results();
     }
   else
     {	// switch turns
@@ -730,11 +783,12 @@ bool Board::undo_move()
   return true;
 }
 
-void Board::show_results()
+string Board::show_results()
 {	// shows the results of the game
   string function = "show_results";
   string win = (winner == Color::WHITE) ? "White" : "Black";
   string reason;
+  string output;
   int enemy_pieces = (winner == Color::WHITE) ? num_black_pieces : num_white_pieces;
 	
   game_log.print(INFORMATION, function, string("Displaying game results. . ."));
@@ -743,7 +797,9 @@ void Board::show_results()
   else reason = "reached the opponent's home row.";
 	
   cout << "The " << win << " player " << reason <<'\n';
+  output += "The " + win + " player " + reason + "\n";
   cout << "This game's winner is the " << win << " player!\n";
+  output += "This game's winner is the " + win + " player!\n";
 }
 
 void Board::display_board()
@@ -865,66 +921,107 @@ string Board::output_board(vector<vector<Piece*>> game_board)
   int en_player_pieces = turn == Color::WHITE ? num_black_pieces : num_white_pieces;
   char col_label = 'A';
   int row_label = 8;
-
-  game_log.print(INFORMATION, function, string("Outputting board. . ."));
-  output = "Current turn number: " + to_string(turn_num) + "\t\t" + cur_turn + " player's turn\n\n\n";
-  for (int i = row + 1; i >= 0; --i)
+	
+  if (game_end)
+    {	// Show results
+      return show_results();
+    }
+  else
     {
-      output += "  ";
-      if (i < row)
-	{	// add the row numbers
-	  output += to_string(row_label) + " ";
-	  --row_label;
-	}
-      else
+      game_log.print(INFORMATION, function, string("Outputting board. . ."));
+      output = "Current turn number: " + to_string(turn_num) + "\t\t" + cur_turn + " player's turn\n\n\n";
+      for (int i = row + 1; i >= 0; --i)
 	{
 	  output += "  ";
-	}
-      for (int j = 0; j < col; ++j)
-	{	// draw the board
-	  if (i == row + 1)
-	    {
-	      output += " ";
-	      output += col_label;
-	      ++col_label;
-	    }
-	  else if (i == row)
-	    {
-	      output += " _";
+	  if (i < row)
+	    {	// add the row numbers
+	      output += to_string(row_label) + " ";
+	      --row_label;
 	    }
 	  else
 	    {
-	      Piece* cur_space = board_spaces[i][j];
-	      output += '|';
-	      if (cur_space == nullptr)
-		{	// empty space
-		  output += "_";
-		}
-	      else if (cur_space->color() == Color::WHITE)
-		{	// white piece (indicated by O)
-		  output += "O";
-		}
-	      else if (cur_space->color() == Color::BLACK)
-		{	// black piece (indicated by X)
-		  output += "X";
-		}
-	      if (j == col - 1)
-		{
-		  output += "|";
-		}
+	      output += "  ";
 	    }
+	  for (int j = 0; j < col; ++j)
+	    {	// draw the board
+	      if (i == row + 1)
+		{
+		  output += " ";
+		  output += col_label;
+		  ++col_label;
+		}
+	      else if (i == row)
+		{
+		  output += " _";
+		}
+	      else
+		{
+		  Piece* cur_space = board_spaces[i][j];
+		  output += '|';
+		  if (cur_space == nullptr)
+		    {	// empty space
+		      output += "_";
+		    }
+		  else if (cur_space->color() == Color::WHITE)
+		    {	// white piece (indicated by O)
+		      output += "O";
+		    }
+		  else if (cur_space->color() == Color::BLACK)
+		    {	// black piece (indicated by X)
+		      output += "X";
+		    }
+		  if (j == col - 1)
+		    {
+		      output += "|";
+		    }
+		}
 
+	    }
+	  if (i == 5)
+	    {
+	      output += "\t\tYour total number of pieces:  " + to_string(cur_player_pieces);
+	    }
+	  else if (i == 4)
+	    {
+	      output += "\t\tEnemy total number of pieces: " + to_string(en_player_pieces);
+	    }
+	  output += "\n";
 	}
-      if (i == 5)
-	{
-	  output += "\t\tYour total number of pieces:  " + to_string(cur_player_pieces);
-	}
-      else if (i == 4)
-	{
-	  output += "\t\tEnemy total number of pieces: " + to_string(en_player_pieces);
+      if (turn == Color::BLACK)
+	{	// display move made for AI
+	  Move_Hist ai_move = history.move(turn_num);
+	  int ai_row = ai_move.piece.position().row;
+	  char ai_col = ai_move.piece.position().col + 'A';
+	  string ai_dir;
+			
+	  switch(ai_move.direction)
+	    {
+	    case FORWARD:
+	      {
+		ai_dir = "FWD";
+		break;
+	      }
+	    case LEFT:
+	      {
+		ai_dir = "LEFT";
+		break;
+	      }
+	    case RIGHT:
+	      {
+		ai_dir = "RIGHT";
+		break;
+	      }
+	    default:
+	      {
+		break;
+	      }
+	    }
+			
+	  output += ai_col;
+	  output += to_string(ai_row);
+	  output += " " + ai_dir + "\n";
 	}
       output += "\n";
+      return output;
     }
-  output += "\n";
-  return output;
 }

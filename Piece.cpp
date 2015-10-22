@@ -19,6 +19,17 @@ using namespace std;
 **    CLASS DEFINITIONS    ********************************
  *********************************************************
 */
+/*    CONSTRUCTOR    */
+Piece::Piece()
+{
+	id = 0;
+	team = Color::WHITE;
+	pos.row = -1;
+	pos.col = -1;
+	active = false;
+}
+
+/*    MEMBER FUNCTIONS    */
 void Piece::position(Position space)
 {	// the validity of the position is checked on the board before being set
 	pos = space;

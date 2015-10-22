@@ -15,7 +15,7 @@
 stack<Token> tokens;
 int errors= 0;
 %}
-MOVE [a-g]{1}[1-8]{1}
+MOVE [a-h]{1}[1-8]{1}
 Newline "\n"
 ID [a-z]|[a-z0-9.]*
 DIGIT [0-9]

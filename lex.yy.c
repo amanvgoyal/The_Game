@@ -432,14 +432,14 @@ static yyconst flex_int32_t yy_meta[50] =
 
 static yyconst flex_int16_t yy_base[78] =
     {   0,
-        0,    0,  126,  182,  182,  182,    0,   43,  112,   44,
-      103,   45,   46,   50,   45,   37,   50,   51,   48,   46,
-        0,   61,  101,  182,    0,   69,   45,   46,   56,   68,
-       63,   68,   89,   81,   84,   83,   87,   91,   79,   74,
-       79,    0,   96,   99,  128,   84,   96,  101,   98,  108,
-      108,    0,    0,    0,  117,  136,  143,   62,    0,  114,
-      122,    0,  182,  142,   54,  133,    0,  125,  144,    0,
-        0,  139,  182,  182,   54,  176,  178
+        0,    0,  158,  180,  180,  180,    0,   43,  153,   44,
+      117,   45,   46,   50,   49,   32,   50,   51,   48,   39,
+        0,   59,  112,  180,    0,  106,   43,   44,   53,   59,
+       49,   66,   86,   79,   84,   83,   87,   90,   78,   73,
+       78,    0,   94,   98,  126,   86,   90,   99,   95,  107,
+      118,    0,    0,    0,  117,  135,  141,  106,    0,  113,
+      120,    0,  180,  140,   97,  131,    0,  123,  142,    0,
+        0,  137,  180,  180,   69,  174,  176
     } ;
 
 static yyconst flex_int16_t yy_def[78] =
@@ -454,64 +454,62 @@ static yyconst flex_int16_t yy_def[78] =
        75,   74,   74,    0,   74,   74,   74
     } ;
 
-static yyconst flex_int16_t yy_nxt[232] =
+static yyconst flex_int16_t yy_nxt[230] =
     {   0,
         4,    5,    6,    4,    4,    7,    8,    8,    9,   10,
        11,   12,   13,   14,   11,   15,   16,    7,   17,   18,
         7,    7,    7,   19,    7,    7,   20,    7,    7,    7,
        10,   12,   13,   14,   11,   15,   16,   17,   18,    7,
         7,    7,   19,    7,    7,   20,    7,    7,    7,   22,
-       22,   25,   25,   25,   31,   28,   21,   25,   69,   33,
-       26,   27,   34,   35,   36,   74,   37,   22,   22,   39,
-       40,   32,   41,   38,   29,   31,   28,   30,   33,   42,
-       26,   27,   34,   35,   36,   37,   43,   44,   39,   40,
-       32,   45,   41,   29,   46,   47,   30,   48,   49,   42,
+       22,   25,   25,   25,   33,   28,   25,   25,   31,   37,
+       26,   27,   34,   35,   36,   22,   22,   39,   40,   41,
+       42,   21,   43,   33,   29,   32,   28,   30,   37,   31,
+       26,   27,   34,   35,   36,   44,   39,   40,   45,   41,
+       42,   43,   46,   29,   32,   47,   30,   48,   49,   50,
 
-       50,   51,   24,   52,   53,   43,   44,   54,   55,   59,
-       25,   33,   60,   24,   46,   47,   61,   48,   49,   62,
-       51,   50,   52,   53,   63,   74,   64,   54,   59,   55,
-       33,   56,   60,   57,   57,   57,   61,   65,   62,   56,
-       66,   56,   56,   56,   63,   64,   56,   67,   57,   57,
-       57,   68,   70,   72,   71,   73,   65,   74,   74,   66,
-       74,   74,   74,   74,   74,   74,   67,   74,   74,   74,
-       74,   70,   68,   71,   72,   73,   23,   23,   23,   58,
-       58,    3,   74,   74,   74,   74,   74,   74,   74,   74,
+       51,   69,   52,   53,   44,   54,   60,   55,   33,   74,
+       38,   59,   46,   24,   61,   47,   62,   48,   49,   51,
+       50,   52,   53,   63,   25,   54,   60,   33,   55,   56,
+       59,   57,   57,   57,   61,   62,   64,   65,   56,   66,
+       56,   56,   56,   63,   56,   67,   57,   57,   57,   68,
+       70,   72,   71,   73,   24,   64,   65,   74,   66,   74,
+       74,   74,   74,   74,   67,   74,   74,   74,   74,   70,
+       68,   71,   72,   73,   23,   23,   23,   58,   58,    3,
+       74,   74,   74,   74,   74,   74,   74,   74,   74,   74,
        74,   74,   74,   74,   74,   74,   74,   74,   74,   74,
 
        74,   74,   74,   74,   74,   74,   74,   74,   74,   74,
        74,   74,   74,   74,   74,   74,   74,   74,   74,   74,
-       74,   74,   74,   74,   74,   74,   74,   74,   74,   74,
-       74
+       74,   74,   74,   74,   74,   74,   74,   74,   74
     } ;
 
-static yyconst flex_int16_t yy_chk[232] =
+static yyconst flex_int16_t yy_chk[230] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    8,
-        8,   10,   12,   13,   15,   13,   75,   14,   65,   16,
-       10,   12,   17,   18,   19,   58,   20,   22,   22,   27,
-       28,   15,   29,   26,   13,   15,   13,   14,   16,   30,
-       10,   12,   17,   18,   19,   20,   31,   32,   27,   28,
-       15,   33,   29,   13,   34,   35,   14,   36,   37,   30,
+        8,   10,   12,   13,   16,   13,   15,   14,   15,   20,
+       10,   12,   17,   18,   19,   22,   22,   27,   28,   29,
+       30,   75,   31,   16,   13,   15,   13,   14,   20,   15,
+       10,   12,   17,   18,   19,   32,   27,   28,   33,   29,
+       30,   31,   34,   13,   15,   35,   14,   36,   37,   38,
 
-       38,   39,   23,   40,   41,   31,   32,   43,   44,   46,
-       11,   33,   47,    9,   34,   35,   48,   36,   37,   49,
-       39,   38,   40,   41,   50,    3,   51,   43,   46,   44,
-       33,   45,   47,   45,   45,   45,   48,   55,   49,   56,
-       60,   56,   56,   56,   50,   51,   57,   61,   57,   57,
-       57,   64,   66,   69,   68,   72,   55,    0,    0,   60,
-        0,    0,    0,    0,    0,    0,   61,    0,    0,    0,
-        0,   66,   64,   68,   69,   72,   76,   76,   76,   77,
-       77,   74,   74,   74,   74,   74,   74,   74,   74,   74,
+       39,   65,   40,   41,   32,   43,   47,   44,   33,   58,
+       26,   46,   34,   23,   48,   35,   49,   36,   37,   39,
+       38,   40,   41,   50,   11,   43,   47,   33,   44,   45,
+       46,   45,   45,   45,   48,   49,   51,   55,   56,   60,
+       56,   56,   56,   50,   57,   61,   57,   57,   57,   64,
+       66,   69,   68,   72,    9,   51,   55,    3,   60,    0,
+        0,    0,    0,    0,   61,    0,    0,    0,    0,   66,
+       64,   68,   69,   72,   76,   76,   76,   77,   77,   74,
+       74,   74,   74,   74,   74,   74,   74,   74,   74,   74,
        74,   74,   74,   74,   74,   74,   74,   74,   74,   74,
 
        74,   74,   74,   74,   74,   74,   74,   74,   74,   74,
        74,   74,   74,   74,   74,   74,   74,   74,   74,   74,
-       74,   74,   74,   74,   74,   74,   74,   74,   74,   74,
-       74
+       74,   74,   74,   74,   74,   74,   74,   74,   74
     } ;
 
 static yy_state_type yy_last_accepting_state;
@@ -544,7 +542,7 @@ char *yytext;
 
 stack<Token> tokens;
 int errors= 0;
-#line 548 "lex.yy.c"
+#line 546 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -733,7 +731,7 @@ YY_DECL
     
 #line 22 "scanner.l"
 
-#line 737 "lex.yy.c"
+#line 735 "lex.yy.c"
 
 	if ( !(yy_init) )
 		{
@@ -792,7 +790,7 @@ yy_match:
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 182 );
+		while ( yy_base[yy_current_state] != 180 );
 
 yy_find_action:
 		yy_act = yy_accept[yy_current_state];
@@ -985,7 +983,7 @@ YY_RULE_SETUP
 #line 137 "scanner.l"
 ECHO;
 	YY_BREAK
-#line 989 "lex.yy.c"
+#line 987 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2261,9 +2259,11 @@ bool Parser::par_empty(){
 int Parser::par_stacksize(){
   return ordered.size();
 }
+string a;
 string Parser::par_display(){
   if(counter!=-1){
-  string temp = Game.output_board();
+  string temp = a+Game.output_board();
+  a.clear();
   return temp;
   }
   string temp = "NO GAME HAS STARTED";
@@ -2283,6 +2283,7 @@ string Parser::par_line(){
       move = temp.get_string_value();
       cout<<"Move"<<move<<endl;
       ordered.pop();
+      if(ordered.empty()) return "FALSE";
       temp = ordered.top();
       //bool move_piece(int rows, char cols, Direction direction);
         if(temp.get_type()==T_FWD){
@@ -2292,6 +2293,9 @@ string Parser::par_line(){
           row.insert(0,1,move[1]);
           cout<<"This is what row has:"<<row<<endl;
           if(Game.move_piece(atoi(row.c_str()),move[0],FORWARD)){
+            Game.end_turn();
+            Game.ai_turn();
+            a = Game.output_board();
             Game.end_turn();
             return par_display();
           }
@@ -2304,6 +2308,9 @@ string Parser::par_line(){
           row.insert(0,1,move[1]);
           if(Game.move_piece(atoi(row.c_str()),move[0],LEFT)){
             Game.end_turn();
+            Game.ai_turn();
+            a = Game.output_board();
+            Game.end_turn();
             return par_display();
           }
           else return "FALSE";
@@ -2314,6 +2321,9 @@ string Parser::par_line(){
           string row;
           row.insert(0,1,move[1]);
           if(Game.move_piece(atoi(row.c_str()),move[0],RIGHT)){
+            Game.end_turn();
+            Game.ai_turn();
+            a = Game.output_board();
             Game.end_turn();
             return par_display();
           }
@@ -2339,6 +2349,7 @@ string Parser::par_line(){
   }
   if(temp.get_type()==T_HUMANAI){
       ordered.pop();
+      if(ordered.empty()) return "FALSE";
   		temp = ordered.top();
   		if(temp.get_type()==T_EASY||temp.get_type()==T_MEDIUM||temp.get_type()==T_HARD){
   			switch(temp.get_type()){

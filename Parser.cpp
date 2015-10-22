@@ -70,9 +70,11 @@ bool Parser::par_empty(){
 int Parser::par_stacksize(){
   return ordered.size();
 }
+string a;
 string Parser::par_display(){
   if(counter!=-1){
-  string temp = Game.output_board();
+  string temp = a+Game.output_board();
+  a.clear();
   return temp;
   }
   string temp = "NO GAME HAS STARTED";
@@ -92,6 +94,7 @@ string Parser::par_line(){
       move = temp.get_string_value();
       cout<<"Move"<<move<<endl;
       ordered.pop();
+      if(ordered.empty()) return "FALSE";
       temp = ordered.top();
       //bool move_piece(int rows, char cols, Direction direction);
         if(temp.get_type()==T_FWD){
@@ -101,6 +104,9 @@ string Parser::par_line(){
           row.insert(0,1,move[1]);
           cout<<"This is what row has:"<<row<<endl;
           if(Game.move_piece(atoi(row.c_str()),move[0],FORWARD)){
+            Game.end_turn();
+            Game.ai_turn();
+            a = Game.output_board();
             Game.end_turn();
             return par_display();
           }
@@ -113,6 +119,9 @@ string Parser::par_line(){
           row.insert(0,1,move[1]);
           if(Game.move_piece(atoi(row.c_str()),move[0],LEFT)){
             Game.end_turn();
+            Game.ai_turn();
+            a = Game.output_board();
+            Game.end_turn();
             return par_display();
           }
           else return "FALSE";
@@ -123,6 +132,9 @@ string Parser::par_line(){
           string row;
           row.insert(0,1,move[1]);
           if(Game.move_piece(atoi(row.c_str()),move[0],RIGHT)){
+            Game.end_turn();
+            Game.ai_turn();
+            a = Game.output_board();
             Game.end_turn();
             return par_display();
           }
@@ -148,6 +160,7 @@ string Parser::par_line(){
   }
   if(temp.get_type()==T_HUMANAI){
       ordered.pop();
+      if(ordered.empty()) return "FALSE";
   		temp = ordered.top();
   		if(temp.get_type()==T_EASY||temp.get_type()==T_MEDIUM||temp.get_type()==T_HARD){
   			switch(temp.get_type()){

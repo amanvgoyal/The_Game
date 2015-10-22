@@ -41,9 +41,10 @@ class Piece
 	bool active;							// stores whether the piece is on the board or not
 public:
 	/*    CONSTRUCTOR     */
+	Piece();
 	Piece(int number, Color color, Position position, bool on_board) 
 	: id(number), team(color), pos(position), active(on_board) { };
-	/*    HELPER FUNCTIONS    */
+	/*    MEMBER FUNCTIONS    */
 	void position(Position space);			// set the position
 	void position(int row, int col);		// set the position
 	Position position();					// returns the position of the piece

@@ -39,6 +39,12 @@ Log::Log(string filename, ios_base::openmode mode)
 	file_open = log.is_open();
 }
 
+/*    DESTRUCTOR    */
+Log::~Log()
+{
+	log.close();
+}
+
 /*    MEMBER FUNCTIONS    */
 void Log::open(const char* filename, ios_base::openmode mode)
 {
@@ -49,6 +55,7 @@ void Log::open(const char* filename, ios_base::openmode mode)
 void Log::open(string filename, ios_base::openmode mode)
 {
 	log.open(filename, mode);
+	file_open = log.is_open();
 }
 
 void Log::print(Message_Type type, const char* function, const char* message)
@@ -75,7 +82,7 @@ void Log::print(Message_Type type, string function, string message)
 		default:
 			break;
 	}
-	log << '[' << timestamp() << "]\t" << msg_type << ' ' << function << ": " << message << '\n';
+	log << '[' << timestamp() << "]\t" << msg_type << ' ' << function << ":\t" << message << '\n';
 }
 
 bool Log::is_open()

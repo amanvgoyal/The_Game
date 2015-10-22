@@ -28,11 +28,11 @@ class AI {
   void print_board(board);
 
 public:
-  std::string move(std::vector<std::vector<Piece*> >, std::string, std::string);
+  std::string move(std::vector<std::vector<Piece*> >, std::string diff, std::string color);
 
-  std::string random(std::string);
+  std::string random(std::string diff);
   int minimax(board, int, Color, Color);
-  std::string alpha_beta(std::string);
+  std::string alpha_beta(std::string diff);
     
   void update_state(std::vector<std::vector<Piece*>>);
 };

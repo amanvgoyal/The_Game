@@ -13,15 +13,13 @@ const int cols = 8;
 const int MAX_DEPTH = 3;
 
 string AI::move(vector<vector<Piece*> > state, string diff, string color) {
-  Color c;
-  if (color == "BLACK") {c = Color::BLACK;}
-  else if (color == "WHITE") {c = Color::WHITE;}
+  ai_color = color;
   update_state(state);
   /*
   if (diff == "EASY") {
     return random(color);
   }
-  
+   
   else if (diff == "MEDIUM") {
     return minimax(color);
   }
@@ -31,19 +29,28 @@ string AI::move(vector<vector<Piece*> > state, string diff, string color) {
   else {
     cerr << "Difficulty string not well formed!" << endl;
     }*/
-  return "";
+  cout << "MINIMAX: " << minimax(brd, 3, Color::WHITE, Color::BLACK) << endl;
+  return random("BLACK");
 }
 
 void AI::update_state(vector<vector<Piece*>> state) {
-  /*Position pos;
-  for (auto v : state) {
-    for (auto p : v) {
-      pos = p->position(); 
-      board[pos.row][pos.col] = p->color();
+  Position pos;
+  for (int i = 0; i < 8; ++i) {
+    for (int j = 0; j < 8; ++j) {
+      brd[i][j] = Color::NONE;
     }
   }
-  */
 
+  for (auto v : state) {
+    for (auto p : v) {
+      if (p != nullptr) {
+	pos = p->position(); 
+	brd[7-pos.row][pos.col] = p->color();
+      }
+    }
+  }
+  
+  /*
   for (int i = 0; i < rows; ++i) {
     for (int j = 0; j < cols; ++j) {
       if (i == 0 || i == 1) {
@@ -58,14 +65,14 @@ void AI::update_state(vector<vector<Piece*>> state) {
 	brd[i][j] = Color::NONE;
       }
     }
-  }
+  }*/
 
   print_board(brd);
-  cout << endl;
+  //cout << endl;
   //vector<board> bs = generate_moves(brd, Color::BLACK);
   //cout << bs.size() << endl;
 
-  cout << random("BLACK") << endl;
+  //cout << random("BLACK") << endl;
 
   /*for (auto v : bs) {
     print_board(v);
@@ -312,17 +319,24 @@ string AI::random(string color) {
   vector<string> eat_moves;
 
   Color player_color;
-  if (color == "BLACK") {player_color = Color::BLACK;}
-  else {player_color = Color::WHITE;}
+  Color enemy_color;
+  if (color == "BLACK") {
+    player_color = Color::BLACK;
+    enemy_color = Color::WHITE;
+  }
+  else {
+    player_color = Color::WHITE;
+    enemy_color = Color::BLACK;
+  }
 
   for (int i = 0; i < rows; ++i) {
     for (int j = 0; j < cols; ++j) {
       if (brd[i][j] == player_color) {
-	
 	if (player_color == Color::WHITE) {
+
 	  // Can go up
 	  if (i > 0) {
-	    if (brd[i-1][j] == Color::NONE) {
+	    if (brd[i-1][j] != Color::NONE) {
 	      possible_moves.push_back("("+to_string(j)+", "+to_string(i)+")*("+to_string(j)+", "+to_string(i-1)+")");
 	    }
 	  }
@@ -330,7 +344,7 @@ string AI::random(string color) {
 	  // Can go diag left
 	  if (i > 0 && j > 0) {
 	    if (brd[i-1][j-1] != player_color) {
-	      if (brd[i-1][j-1] != Color::NONE) {
+	      if (brd[i-1][j-1] == enemy_color) {
 		eat_moves.push_back("("+to_string(j)+", "+to_string(i)+")*("+to_string(j-1)+", "+to_string(i-1)+")");
 	      }
 	      else {
@@ -342,7 +356,7 @@ string AI::random(string color) {
 	  // Can go diag right
 	  if (i > 0 && j < 7) {
 	    if (brd[i-1][j+1] != player_color) {
-	      if (brd[i-1][j+1] != Color::NONE) {
+	      if (brd[i-1][j+1] == enemy_color) {
 		eat_moves.push_back("("+to_string(j)+", "+to_string(i)+")*("+to_string(j+1)+", "+to_string(i-1)+")");
 	      }
 	      else {possible_moves.push_back("("+to_string(j)+", "+to_string(i)+")*("+to_string(j+1)+", "+to_string(i-1)+")");}
@@ -361,7 +375,8 @@ string AI::random(string color) {
 	  // Can go diag left
 	  if (i < 7 && j > 0) {
 	    if (brd[i+1][j-1] != player_color) {
-	      if (brd[i+1][j-1] != Color::NONE) {
+	      if (brd[i+1][j-1] == enemy_color) {
+		cout << "EATING!!!!!!!!!!!!!!!!!" << endl;
 		eat_moves.push_back("("+to_string(j)+", "+to_string(i)+")*("+to_string(j-1)+", "+to_string(i+1)+")");
 	      }
 	      else {possible_moves.push_back("("+to_string(j)+", "+to_string(i)+")*("+to_string(j-1)+", "+to_string(i+1)+")");}
@@ -371,7 +386,8 @@ string AI::random(string color) {
 	  // Can go diag right
 	  if (i < 7 && j < 7) {
 	    if (brd[i+1][j+1] != player_color) {
-	      if (brd[i+1][j+1] != Color::NONE) {
+	      if (brd[i+1][j+1] == enemy_color) {
+		cout << "EATING!!!!!!!!!!!!!!!!!" << endl;
 		eat_moves.push_back("("+to_string(j)+", "+to_string(i)+")*("+to_string(j+1)+", "+to_string(i+1)+")");
 	      }
 	      else {possible_moves.push_back("("+to_string(j)+", "+to_string(i)+")*("+to_string(j+1)+", "+to_string(i+1)+")");}

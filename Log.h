@@ -36,6 +36,9 @@ public:
 	Log(const char* filename, std::ios_base::openmode mode = std::fstream::out | std::fstream::trunc);
 	Log(std::string filename, std::ios_base::openmode mode = std::fstream::out | std::fstream::trunc);
 	
+	/*    DESTRUCTOR    */
+	~Log();
+	
 	/*    MEMBER FUNCTIONS    */
 	void open(const char* filename, std::ios_base::openmode mode = std::fstream::out | std::fstream::trunc);
 	void open(std::string filename, std::ios_base::openmode mode = std::fstream::out | std::fstream::trunc);
