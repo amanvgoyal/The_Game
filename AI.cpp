@@ -36,8 +36,8 @@ string AI::move(vector<vector<Piece*> > board_state, string diff, string color) 
   s.change = brd;
   s.move = "";
   //cout << "MINIMAX: " << minimax(s, 3, Color::BLACK, Color::BLACK).move << endl;
-  return minimax(s, 3, Color::BLACK, Color::WHITE).move;
-  //return minimax(s, 4, Color::BLACK, Color::BLACK).move;
+  return minimax(s, 3, Color::BLACK, Color::WHITE).move; // wrong? always eats?
+  //return minimax(s, 4, Color::BLACK, Color::BLACK).move; // eats for depth 1
   //return random("BLACK");
 }
 
