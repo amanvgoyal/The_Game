@@ -11,7 +11,7 @@ using namespace std;
 const int rows = 8;
 const int cols = 8;
 
-const int MAX_DEPTH = 2;
+const int MAX_DEPTH = 3;
 
 string AI::move(vector<vector<Piece*> > board_state, string diff, string color) {
   ai_color = color;
@@ -36,7 +36,8 @@ string AI::move(vector<vector<Piece*> > board_state, string diff, string color) 
   s.change = brd;
   s.move = "";
   //cout << "MINIMAX: " << minimax(s, 3, Color::BLACK, Color::BLACK).move << endl;
-  return minimax(s, 1, Color::BLACK, Color::BLACK).move;
+  return minimax(s, 3, Color::BLACK, Color::WHITE).move;
+  //return minimax(s, 4, Color::BLACK, Color::BLACK).move;
   //return random("BLACK");
 }
 
@@ -274,7 +275,7 @@ int AI::board_val(board b, bool ate, Color player_color) {
   
   // Bonus if a piece at another
   if (ate) {
-    board_val += 100;
+    board_val += 9999999;
   } // Too much?
 
   // First check for wins??
@@ -416,51 +417,6 @@ string AI::random(string color) {
     return possible_moves[index];
   }
 }
-
-/*scored_move AI::minimax(
-	    board cur_board, int depth, Color cur_player, Color max_player) {
-  int score = 0;
-  int best_score = 0;
-  vector<state> moves;
-  string best_move;
-  Color enemy;
-  scored_move best;
-  if (cur_player == Color::BLACK) {enemy = Color::WHITE;}
-  else {enemy = Color::WHITE;}
-
-  if (depth == MAX_DEPTH || win(cur_board) != Color::NONE) {
-    score = board_val(cur_board, cur_player);
-  }
-
-  if (cur_player == max_player) {
-    score = -99999;
-    moves = generate_moves(cur_board, max_player);
-    for (auto s : moves) {
-      score = minimax(s.change, depth + 1, enemy, max_player).score;
-      if (score > best_score) {
-	best_score = score;
-	best_move = s.move;
-      }
-    }
-  }
-
-  else {
-    score = 99999;
-    moves = generate_moves(cur_board, cur_player);
-    for (auto s : moves) {
-      score = minimax(s.change, depth + 1, cur_player, max_player).score;
-      if (score < best_score) {
-	best_score = score;
-	best_move = s.move;
-      }
-    }
-  }
-
-  best.score = best_score;
-  best.move = best_move;
-
-  return best;
-  }*/
 
 scored_move AI::minimax(state s, int depth, Color cur_player, Color max_player) {
   scored_move m, temp;
