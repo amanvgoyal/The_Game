@@ -17,6 +17,7 @@ struct scored_move {
 
 struct state {
   board change;
+  bool ate = false;;
   std::string move;
 };
 
@@ -30,7 +31,7 @@ class AI {
 
   Color win(board);
   std::vector<state> generate_moves(board, Color);
-  int board_val(board, Color);
+  int board_val(board, bool, Color);
   int threat_level(board, int, int);
   int mobility_level(board, int, int);
   int piece_val(board, int, int);

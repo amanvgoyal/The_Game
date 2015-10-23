@@ -36,7 +36,7 @@ string AI::move(vector<vector<Piece*> > board_state, string diff, string color) 
   s.change = brd;
   s.move = "";
   //cout << "MINIMAX: " << minimax(s, 3, Color::BLACK, Color::BLACK).move << endl;
-  return minimax(s, 3, Color::BLACK, Color::BLACK).move;
+  return minimax(s, 1, Color::BLACK, Color::BLACK).move;
   //return random("BLACK");
 }
 
@@ -76,6 +76,7 @@ Color AI::win(board b) {
 
 vector<state> AI::generate_moves(board b, Color player_color) {
   //board b_copy = b;
+  srand(unsigned(time(0)));
   vector<state> ret;
   Color original;
   int ct = 0;
@@ -92,6 +93,7 @@ vector<state> AI::generate_moves(board b, Color player_color) {
 	      b[i][j] = Color::NONE;
 	      temp.change = b;
 	      temp.move = move_str(i,j,i-1,j);
+	      temp.ate = false;
 	      ret.push_back(temp);
 	      b[i-1][j] = Color::NONE;
 	      b[i][j] = player_color;
@@ -101,6 +103,7 @@ vector<state> AI::generate_moves(board b, Color player_color) {
 	  // Can go diag left
 	  if (i > 0 && j > 0) {
 	    if (b[i-1][j-1] != player_color) {
+	      (b[i-1][j-1] != Color::NONE) ? temp.ate = true : temp.ate = false;
 	      original = b[i-1][j-1];
 	      b[i-1][j-1] = player_color;
 	      b[i][j] = Color::NONE;
@@ -116,6 +119,7 @@ vector<state> AI::generate_moves(board b, Color player_color) {
 	  // Can go diag right
 	  if (i > 0 && j < 7) {
 	    if (b[i-1][j+1] != player_color) {
+	      (b[i-1][j+1] != Color::NONE) ? temp.ate = true : temp.ate = false;
 	      original = b[i-1][j+1];
 	      b[i-1][j+1] = player_color;
 	      b[i][j] = Color::NONE;
@@ -137,6 +141,7 @@ vector<state> AI::generate_moves(board b, Color player_color) {
 	      b[i][j] = Color::NONE;
 	      temp.change = b;
 	      temp.move = move_str(i,j,i+1,j);
+	      temp.ate = false;
 	      ret.push_back(temp);
 	      b[i+1][j] = original;
 	      b[i][j] = player_color;
@@ -146,6 +151,7 @@ vector<state> AI::generate_moves(board b, Color player_color) {
 	  // Can go diag left
 	  if (i < 7 && j > 0) {
 	    if (b[i+1][j-1] != player_color) {
+	      (b[i+1][j-1] != Color::NONE) ? temp.ate = true : temp.ate = false;
 	      original = b[i+1][j-1];
 	      b[i+1][j-1] = player_color;
 	      b[i][j] = Color::NONE;
@@ -160,6 +166,7 @@ vector<state> AI::generate_moves(board b, Color player_color) {
 	  // Can go diag right
 	  if (i < 7 && j < 7) {
 	    if (b[i+1][j+1] != player_color) {
+	      (b[i+1][j+1] != Color::NONE) ? temp.ate = true : temp.ate = false;
 	      original = b[i+1][j+1];
 	      b[i+1][j+1] = player_color;
 	      b[i][j] = Color::NONE;
@@ -262,9 +269,14 @@ int AI::piece_val(board b, int x, int y) {
   return piece_val;
 }
 
-int AI::board_val(board b, Color player_color) {
+int AI::board_val(board b, bool ate, Color player_color) {
   int board_val = 0;
   
+  // Bonus if a piece at another
+  if (ate) {
+    board_val += 100;
+  } // Too much?
+
   // First check for wins??
   if (win(b) == player_color) return 99999999;
 
@@ -284,6 +296,8 @@ int AI::board_val(board b, Color player_color) {
       }
     }
   }
+
+  return board_val;
 }
 
 void AI::print_board(board b) {
@@ -460,7 +474,7 @@ scored_move AI::minimax(state s, int depth, Color cur_player, Color max_player) 
 
   if (depth == 0 || win(s.change) != Color::NONE) {
     m.move = s.move;
-    m.score = board_val(s.change, cur_player);
+    m.score = board_val(s.change, s.ate, cur_player);
     return m;
   }
 
