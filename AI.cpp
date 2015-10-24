@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <algorithm>
+#include <random>
 
 using namespace std;
 
@@ -12,6 +13,8 @@ const int rows = 8;
 const int cols = 8;
 
 const int MAX_DEPTH = 3;
+
+auto eng = default_random_engine();
 
 string AI::move(vector<vector<Piece*> > board_state, string diff, string color) {
   ai_color = color;
@@ -40,7 +43,7 @@ string AI::move(vector<vector<Piece*> > board_state, string diff, string color) 
   //return minimax(s, 3, Color::BLACK, Color::BLACK).move; // eats for depth 1
 
   //cout << "AB: " << alpha_beta(s, 3, -999999, 999999, Color::BLACK, Color::BLACK).move<< endl;
-  return alpha_beta(s, 3, -999999, 999999, Color::BLACK, Color::BLACK).move;
+  return alpha_beta(s, 5, -999999, 999999, Color::BLACK, Color::WHITE).move;
   //return alpha_beta(s, 5, -999999, 999999, Color::BLACK, Color::WHITE).move;
   //return random("BLACK");
 }
@@ -120,7 +123,6 @@ vector<state> AI::generate_moves(board b, Color player_color) {
 	    }
 	  }
       
-
 	  // Can go diag right
 	  if (i > 0 && j < 7) {
 	    if (b[i-1][j+1] != player_color) {
@@ -187,7 +189,9 @@ vector<state> AI::generate_moves(board b, Color player_color) {
     }
   }
 
-  random_shuffle(ret.begin(), ret.end()); // MAYBE DONT DO THIS
+  //  random_shuffle(ret.begin(), ret.end()); // MAYBE DONT DO THIS
+  eng = default_random_engine{};
+  shuffle(begin(ret), end(ret), eng);
   return ret;
 } 
 
@@ -491,17 +495,17 @@ scored_move AI::alpha_beta(state s, int depth, int alpha, int beta, Color cur_pl
     cur_score = -999999;
     moves = generate_moves(s.change, cur_player);
     for (auto mov : moves) {
-      m = alpha_beta(mov, depth - 1, alpha, beta, enemy, max_player);
-      if (m.score > cur_score) {
-	cur_score = m.score;
-	move = m.move;
+      temp = alpha_beta(mov, depth - 1, alpha, beta, enemy, max_player);
+      if (temp.score > cur_score) {
+	cur_score = temp.score;
+	move = mov.move;
       }
-      if (m.score > alpha) {alpha = m.score;}
+      if (temp.score > alpha) {alpha = temp.score;}
       if (beta <= alpha) {break;}
     }
     m.score = cur_score;
     m.move = move;
-    cout << m.move << endl;
+    
     return m;
   }
 
@@ -509,17 +513,17 @@ scored_move AI::alpha_beta(state s, int depth, int alpha, int beta, Color cur_pl
     cur_score = 99999;
     moves = generate_moves(s.change, cur_player);
     for (auto mov : moves) {
-      m = alpha_beta(mov, depth - 1, alpha, beta, max_player, max_player);
-      if (m.score < cur_score) {
-	cur_score = m.score;
-	move = m.move;
+      temp = alpha_beta(mov, depth - 1, alpha, beta, max_player, max_player);
+      if (temp.score < cur_score) {
+	cur_score = temp.score;
+	move = mov.move;
       }
-      if (m.score < beta) {beta = m.score;}
+      if (temp.score < beta) {beta = temp.score;}
       if (beta <= alpha) {break;}
     }
     m.score = cur_score;
     m.move = move;
-    cout << m.move << endl;
+    
     return m;
   }
 }
