@@ -467,9 +467,55 @@ scored_move AI::minimax(state s, int depth, Color cur_player, Color max_player) 
   }
 }
 
+scored_move AI::alpha_beta(state s, int depth, int alpha, int beta, Color cur_player, Color max_player) {
+  scored_move m, temp;
+  int cur_score;
+  string move;
+  vector<state> moves;
+  Color enemy;
 
-string AI::alpha_beta(string color) {
+  if (cur_player == Color::BLACK) {enemy = Color::WHITE;}
+  else {enemy = Color::BLACK;}
 
+  if (depth == 0 || win(s.change) != Color::NONE) {
+    m.move = s.move;
+    m.score = board_val(s.change, s.ate, cur_player);
+    return m;
+  }
+
+  if (cur_player == max_player) { 
+    cur_score = -999999;
+    moves = generate_moves(s.change, cur_player);
+    for (auto mov : moves) {
+      m = alpha_beta(mov, depth - 1, alpha, beta, enemy, max_player);
+      if (m.score > cur_score) {
+	cur_score = m.score;
+	move = m.move;
+      }
+      if (m.score > alpha) {alpha = m.score;}
+      if (beta <= alpha) {break;}
+    }
+    m.score = cur_score;
+    m.move = move;
+    return m;
+  }
+
+  else {
+    cur_score = 99999;
+    moves = generate_moves(s.change, cur_player);
+    for (auto mov : moves) {
+      m = alpha_beta(mov, depth - 1, alpha, beta, max_player, max_player);
+      if (m.score < cur_score) {
+	cur_score = m.score;
+	move = m.move;
+      }
+      if (m.score < beta) {beta = m.score;}
+      if (beta <= alpha) {break;}
+    }
+    m.score = cur_score;
+    m.move = move;
+    return m;
+  }
 }
 
 string AI::move_str(int x1, int y1, int x2, int y2) {

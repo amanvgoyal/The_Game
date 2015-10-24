@@ -45,7 +45,7 @@ public:
   std::string random(std::string diff);
   //scored_move minimax(board, int, Color, Color);
   scored_move minimax(state, int, Color, Color);
-  std::string alpha_beta(std::string diff);
+  scored_move alpha_beta(state, int, int, int, Color, Color);
     
   void update_state(std::vector<std::vector<Piece*>>);
 };
