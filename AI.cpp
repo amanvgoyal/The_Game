@@ -36,8 +36,12 @@ string AI::move(vector<vector<Piece*> > board_state, string diff, string color) 
   s.change = brd;
   s.move = "";
   //cout << "MINIMAX: " << minimax(s, 3, Color::BLACK, Color::BLACK).move << endl;
-  return minimax(s, 3, Color::BLACK, Color::WHITE).move; // wrong? always eats?
-  //return minimax(s, 4, Color::BLACK, Color::BLACK).move; // eats for depth 1
+  //return minimax(s, 3, Color::BLACK, Color::WHITE).move; // wrong? always eats?
+  //return minimax(s, 3, Color::BLACK, Color::BLACK).move; // eats for depth 1
+
+  //cout << "AB: " << alpha_beta(s, 3, -999999, 999999, Color::BLACK, Color::BLACK).move<< endl;
+  return alpha_beta(s, 3, -999999, 999999, Color::BLACK, Color::BLACK).move;
+  //return alpha_beta(s, 5, -999999, 999999, Color::BLACK, Color::WHITE).move;
   //return random("BLACK");
 }
 
@@ -425,7 +429,7 @@ scored_move AI::minimax(state s, int depth, Color cur_player, Color max_player) 
   vector<state> moves;
   Color enemy;
 
-  if (cur_player == Color::BLACK) {enemy = Color::WHITE;}
+  if (max_player == Color::BLACK) {enemy = Color::WHITE;}
   else {enemy = Color::BLACK;}
 
   if (depth == 0 || win(s.change) != Color::NONE) {
@@ -455,7 +459,7 @@ scored_move AI::minimax(state s, int depth, Color cur_player, Color max_player) 
     moves = generate_moves(s.change, cur_player);
     for (auto mov : moves) {
       //cout << mov.move << endl;
-      temp = minimax(mov, depth - 1, enemy, max_player);
+      temp = minimax(mov, depth - 1, max_player, max_player);
       if (temp.score < cur_score) {
 	cur_score = temp.score;
 	move = mov.move;
@@ -474,7 +478,7 @@ scored_move AI::alpha_beta(state s, int depth, int alpha, int beta, Color cur_pl
   vector<state> moves;
   Color enemy;
 
-  if (cur_player == Color::BLACK) {enemy = Color::WHITE;}
+  if (max_player == Color::BLACK) {enemy = Color::WHITE;}
   else {enemy = Color::BLACK;}
 
   if (depth == 0 || win(s.change) != Color::NONE) {
@@ -497,6 +501,7 @@ scored_move AI::alpha_beta(state s, int depth, int alpha, int beta, Color cur_pl
     }
     m.score = cur_score;
     m.move = move;
+    cout << m.move << endl;
     return m;
   }
 
@@ -514,6 +519,7 @@ scored_move AI::alpha_beta(state s, int depth, int alpha, int beta, Color cur_pl
     }
     m.score = cur_score;
     m.move = move;
+    cout << m.move << endl;
     return m;
   }
 }
