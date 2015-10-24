@@ -17,33 +17,45 @@ const int MAX_DEPTH = 3;
 auto eng = default_random_engine();
 
 string AI::move(vector<vector<Piece*> > board_state, string diff, string color) {
-  ai_color = color;
   update_state(board_state);
-  /*
+  state s;
+  s.change = brd;
+  s.move = "";
+
+  Color p1, p2;
+  if (color == "BLACK") {
+    p1 = Color::BLACK;
+    p2 = Color::WHITE;
+  }
+
+  else {
+    p1 = Color::WHITE;
+    p2 = Color::BLACK;
+  }
+
   if (diff == "EASY") {
     return random(color);
   }
    
   else if (diff == "MEDIUM") {
-    return minimax(color);
+    return minimax(s,3,p1,p2).move;
   }
+
   else if (diff == "HARD") {
-    return alpha_beta(color);
+    return alpha_beta(s,5,-999999,999999,p1,p2).move;
   }
   else {
     cerr << "Difficulty string not well formed!" << endl;
-    }
-  cout << "MINIMAX: " << minimax(brd, 3, Color::BLACK, Color::BLACK).move << endl;
-  */
-  state s;
-  s.change = brd;
-  s.move = "";
+    return "";
+  }
+    
+
   //cout << "MINIMAX: " << minimax(s, 3, Color::BLACK, Color::BLACK).move << endl;
   //return minimax(s, 3, Color::BLACK, Color::WHITE).move; // wrong? always eats?
   //return minimax(s, 3, Color::BLACK, Color::BLACK).move; // eats for depth 1
 
   //cout << "AB: " << alpha_beta(s, 3, -999999, 999999, Color::BLACK, Color::BLACK).move<< endl;
-  return alpha_beta(s, 5, -999999, 999999, Color::BLACK, Color::WHITE).move;
+  //return alpha_beta(s, 5, -999999, 999999, Color::BLACK, Color::WHITE).move;
   //return alpha_beta(s, 5, -999999, 999999, Color::BLACK, Color::WHITE).move;
   //return random("BLACK");
 }
