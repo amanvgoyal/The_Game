@@ -332,14 +332,19 @@ int AI::piece_val(board b, int x, int y) {
 
 int AI::board_val(board b, bool ate, Color player_color) {
   int board_val = 0;
-  
+  Color enemy;
+
+  (player_color == Color::BLACK) ? enemy = Color::WHITE : enemy = Color::BLACK;
+
+  // First check for wins??
+  if (win(b) == player_color) return 9999999;
+  if (win(b) == enemy) return -9999999;
+
+
   // Bonus if a piece at another
   if (ate) {
     board_val += EAT_BONUS;
   } // Too much?
-
-  // First check for wins??
-  if (win(b) == player_color) return 99999999;
 
   // Now check features
   for (int i = 0; i < rows; ++i) {
@@ -488,7 +493,7 @@ scored_move AI::minimax(state s, int depth, Color cur_player, Color max_player) 
   if (max_player == Color::BLACK) {enemy = Color::WHITE;}
   else {enemy = Color::BLACK;}
 
-  if (depth == 0 || win(s.change) != Color::NONE) {
+  if (depth == 0) {
     m.move = s.move;
     m.score = board_val(s.change, s.ate, cur_player);
     return m;
@@ -537,7 +542,7 @@ scored_move AI::alpha_beta(state s, int depth, int alpha, int beta, Color cur_pl
   if (max_player == Color::BLACK) {enemy = Color::WHITE;}
   else {enemy = Color::BLACK;}
 
-  if (depth == 0 || win(s.change) != Color::NONE) {
+  if (depth == 0) {
     m.move = s.move;
     m.score = board_val(s.change, s.ate, cur_player);
     return m;
@@ -584,4 +589,8 @@ string AI::move_str(int x1, int y1, int x2, int y2) {
   string mov = "("+to_string(y1)+", "+to_string(x1)+")*("+to_string(y2)+", "+
     to_string(x2)+")";
   return mov;
+}
+
+void AI::sort_moves(vector<state>& moves) {
+  
 }
