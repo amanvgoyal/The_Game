@@ -13,6 +13,12 @@ const int rows = 8;
 const int cols = 8;
 
 const int MAX_DEPTH = 3;
+const int ADJ_ENEMY_VAL = 3;
+const int ADJ_ALLY_VAL = 2;
+const int MOVE_FWD_VAL = 2;
+const int BLOCKED_VAL = 2;
+const int HOLE_VAL = 3;
+const int EAT_BONUS = 99;//10; 
 
 auto eng = default_random_engine();
 
@@ -22,6 +28,7 @@ string AI::move(vector<vector<Piece*> > board_state, string diff, string color) 
   s.change = brd;
   s.move = "";
 
+  /*
   Color p1, p2;
   if (color == "BLACK") {
     p1 = Color::BLACK;
@@ -42,21 +49,20 @@ string AI::move(vector<vector<Piece*> > board_state, string diff, string color) 
   }
 
   else if (diff == "HARD") {
-    return alpha_beta(s,5,-999999,999999,p1,p2).move;
+    return alpha_beta(s,7,-999999,999999,p1,p2).move;
   }
   else {
     cerr << "Difficulty string not well formed!" << endl;
     return "";
   }
-    
+*/    
 
   //cout << "MINIMAX: " << minimax(s, 3, Color::BLACK, Color::BLACK).move << endl;
   //return minimax(s, 3, Color::BLACK, Color::WHITE).move; // wrong? always eats?
   //return minimax(s, 3, Color::BLACK, Color::BLACK).move; // eats for depth 1
 
   //cout << "AB: " << alpha_beta(s, 3, -999999, 999999, Color::BLACK, Color::BLACK).move<< endl;
-  //return alpha_beta(s, 5, -999999, 999999, Color::BLACK, Color::WHITE).move;
-  //return alpha_beta(s, 5, -999999, 999999, Color::BLACK, Color::WHITE).move;
+  return alpha_beta(s, 5, -999999, 999999, Color::BLACK, Color::WHITE).move;
   //return random("BLACK");
 }
 
@@ -81,6 +87,7 @@ void AI::update_state(vector<vector<Piece*>> state) {
 } 
 
 Color AI::win(board b) {
+  // Check if someone has reached the edge of the board
   for (int i = 0; i < rows; ++i) {
     if (b[0][i] == Color::WHITE) {
       return Color::WHITE; // White has won
@@ -90,6 +97,18 @@ Color AI::win(board b) {
       return Color::BLACK; // Black has won
     }
   }
+
+  // Check if someone lost all of their pieces
+  int b_ct, w_ct;
+  for (int i = 0; i < rows; ++i) {
+    for (int j =0; j < cols; ++j) {
+      if (b[i][j] == Color::WHITE) {++w_ct;}
+      if (b[i][j] == Color::BLACK) {++b_ct;}
+    }
+  }
+
+  if (b_ct == 0) {return Color::WHITE;}
+  if (w_ct == 0) {return Color::BLACK;}
 
   return Color::NONE; // No one has won
 }
@@ -211,55 +230,57 @@ vector<state> AI::generate_moves(board b, Color player_color) {
 int AI::threat_level(board b, int x, int y) {
   int val = 0;
 
+  // Case White
   if (b[x][y] == Color::WHITE) {
     // Check if protected
     if (x < 7 && y > 0) {
       if (b[x+1][y-1] == Color::WHITE) {
-	val += 1;
+	val += ADJ_ALLY_VAL;
       }
     }
     
     if (x < 7 && y < 7) {
       if (b[x+1][y+1] == Color::WHITE) {
-	val += 1;
+	val += ADJ_ALLY_VAL;
       }
     }
     
     // Check for Attackers
     if (x < 7 && y > 0) {
       if (b[x+1][y-1] == Color::BLACK) {
-	val -= 1;
+	val -= ADJ_ENEMY_VAL;
       }
     }
     if (x < 7 && y < 7) {
       if (b[x+1][y+1] == Color::BLACK) {
-	val -= 1;
+	val -= ADJ_ENEMY_VAL;
       }
     }
   }
-  
+
+  // Case Black
   else if (b[x][y] == Color::BLACK) {
     // Check if protected
     if (x > 0 && y > 0) {
       if (b[x-1][y-1] == Color::BLACK) {
-	val += 1;
+	val += ADJ_ALLY_VAL;
       }
     }
     if (x > 0 && y < 7) {
       if (b[x-1][y+1] == Color::BLACK) {
-	val += 1;
+	val += ADJ_ALLY_VAL;
       }
     }
     
     // Check for Attackers
     if (x > 0 && y > 0) {
       if (b[x-1][y-1] == Color::WHITE) {
-	val -= 1;
+	val -= ADJ_ENEMY_VAL;
       }
     }
     if (x > 0 && y < 7) {
       if (b[x-1][y+1] == Color::WHITE) {
-	val -= 1;
+	val -= ADJ_ENEMY_VAL;
       }
     }
   }
@@ -273,12 +294,31 @@ int AI::threat_level(board b, int x, int y) {
 // SUPPOSED TO STOP GAME IF WE GET TO THE ENDS
 int AI::mobility_level(board b, int x, int y) {
   int mobi_val = 0;
+  bool hole = true;
+
+  // can go fwd
+  if (b[x][y] == Color::WHITE && b[x-1][y] == Color::NONE) {
+    mobi_val += MOVE_FWD_VAL;
+
+    // Check if there's a path to the end
+    for (int i = 0; i < x; ++i) {
+      if (b[i][y] != Color::NONE) {hole = false;}
+    }
+    if (hole) {mobi_val += HOLE_VAL;}
+  }
+  else {mobi_val -= BLOCKED_VAL;}
   
-  if (b[x][y] == Color::WHITE && b[x-1][y] == Color::NONE) {return 2;}
-  else {return -2;}
-  
-  if (b[x][y] == Color::BLACK && b[x+1][y] == Color::NONE) {return 2;}
-  else {return -2;}
+  // can go fwd
+  if (b[x][y] == Color::BLACK && b[x+1][y] == Color::NONE) {
+    mobi_val += MOVE_FWD_VAL;
+    
+    // Check if there's a path to the end
+    for (int i = 7; i > x - 1; --i) {
+      if (b[i][y] != Color::NONE) {hole = false;}
+    }
+    if (hole) {mobi_val += HOLE_VAL;}
+}
+  else {mobi_val -= -BLOCKED_VAL;}
 }
 
 int AI::piece_val(board b, int x, int y) {
@@ -295,7 +335,7 @@ int AI::board_val(board b, bool ate, Color player_color) {
   
   // Bonus if a piece at another
   if (ate) {
-    board_val += 9999999;
+    board_val += EAT_BONUS;
   } // Too much?
 
   // First check for wins??
