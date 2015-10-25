@@ -6,6 +6,7 @@
 #include <iostream>
 #include <algorithm>
 #include <random>
+#include <time.h>
 
 using namespace std;
 
@@ -17,10 +18,13 @@ const int ADJ_ENEMY_VAL = 3;
 const int ADJ_ALLY_VAL = 2;
 const int MOVE_FWD_VAL = 2;
 const int BLOCKED_VAL = 2;
-const int HOLE_VAL = 3;
+const int HOLE_VAL = 99;
 const int EAT_BONUS = 99;//10; 
 
 auto eng = default_random_engine();
+
+// In case need to check runtime
+clock_t t1, t2;
 
 string AI::move(vector<vector<Piece*> > board_state, string diff, string color) {
   update_state(board_state);
@@ -28,6 +32,7 @@ string AI::move(vector<vector<Piece*> > board_state, string diff, string color) 
   s.change = brd;
   s.move = "";
 
+  string ret_move;
   /*
   Color p1, p2;
   if (color == "BLACK") {
@@ -62,7 +67,12 @@ string AI::move(vector<vector<Piece*> > board_state, string diff, string color) 
   //return minimax(s, 3, Color::BLACK, Color::BLACK).move; // eats for depth 1
 
   //cout << "AB: " << alpha_beta(s, 3, -999999, 999999, Color::BLACK, Color::BLACK).move<< endl;
-  return alpha_beta(s, 5, -999999, 999999, Color::BLACK, Color::WHITE).move;
+  t1 = clock();
+  ret_move = alpha_beta(s, 5, -999999, 999999, Color::BLACK, Color::WHITE).move;
+  t2 = clock();
+  cout << "TIME: " << ((double)t2 - (double)t1) / CLOCKS_PER_SEC << endl;
+  cout << "THE MOVE: " << ret_move << endl;
+  return ret_move;
   //return random("BLACK");
 }
 
@@ -223,6 +233,7 @@ vector<state> AI::generate_moves(board b, Color player_color) {
   //  random_shuffle(ret.begin(), ret.end()); // MAYBE DONT DO THIS
   eng = default_random_engine{};
   shuffle(begin(ret), end(ret), eng);
+  if (ret.size() == 0) {cout << "RET SIZE IS ZERO!!!!!!!!" << endl;}
   return ret;
 } 
 
@@ -289,6 +300,9 @@ int AI::threat_level(board b, int x, int y) {
 
   return val;
 }
+
+// MAKE A FILL HOLE BONUS
+
 
 // MAYBE CHECK IF X, Y, IN RANGE
 // SUPPOSED TO STOP GAME IF WE GET TO THE ENDS
@@ -493,7 +507,7 @@ scored_move AI::minimax(state s, int depth, Color cur_player, Color max_player) 
   if (max_player == Color::BLACK) {enemy = Color::WHITE;}
   else {enemy = Color::BLACK;}
 
-  if (depth == 0) {
+  if (depth == 0 || win(s.change) != Color::NONE) {
     m.move = s.move;
     m.score = board_val(s.change, s.ate, cur_player);
     return m;
@@ -542,7 +556,7 @@ scored_move AI::alpha_beta(state s, int depth, int alpha, int beta, Color cur_pl
   if (max_player == Color::BLACK) {enemy = Color::WHITE;}
   else {enemy = Color::BLACK;}
 
-  if (depth == 0) {
+  if (depth == 0 || win(s.change) != Color::NONE) {
     m.move = s.move;
     m.score = board_val(s.change, s.ate, cur_player);
     return m;
@@ -589,8 +603,4 @@ string AI::move_str(int x1, int y1, int x2, int y2) {
   string mov = "("+to_string(y1)+", "+to_string(x1)+")*("+to_string(y2)+", "+
     to_string(x2)+")";
   return mov;
-}
-
-void AI::sort_moves(vector<state>& moves) {
-  
 }
