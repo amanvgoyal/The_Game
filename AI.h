@@ -36,6 +36,8 @@ class AI {
   int mobility_level(board, int, int);
   int piece_val(board, int, int);
 
+  std::vector<int> hole_check(board);
+
   void print_board(board);
 
   std::string move_str(int, int, int, int);

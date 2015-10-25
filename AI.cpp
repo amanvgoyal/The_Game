@@ -16,10 +16,11 @@ const int cols = 8;
 const int MAX_DEPTH = 3;
 const int ADJ_ENEMY_VAL = 3;
 const int ADJ_ALLY_VAL = 2;
-const int MOVE_FWD_VAL = 2;
+const int MOVE_FWD_VAL = 1;
 const int BLOCKED_VAL = 2;
-const int HOLE_VAL = 99;
-const int EAT_BONUS = 99;//10; 
+const int HOLE_VAL = 3;
+const int HOLE_CREATE_VAL = 1;
+const int EAT_BONUS = 20;//10; 
 
 auto eng = default_random_engine();
 
@@ -302,7 +303,34 @@ int AI::threat_level(board b, int x, int y) {
 }
 
 // MAKE A FILL HOLE BONUS
-
+vector<int> AI::hole_check(board b) {
+  bool b_hole = true;
+  bool w_hole = true;
+  int w_hole_ct = 0;
+  int b_hole_ct = 0;
+  vector<int> num_holes;
+  for (int i = 0; i < rows; ++i) {
+    for (int j = 0; j < cols; ++j) {
+      // check black hole
+      if (i > 0 && i < 3) {
+	if (b[i][j] != Color::NONE) {b_hole = false;}
+      }
+      // check white hole
+      if (i < 7 && i > 3) {
+	if (b[i][j] != Color::NONE) {w_hole = false;}
+      }
+      if (b_hole) {
+	++b_hole_ct;
+	//cout << "BLACK HOLE!!!!!!!!!!!" << endl;
+      }
+      if (w_hole) {++w_hole_ct;}
+      b_hole = true;
+      w_hole = true;
+    }
+  }
+  num_holes = {b_hole_ct, w_hole_ct};
+  return num_holes;
+}
 
 // MAYBE CHECK IF X, Y, IN RANGE
 // SUPPOSED TO STOP GAME IF WE GET TO THE ENDS
@@ -315,10 +343,10 @@ int AI::mobility_level(board b, int x, int y) {
     mobi_val += MOVE_FWD_VAL;
 
     // Check if there's a path to the end
-    for (int i = 0; i < x; ++i) {
+    /* for (int i = 0; i < x; ++i) {
       if (b[i][y] != Color::NONE) {hole = false;}
     }
-    if (hole) {mobi_val += HOLE_VAL;}
+    if (hole) {mobi_val += HOLE_VAL;}*/
   }
   else {mobi_val -= BLOCKED_VAL;}
   
@@ -327,9 +355,9 @@ int AI::mobility_level(board b, int x, int y) {
     mobi_val += MOVE_FWD_VAL;
     
     // Check if there's a path to the end
-    for (int i = 7; i > x - 1; --i) {
+    /*for (int i = 7; i > x - 1; --i) {
       if (b[i][y] != Color::NONE) {hole = false;}
-    }
+      }*/
     if (hole) {mobi_val += HOLE_VAL;}
 }
   else {mobi_val -= -BLOCKED_VAL;}
@@ -347,18 +375,31 @@ int AI::piece_val(board b, int x, int y) {
 int AI::board_val(board b, bool ate, Color player_color) {
   int board_val = 0;
   Color enemy;
+  vector<int> hole_vals;
 
   (player_color == Color::BLACK) ? enemy = Color::WHITE : enemy = Color::BLACK;
 
   // First check for wins??
-  if (win(b) == player_color) return 9999999;
-  if (win(b) == enemy) return -9999999;
-
+  Color winner = win(b);
+  if (winner == player_color) {return 999999;}
+  else if (winner == enemy) {return -999999;}
 
   // Bonus if a piece at another
   if (ate) {
     board_val += EAT_BONUS;
-  } // Too much?
+  } 
+
+  // Board gets points if enemy has holes
+  // loses points if you have holes
+  hole_vals = hole_check(b);
+  if (player_color == Color::BLACK) {
+    board_val -= hole_vals[0]*HOLE_CREATE_VAL;
+    board_val += hole_vals[1]*HOLE_CREATE_VAL;
+  }
+  else {
+    board_val += hole_vals[0]*HOLE_CREATE_VAL;
+    board_val -= hole_vals[1]*HOLE_CREATE_VAL;
+  }
 
   // Now check features
   for (int i = 0; i < rows; ++i) {
@@ -385,7 +426,7 @@ void AI::print_board(board b) {
     for (int j = 0; j < cols; ++j) {
 
       if (b[i][j] == Color::WHITE) {
-        cout << "w ";
+	cout << "w ";
       }
 
       else if (b[i][j] == Color::BLACK) {
