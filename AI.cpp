@@ -99,7 +99,7 @@ void AI::update_state(vector<vector<Piece*>> state) {
 
 Color AI::win(board b) {
   // Check if someone has reached the edge of the board
-  for (int i = 0; i < rows; ++i) {
+  for (int i = 0; i < cols; ++i) {
     if (b[0][i] == Color::WHITE) {
       return Color::WHITE; // White has won
     }
@@ -622,7 +622,7 @@ scored_move AI::alpha_beta(state s, int depth, int alpha, int beta, Color cur_pl
   }
 
   else {
-    cur_score = 99999;
+    cur_score = 999999;
     moves = generate_moves(s.change, cur_player);
     for (auto mov : moves) {
       temp = alpha_beta(mov, depth - 1, alpha, beta, max_player, max_player);
