@@ -250,13 +250,13 @@ int AI::threat_level(board b, int x, int y) {
   if (b[x][y] == Color::WHITE) {
     // Check if protected
     if (x > 0 && y > 0) {
-      if (b[x-1][y-1] == Color::WHITE) {
+      if (b[x+1][y-1] == Color::WHITE) {
 	val += ADJ_ALLY_VAL;
       }
     }
     
     if (x > 0 && y < 7) {
-      if (b[x-1][y+1] == Color::WHITE) {
+      if (b[x+1][y+1] == Color::WHITE) {
 	val += ADJ_ALLY_VAL;
       }
     }
@@ -278,12 +278,12 @@ int AI::threat_level(board b, int x, int y) {
   else if (b[x][y] == Color::BLACK) {
     // Check if protected
     if (x > 0 && y > 0) {
-      if (b[x+1][y-1] == Color::BLACK) {
+      if (b[x-1][y-1] == Color::BLACK) {
 	val += ADJ_ALLY_VAL;
       }
     }
     if (x < 7 && y < 7) {
-      if (b[x+1][y+1] == Color::BLACK) {
+      if (b[x-1][y+1] == Color::BLACK) {
 	val += ADJ_ALLY_VAL;
       }
     }
