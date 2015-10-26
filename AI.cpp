@@ -346,10 +346,10 @@ int AI::mobility_level(board b, int x, int y) {
     mobi_val += MOVE_FWD_VAL;
 
     // Check if there's a path to the end
-    /* for (int i = 0; i < x; ++i) {
+    for (int i = 0; i < x; ++i) {
       if (b[i][y] != Color::NONE) {hole = false;}
     }
-    if (hole) {mobi_val += HOLE_VAL;}*/
+    if (hole) {mobi_val += HOLE_VAL;}
   }
   else {mobi_val -= BLOCKED_VAL;}
   
@@ -358,9 +358,9 @@ int AI::mobility_level(board b, int x, int y) {
     mobi_val += MOVE_FWD_VAL;
     
     // Check if there's a path to the end
-    /*for (int i = 7; i > x - 1; --i) {
+    for (int i = 7; i > x - 1; --i) {
       if (b[i][y] != Color::NONE) {hole = false;}
-      }*/
+      }
     if (hole) {mobi_val += HOLE_VAL;}
 }
   else {mobi_val -= -BLOCKED_VAL;}
