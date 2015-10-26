@@ -249,26 +249,26 @@ int AI::threat_level(board b, int x, int y) {
   // Case White
   if (b[x][y] == Color::WHITE) {
     // Check if protected
-    if (x < 7 && y > 0) {
-      if (b[x+1][y-1] == Color::WHITE) {
+    if (x > 0 && y > 0) {
+      if (b[x-1][y-1] == Color::WHITE) {
 	val += ADJ_ALLY_VAL;
       }
     }
     
-    if (x < 7 && y < 7) {
-      if (b[x+1][y+1] == Color::WHITE) {
+    if (x > 0 && y < 7) {
+      if (b[x-1][y+1] == Color::WHITE) {
 	val += ADJ_ALLY_VAL;
       }
     }
     
     // Check for Attackers
-    if (x < 7 && y > 0) {
-      if (b[x+1][y-1] == Color::BLACK) {
+    if (x > 0 && y > 0) {
+      if (b[x-1][y-1] == Color::BLACK) {
 	val -= ADJ_ENEMY_VAL;
       }
     }
-    if (x < 7 && y < 7) {
-      if (b[x+1][y+1] == Color::BLACK) {
+    if (x > 0 && y < 7) {
+      if (b[x-1][y+1] == Color::BLACK) {
 	val -= ADJ_ENEMY_VAL;
       }
     }
@@ -278,24 +278,24 @@ int AI::threat_level(board b, int x, int y) {
   else if (b[x][y] == Color::BLACK) {
     // Check if protected
     if (x > 0 && y > 0) {
-      if (b[x-1][y-1] == Color::BLACK) {
+      if (b[x+1][y-1] == Color::BLACK) {
 	val += ADJ_ALLY_VAL;
       }
     }
-    if (x > 0 && y < 7) {
-      if (b[x-1][y+1] == Color::BLACK) {
+    if (x < 7 && y < 7) {
+      if (b[x+1][y+1] == Color::BLACK) {
 	val += ADJ_ALLY_VAL;
       }
     }
     
     // Check for Attackers
-    if (x > 0 && y > 0) {
-      if (b[x-1][y-1] == Color::WHITE) {
+    if (x < 7 && y > 0) {
+      if (b[x+1][y-1] == Color::WHITE) {
 	val -= ADJ_ENEMY_VAL;
       }
     }
-    if (x > 0 && y < 7) {
-      if (b[x-1][y+1] == Color::WHITE) {
+    if (x < 7 && y < 7) {
+      if (b[x+1][y+1] == Color::WHITE) {
 	val -= ADJ_ENEMY_VAL;
       }
     }
@@ -611,6 +611,14 @@ scored_move AI::alpha_beta(state s, int depth, int alpha, int beta, Color cur_pl
   if (cur_player == max_player) { 
     cur_score = -INF;
     moves = generate_moves(s.change, cur_player);
+    
+    // case where no moves exist
+    if (moves.size() == 0) {
+      m.move = s.move;
+      m.score = board_val(s.change, s.ate, cur_player);
+      return m;
+    }
+    
     for (auto mov : moves) {
       temp = alpha_beta(mov, depth - 1, alpha, beta, enemy, max_player);
       if (temp.score > cur_score) {
@@ -629,6 +637,14 @@ scored_move AI::alpha_beta(state s, int depth, int alpha, int beta, Color cur_pl
   else {
     cur_score = INF;
     moves = generate_moves(s.change, cur_player);
+
+    // case where no moves exist
+    if (moves.size() == 0) {
+      m.move = s.move;
+      m.score = board_val(s.change, s.ate, cur_player);
+      return m;
+    }
+
     for (auto mov : moves) {
       temp = alpha_beta(mov, depth - 1, alpha, beta, max_player, max_player);
       if (temp.score < cur_score) {
