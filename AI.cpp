@@ -14,13 +14,13 @@ const int rows = 8;
 const int cols = 8;
 
 const int MAX_DEPTH = 3;
-const int ADJ_ENEMY_VAL = 3;
+const int ADJ_ENEMY_VAL = 10;//3
 const int ADJ_ALLY_VAL = 2;
-const int MOVE_FWD_VAL = 1;
+const int MOVE_FWD_VAL = 5;//1
 const int BLOCKED_VAL = 2;
-const int HOLE_VAL = 3;
+const int HOLE_VAL = 10;
 const int HOLE_CREATE_VAL = 1;
-const int EAT_BONUS = 25;//10; 
+const int EAT_BONUS = 50;//10; 
 
 const int INF = 999999;
 
@@ -66,12 +66,13 @@ string AI::move(vector<vector<Piece*> > board_state, string diff, string color) 
 */    
 
   //cout << "MINIMAX: " << minimax(s, 3, Color::BLACK, Color::BLACK).move << endl;
-  //return minimax(s, 3, Color::BLACK, Color::WHITE).move; // wrong? always eats?
+  //  return minimax(s, 4, Color::BLACK, Color::WHITE).move; // wrong? always eats?
   //return minimax(s, 3, Color::BLACK, Color::BLACK).move; // eats for depth 1
 
   //cout << "AB: " << alpha_beta(s, 3, -999999, 999999, Color::BLACK, Color::BLACK).move<< endl;
   t1 = clock();
   ret_move = alpha_beta(s, 5, -INF, INF, Color::BLACK, Color::WHITE).move;
+  //ret_move = minimax(s,4,Color::BLACK, Color::WHITE).move;
   t2 = clock();
   cout << "TIME: " << ((double)t2 - (double)t1) / CLOCKS_PER_SEC << endl;
   cout << "THE MOVE: " << ret_move << endl;
@@ -601,6 +602,7 @@ scored_move AI::alpha_beta(state s, int depth, int alpha, int beta, Color cur_pl
   else {enemy = Color::BLACK;}
 
   if (depth == 0 || win(s.change) != Color::NONE) {
+  //if (depth == 0 || win(s.change) != Color::NONE) {
     m.move = s.move;
     m.score = board_val(s.change, s.ate, cur_player);
     return m;
