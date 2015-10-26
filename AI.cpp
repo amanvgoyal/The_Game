@@ -561,6 +561,13 @@ scored_move AI::minimax(state s, int depth, Color cur_player, Color max_player) 
   if (cur_player == max_player) {
     cur_score = -INF;
     moves = generate_moves(s.change, cur_player);
+
+    if (moves.size() == 0) {
+      m.move = s.move;
+      m.score = board_val(s.change, s.ate, cur_player);
+      return m;
+    }
+
     for (auto mov : moves) {
       //cout << mov.move << endl;
       temp = minimax(mov, depth - 1, enemy, max_player);
@@ -577,6 +584,13 @@ scored_move AI::minimax(state s, int depth, Color cur_player, Color max_player) 
   else if (cur_player != max_player) {
     cur_score = INF;
     moves = generate_moves(s.change, cur_player);
+
+    if (moves.size() == 0) {
+      m.move = s.move;
+      m.score = board_val(s.change, s.ate, cur_player);
+      return m;
+    }
+
     for (auto mov : moves) {
       //cout << mov.move << endl;
       temp = minimax(mov, depth - 1, max_player, max_player);
