@@ -46,7 +46,7 @@ string AI::move(vector<vector<Piece*> > board_state, string diff, string color) 
   else {
     p1 = Color::WHITE;
     p2 = Color::BLACK;
-  }
+n  }
 
   if (diff == "EASY") {
     return random(color);
@@ -71,7 +71,7 @@ string AI::move(vector<vector<Piece*> > board_state, string diff, string color) 
 
   //cout << "AB: " << alpha_beta(s, 3, -999999, 999999, Color::BLACK, Color::BLACK).move<< endl;
   t1 = clock();
-  ret_move = alpha_beta(s, 5, -INF, INF, Color::BLACK, Color::WHITE).move;
+  ret_move = alpha_beta(s, 4, -INF, INF, Color::BLACK, Color::WHITE).move;
   //ret_move = minimax(s,4,Color::BLACK, Color::WHITE).move;
   t2 = clock();
   cout << "TIME: " << ((double)t2 - (double)t1) / CLOCKS_PER_SEC << endl;
@@ -570,7 +570,7 @@ scored_move AI::minimax(state s, int depth, Color cur_player, Color max_player) 
 
     for (auto mov : moves) {
       //cout << mov.move << endl;
-      temp = minimax(mov, depth - 1, enemy, max_player);
+     temp = minimax(mov, depth - 1, enemy, max_player);
       if (temp.score > cur_score) {
 	cur_score = temp.score;
 	move = mov.move;

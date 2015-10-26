@@ -41,6 +41,7 @@ class AI {
   void print_board(board);
 
   std::string move_str(int, int, int, int);
+
 public:
   std::string move(std::vector<std::vector<Piece*> >, std::string diff, std::string color);
 
