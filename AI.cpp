@@ -20,7 +20,9 @@ const int MOVE_FWD_VAL = 1;
 const int BLOCKED_VAL = 2;
 const int HOLE_VAL = 3;
 const int HOLE_CREATE_VAL = 1;
-const int EAT_BONUS = 20;//10; 
+const int EAT_BONUS = 25;//10; 
+
+const int INF = 999999;
 
 auto eng = default_random_engine();
 
@@ -69,7 +71,7 @@ string AI::move(vector<vector<Piece*> > board_state, string diff, string color) 
 
   //cout << "AB: " << alpha_beta(s, 3, -999999, 999999, Color::BLACK, Color::BLACK).move<< endl;
   t1 = clock();
-  ret_move = alpha_beta(s, 5, -999999, 999999, Color::BLACK, Color::WHITE).move;
+  ret_move = alpha_beta(s, 5, -INF, INF, Color::BLACK, Color::WHITE).move;
   t2 = clock();
   cout << "TIME: " << ((double)t2 - (double)t1) / CLOCKS_PER_SEC << endl;
   cout << "THE MOVE: " << ret_move << endl;
@@ -110,7 +112,8 @@ Color AI::win(board b) {
   }
 
   // Check if someone lost all of their pieces
-  int b_ct, w_ct;
+  int b_ct = 0;
+  int w_ct = 0;
   for (int i = 0; i < rows; ++i) {
     for (int j =0; j < cols; ++j) {
       if (b[i][j] == Color::WHITE) {++w_ct;}
@@ -381,8 +384,8 @@ int AI::board_val(board b, bool ate, Color player_color) {
 
   // First check for wins??
   Color winner = win(b);
-  if (winner == player_color) {return 999999;}
-  else if (winner == enemy) {return -999999;}
+  if (winner == player_color) {return -INF;}
+  else if (winner == enemy) {return INF;}
 
   // Bonus if a piece at another
   if (ate) {
@@ -412,7 +415,7 @@ int AI::board_val(board b, bool ate, Color player_color) {
 	board_val += piece_val(b, i, j); //???
       }
 
-      else if (b[i][j] != player_color) {
+      else if (b[i][j] == enemy) {
 	board_val -= piece_val(b, i, j); //???
       }
     }
@@ -555,7 +558,7 @@ scored_move AI::minimax(state s, int depth, Color cur_player, Color max_player) 
   }
 
   if (cur_player == max_player) {
-    cur_score = -99999;
+    cur_score = -INF;
     moves = generate_moves(s.change, cur_player);
     for (auto mov : moves) {
       //cout << mov.move << endl;
@@ -571,7 +574,7 @@ scored_move AI::minimax(state s, int depth, Color cur_player, Color max_player) 
   }
 
   else if (cur_player != max_player) {
-    cur_score = 99999;
+    cur_score = INF;
     moves = generate_moves(s.change, cur_player);
     for (auto mov : moves) {
       //cout << mov.move << endl;
@@ -604,7 +607,7 @@ scored_move AI::alpha_beta(state s, int depth, int alpha, int beta, Color cur_pl
   }
 
   if (cur_player == max_player) { 
-    cur_score = -999999;
+    cur_score = -INF;
     moves = generate_moves(s.change, cur_player);
     for (auto mov : moves) {
       temp = alpha_beta(mov, depth - 1, alpha, beta, enemy, max_player);
@@ -622,7 +625,7 @@ scored_move AI::alpha_beta(state s, int depth, int alpha, int beta, Color cur_pl
   }
 
   else {
-    cur_score = 999999;
+    cur_score = INF;
     moves = generate_moves(s.change, cur_player);
     for (auto mov : moves) {
       temp = alpha_beta(mov, depth - 1, alpha, beta, max_player, max_player);
