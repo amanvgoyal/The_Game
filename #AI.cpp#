@@ -14,12 +14,12 @@ const int rows = 8;
 const int cols = 8;
 
 const int MAX_DEPTH = 3;
-const int ADJ_ENEMY_VAL = 1;//10;//3
-const int ADJ_ALLY_VAL = 1;//2;
-const int MOVE_FWD_VAL = 1;//5;//1
-const int BLOCKED_VAL = 1;//2;
-const int HOLE_VAL = 1;//10;
-const int HOLE_CREATE_VAL = 1;//1;
+const int ADJ_ENEMY_VAL = 10;//3
+const int ADJ_ALLY_VAL = 2;
+const int MOVE_FWD_VAL = 5;//1
+const int BLOCKED_VAL = 2;
+const int HOLE_VAL = 10;
+const int HOLE_CREATE_VAL = 1;
 const int EAT_BONUS = 50;//10; 
 
 const int INF = 999999;
@@ -615,10 +615,8 @@ scored_move AI::alpha_beta(state s, int depth, int alpha, int beta, Color cur_pl
   if (max_player == Color::BLACK) {enemy = Color::WHITE;}
   else {enemy = Color::BLACK;}
 
-  moves = generate_moves(s.change, cur_player);
-
-  if (depth == 0 || moves.size() == 0) {
-  //if (depth == 0 || win(s.change) != Color::NONE) {
+  // if (depth == 0 || win(s.change) != Color::NONE) {
+  if (depth == 0 || 
     m.move = s.move;
     m.score = board_val(s.change, s.ate, cur_player);
     return m;
@@ -626,7 +624,7 @@ scored_move AI::alpha_beta(state s, int depth, int alpha, int beta, Color cur_pl
 
   if (cur_player == max_player) { 
     cur_score = -INF;
-    /*moves = generate_moves(s.change, cur_player);
+    moves = generate_moves(s.change, cur_player);
     
     // case where no moves exist
     if (moves.size() == 0) {
@@ -634,7 +632,7 @@ scored_move AI::alpha_beta(state s, int depth, int alpha, int beta, Color cur_pl
       m.score = board_val(s.change, s.ate, cur_player);
       return m;
     }
-    */
+    
     for (auto mov : moves) {
       temp = alpha_beta(mov, depth - 1, alpha, beta, enemy, max_player);
       if (temp.score > cur_score) {
@@ -652,15 +650,15 @@ scored_move AI::alpha_beta(state s, int depth, int alpha, int beta, Color cur_pl
 
   else {
     cur_score = INF;
-    /*moves = generate_moves(s.change, cur_player);
-    
+    moves = generate_moves(s.change, cur_player);
+
     // case where no moves exist
     if (moves.size() == 0) {
       m.move = s.move;
       m.score = board_val(s.change, s.ate, cur_player);
       return m;
     }
-    */
+
     for (auto mov : moves) {
       temp = alpha_beta(mov, depth - 1, alpha, beta, max_player, max_player);
       if (temp.score < cur_score) {
