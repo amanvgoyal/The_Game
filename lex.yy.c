@@ -2252,7 +2252,7 @@ int Parser::par_stacksize(){
 
 string Parser::par_display(){
   if(counter!=-1){
-    if(Game.game_ended())
+    if(Game.game_ended() && !Game.winner_black())
         return Game.output_board();
   else{
     string temp = print+Game.output_board();

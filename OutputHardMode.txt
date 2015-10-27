@@ -1,0 +1,572 @@
+Trying 127.0.0.1...
+Connected to localhost.
+Escape character is '^]'.
+Password:password
+WELCOME:Human-Ai HARD
+OK
+display
+Current turn number: 1		White player's turn
+
+
+     A B C D E F G H
+     _ _ _ _ _ _ _ _
+  8 |X|X|X|X|X|X|X|X|
+  7 |X|X|X|X|X|X|X|X|
+  6 |_|_|_|_|_|_|_|_|		Your total number of pieces:  16
+  5 |_|_|_|_|_|_|_|_|		Enemy total number of pieces: 16
+  4 |_|_|_|_|_|_|_|_|
+  3 |_|_|_|_|_|_|_|_|
+  2 |O|O|O|O|O|O|O|O|
+  1 |O|O|O|O|O|O|O|O|
+
+
+OK
+D2 FWD
+Current turn number: 2		Black player's turn
+
+
+     A B C D E F G H
+     _ _ _ _ _ _ _ _
+  8 |X|X|X|X|X|X|X|X|
+  7 |X|X|X|X|X|X|X|_|
+  6 |_|_|_|_|_|_|_|X|		Your total number of pieces:  16
+  5 |_|_|_|_|_|_|_|_|		Enemy total number of pieces: 16
+  4 |_|_|_|_|_|_|_|_|
+  3 |_|_|_|O|_|_|_|_|
+  2 |O|O|O|_|O|O|O|O|
+  1 |O|O|O|O|O|O|O|O|
+H7 FWD
+
+Current turn number: 3		White player's turn
+
+
+     A B C D E F G H
+     _ _ _ _ _ _ _ _
+  8 |X|X|X|X|X|X|X|X|
+  7 |X|X|X|X|X|X|X|_|
+  6 |_|_|_|_|_|_|_|X|		Your total number of pieces:  16
+  5 |_|_|_|_|_|_|_|_|		Enemy total number of pieces: 16
+  4 |_|_|_|_|_|_|_|_|
+  3 |_|_|_|O|_|_|_|_|
+  2 |O|O|O|_|O|O|O|O|
+  1 |O|O|O|O|O|O|O|O|
+
+
+OK
+H2 FWD
+Current turn number: 4		Black player's turn
+
+
+     A B C D E F G H
+     _ _ _ _ _ _ _ _
+  8 |X|X|X|X|X|X|X|X|
+  7 |X|_|X|X|X|X|X|_|
+  6 |X|_|_|_|_|_|_|X|		Your total number of pieces:  16
+  5 |_|_|_|_|_|_|_|_|		Enemy total number of pieces: 16
+  4 |_|_|_|_|_|_|_|_|
+  3 |_|_|_|O|_|_|_|O|
+  2 |O|O|O|_|O|O|O|_|
+  1 |O|O|O|O|O|O|O|O|
+B7 RIGHT
+
+Current turn number: 5		White player's turn
+
+
+     A B C D E F G H
+     _ _ _ _ _ _ _ _
+  8 |X|X|X|X|X|X|X|X|
+  7 |X|_|X|X|X|X|X|_|
+  6 |X|_|_|_|_|_|_|X|		Your total number of pieces:  16
+  5 |_|_|_|_|_|_|_|_|		Enemy total number of pieces: 16
+  4 |_|_|_|_|_|_|_|_|
+  3 |_|_|_|O|_|_|_|O|
+  2 |O|O|O|_|O|O|O|_|
+  1 |O|O|O|O|O|O|O|O|
+
+
+OK
+A2 FWD
+Current turn number: 6		Black player's turn
+
+
+     A B C D E F G H
+     _ _ _ _ _ _ _ _
+  8 |X|X|X|X|X|X|_|X|
+  7 |X|_|X|X|X|X|X|X|
+  6 |X|_|_|_|_|_|_|X|		Your total number of pieces:  16
+  5 |_|_|_|_|_|_|_|_|		Enemy total number of pieces: 16
+  4 |_|_|_|_|_|_|_|_|
+  3 |O|_|_|O|_|_|_|O|
+  2 |_|O|O|_|O|O|O|_|
+  1 |O|O|O|O|O|O|O|O|
+G8 LEFT
+
+Current turn number: 7		White player's turn
+
+
+     A B C D E F G H
+     _ _ _ _ _ _ _ _
+  8 |X|X|X|X|X|X|_|X|
+  7 |X|_|X|X|X|X|X|X|
+  6 |X|_|_|_|_|_|_|X|		Your total number of pieces:  16
+  5 |_|_|_|_|_|_|_|_|		Enemy total number of pieces: 16
+  4 |_|_|_|_|_|_|_|_|
+  3 |O|_|_|O|_|_|_|O|
+  2 |_|O|O|_|O|O|O|_|
+  1 |O|O|O|O|O|O|O|O|
+
+
+OK
+F2 FWD
+Current turn number: 8		Black player's turn
+
+
+     A B C D E F G H
+     _ _ _ _ _ _ _ _
+  8 |X|X|X|X|X|X|_|X|
+  7 |X|_|_|X|X|X|X|X|
+  6 |X|_|X|_|_|_|_|X|		Your total number of pieces:  16
+  5 |_|_|_|_|_|_|_|_|		Enemy total number of pieces: 16
+  4 |_|_|_|_|_|_|_|_|
+  3 |O|_|_|O|_|O|_|O|
+  2 |_|O|O|_|O|_|O|_|
+  1 |O|O|O|O|O|O|O|O|
+C7 FWD
+
+Current turn number: 9		White player's turn
+
+
+     A B C D E F G H
+     _ _ _ _ _ _ _ _
+  8 |X|X|X|X|X|X|_|X|
+  7 |X|_|_|X|X|X|X|X|
+  6 |X|_|X|_|_|_|_|X|		Your total number of pieces:  16
+  5 |_|_|_|_|_|_|_|_|		Enemy total number of pieces: 16
+  4 |_|_|_|_|_|_|_|_|
+  3 |O|_|_|O|_|O|_|O|
+  2 |_|O|O|_|O|_|O|_|
+  1 |O|O|O|O|O|O|O|O|
+
+
+OK
+D3 FWD
+Current turn number: 10		Black player's turn
+
+
+     A B C D E F G H
+     _ _ _ _ _ _ _ _
+  8 |X|X|_|X|X|X|_|X|
+  7 |X|X|_|X|X|X|X|X|
+  6 |X|_|X|_|_|_|_|X|		Your total number of pieces:  16
+  5 |_|_|_|_|_|_|_|_|		Enemy total number of pieces: 16
+  4 |_|_|_|O|_|_|_|_|
+  3 |O|_|_|_|_|O|_|O|
+  2 |_|O|O|_|O|_|O|_|
+  1 |O|O|O|O|O|O|O|O|
+C8 RIGHT
+
+Current turn number: 11		White player's turn
+
+
+     A B C D E F G H
+     _ _ _ _ _ _ _ _
+  8 |X|X|_|X|X|X|_|X|
+  7 |X|X|_|X|X|X|X|X|
+  6 |X|_|X|_|_|_|_|X|		Your total number of pieces:  16
+  5 |_|_|_|_|_|_|_|_|		Enemy total number of pieces: 16
+  4 |_|_|_|O|_|_|_|_|
+  3 |O|_|_|_|_|O|_|O|
+  2 |_|O|O|_|O|_|O|_|
+  1 |O|O|O|O|O|O|O|O|
+
+
+OK
+C2 FWD
+Current turn number: 12		Black player's turn
+
+
+     A B C D E F G H
+     _ _ _ _ _ _ _ _
+  8 |X|_|_|X|X|X|_|X|
+  7 |X|X|X|X|X|X|X|X|
+  6 |X|_|X|_|_|_|_|X|		Your total number of pieces:  16
+  5 |_|_|_|_|_|_|_|_|		Enemy total number of pieces: 16
+  4 |_|_|_|O|_|_|_|_|
+  3 |O|_|O|_|_|O|_|O|
+  2 |_|O|_|_|O|_|O|_|
+  1 |O|O|O|O|O|O|O|O|
+B8 LEFT
+
+Current turn number: 13		White player's turn
+
+
+     A B C D E F G H
+     _ _ _ _ _ _ _ _
+  8 |X|_|_|X|X|X|_|X|
+  7 |X|X|X|X|X|X|X|X|
+  6 |X|_|X|_|_|_|_|X|		Your total number of pieces:  16
+  5 |_|_|_|_|_|_|_|_|		Enemy total number of pieces: 16
+  4 |_|_|_|O|_|_|_|_|
+  3 |O|_|O|_|_|O|_|O|
+  2 |_|O|_|_|O|_|O|_|
+  1 |O|O|O|O|O|O|O|O|
+
+
+OK
+E2 FWD
+Current turn number: 14		Black player's turn
+
+
+     A B C D E F G H
+     _ _ _ _ _ _ _ _
+  8 |X|_|_|X|X|X|_|X|
+  7 |X|X|X|_|X|X|X|X|
+  6 |X|_|X|X|_|_|_|X|		Your total number of pieces:  16
+  5 |_|_|_|_|_|_|_|_|		Enemy total number of pieces: 16
+  4 |_|_|_|O|_|_|_|_|
+  3 |O|_|O|_|O|O|_|O|
+  2 |_|O|_|_|_|_|O|_|
+  1 |O|O|O|O|O|O|O|O|
+D7 FWD
+
+Current turn number: 15		White player's turn
+
+
+     A B C D E F G H
+     _ _ _ _ _ _ _ _
+  8 |X|_|_|X|X|X|_|X|
+  7 |X|X|X|_|X|X|X|X|
+  6 |X|_|X|X|_|_|_|X|		Your total number of pieces:  16
+  5 |_|_|_|_|_|_|_|_|		Enemy total number of pieces: 16
+  4 |_|_|_|O|_|_|_|_|
+  3 |O|_|O|_|O|O|_|O|
+  2 |_|O|_|_|_|_|O|_|
+  1 |O|O|O|O|O|O|O|O|
+
+
+OK
+C3 FWD
+Current turn number: 16		Black player's turn
+
+
+     A B C D E F G H
+     _ _ _ _ _ _ _ _
+  8 |X|_|_|X|X|X|_|X|
+  7 |X|X|X|_|X|X|_|X|
+  6 |X|_|X|X|_|X|_|X|		Your total number of pieces:  16
+  5 |_|_|_|_|_|_|_|_|		Enemy total number of pieces: 16
+  4 |_|_|O|O|_|_|_|_|
+  3 |O|_|_|_|O|O|_|O|
+  2 |_|O|_|_|_|_|O|_|
+  1 |O|O|O|O|O|O|O|O|
+G7 RIGHT
+
+Current turn number: 17		White player's turn
+
+
+     A B C D E F G H
+     _ _ _ _ _ _ _ _
+  8 |X|_|_|X|X|X|_|X|
+  7 |X|X|X|_|X|X|_|X|
+  6 |X|_|X|X|_|X|_|X|		Your total number of pieces:  16
+  5 |_|_|_|_|_|_|_|_|		Enemy total number of pieces: 16
+  4 |_|_|O|O|_|_|_|_|
+  3 |O|_|_|_|O|O|_|O|
+  2 |_|O|_|_|_|_|O|_|
+  1 |O|O|O|O|O|O|O|O|
+
+
+OK
+C4 FWD
+Current turn number: 18		Black player's turn
+
+
+     A B C D E F G H
+     _ _ _ _ _ _ _ _
+  8 |X|_|_|X|X|X|_|X|
+  7 |X|X|X|_|X|X|_|X|
+  6 |X|_|X|_|_|X|_|X|		Your total number of pieces:  16
+  5 |_|_|O|X|_|_|_|_|		Enemy total number of pieces: 16
+  4 |_|_|_|O|_|_|_|_|
+  3 |O|_|_|_|O|O|_|O|
+  2 |_|O|_|_|_|_|O|_|
+  1 |O|O|O|O|O|O|O|O|
+D6 FWD
+
+Current turn number: 19		White player's turn
+
+
+     A B C D E F G H
+     _ _ _ _ _ _ _ _
+  8 |X|_|_|X|X|X|_|X|
+  7 |X|X|X|_|X|X|_|X|
+  6 |X|_|X|_|_|X|_|X|		Your total number of pieces:  16
+  5 |_|_|O|X|_|_|_|_|		Enemy total number of pieces: 16
+  4 |_|_|_|O|_|_|_|_|
+  3 |O|_|_|_|O|O|_|O|
+  2 |_|O|_|_|_|_|O|_|
+  1 |O|O|O|O|O|O|O|O|
+
+
+OK
+H3 FWD
+Current turn number: 20   Black player's turn
+
+
+     A B C D E F G H
+     _ _ _ _ _ _ _ _
+  8 |X|_|_|_|X|X|_|X|
+  7 |X|X|X|X|X|X|_|X|
+  6 |X|_|X|_|_|X|_|X|   Your total number of pieces:  16
+  5 |_|_|O|X|_|_|_|_|   Enemy total number of pieces: 16
+  4 |_|_|_|O|_|_|_|O|
+  3 |O|_|_|_|O|O|_|_|
+  2 |_|O|_|_|_|_|O|_|
+  1 |O|O|O|O|O|O|O|O|
+D8 FWD
+
+Current turn number: 21   White player's turn
+
+
+     A B C D E F G H
+     _ _ _ _ _ _ _ _
+  8 |X|_|_|_|X|X|_|X|
+  7 |X|X|X|X|X|X|_|X|
+  6 |X|_|X|_|_|X|_|X|   Your total number of pieces:  16
+  5 |_|_|O|X|_|_|_|_|   Enemy total number of pieces: 16
+  4 |_|_|_|O|_|_|_|O|
+  3 |O|_|_|_|O|O|_|_|
+  2 |_|O|_|_|_|_|O|_|
+  1 |O|O|O|O|O|O|O|O|
+
+
+OK
+H4 FWD
+Current turn number: 22   Black player's turn
+
+
+     A B C D E F G H
+     _ _ _ _ _ _ _ _
+  8 |X|_|_|_|X|_|_|X|
+  7 |X|X|X|X|X|X|X|X|
+  6 |X|_|X|_|_|X|_|X|   Your total number of pieces:  16
+  5 |_|_|O|X|_|_|_|O|   Enemy total number of pieces: 16
+  4 |_|_|_|O|_|_|_|_|
+  3 |O|_|_|_|O|O|_|_|
+  2 |_|O|_|_|_|_|O|_|
+  1 |O|O|O|O|O|O|O|O|
+F8 LEFT
+
+Current turn number: 23   White player's turn
+
+
+     A B C D E F G H
+     _ _ _ _ _ _ _ _
+  8 |X|_|_|_|X|_|_|X|
+  7 |X|X|X|X|X|X|X|X|
+  6 |X|_|X|_|_|X|_|X|   Your total number of pieces:  16
+  5 |_|_|O|X|_|_|_|O|   Enemy total number of pieces: 16
+  4 |_|_|_|O|_|_|_|_|
+  3 |O|_|_|_|O|O|_|_|
+  2 |_|O|_|_|_|_|O|_|
+  1 |O|O|O|O|O|O|O|O|
+
+
+OK
+F3 FWD
+Current turn number: 24   Black player's turn
+
+
+     A B C D E F G H
+     _ _ _ _ _ _ _ _
+  8 |X|_|_|_|X|_|_|X|
+  7 |X|X|X|_|X|X|X|X|
+  6 |X|_|X|_|X|X|_|X|   Your total number of pieces:  16
+  5 |_|_|O|X|_|_|_|O|   Enemy total number of pieces: 16
+  4 |_|_|_|O|_|O|_|_|
+  3 |O|_|_|_|O|_|_|_|
+  2 |_|O|_|_|_|_|O|_|
+  1 |O|O|O|O|O|O|O|O|
+D7 LEFT
+
+Current turn number: 25   White player's turn
+
+
+     A B C D E F G H
+     _ _ _ _ _ _ _ _
+  8 |X|_|_|_|X|_|_|X|
+  7 |X|X|X|_|X|X|X|X|
+  6 |X|_|X|_|X|X|_|X|   Your total number of pieces:  16
+  5 |_|_|O|X|_|_|_|O|   Enemy total number of pieces: 16
+  4 |_|_|_|O|_|O|_|_|
+  3 |O|_|_|_|O|_|_|_|
+  2 |_|O|_|_|_|_|O|_|
+  1 |O|O|O|O|O|O|O|O|
+
+
+OK
+G2 LEFT
+Current turn number: 26   Black player's turn
+
+
+     A B C D E F G H
+     _ _ _ _ _ _ _ _
+  8 |X|_|_|_|_|_|_|X|
+  7 |X|X|X|X|X|X|X|X|
+  6 |X|_|X|_|X|X|_|X|   Your total number of pieces:  16
+  5 |_|_|O|X|_|_|_|O|   Enemy total number of pieces: 16
+  4 |_|_|_|O|_|O|_|_|
+  3 |O|_|_|_|O|O|_|_|
+  2 |_|O|_|_|_|_|_|_|
+  1 |O|O|O|O|O|O|O|O|
+E8 RIGHT
+
+Current turn number: 27   White player's turn
+
+
+     A B C D E F G H
+     _ _ _ _ _ _ _ _
+  8 |X|_|_|_|_|_|_|X|
+  7 |X|X|X|X|X|X|X|X|
+  6 |X|_|X|_|X|X|_|X|   Your total number of pieces:  16
+  5 |_|_|O|X|_|_|_|O|   Enemy total number of pieces: 16
+  4 |_|_|_|O|_|O|_|_|
+  3 |O|_|_|_|O|O|_|_|
+  2 |_|O|_|_|_|_|_|_|
+  1 |O|O|O|O|O|O|O|O|
+
+
+OK
+E3 FWD
+Current turn number: 28   Black player's turn
+
+
+     A B C D E F G H
+     _ _ _ _ _ _ _ _
+  8 |X|_|_|_|_|_|_|X|
+  7 |X|X|X|X|X|X|X|X|
+  6 |X|_|X|_|X|X|_|X|   Your total number of pieces:  16
+  5 |_|_|O|_|_|_|_|O|   Enemy total number of pieces: 16
+  4 |_|_|X|O|O|O|_|_|
+  3 |O|_|_|_|_|O|_|_|
+  2 |_|O|_|_|_|_|_|_|
+  1 |O|O|O|O|O|O|O|O|
+D5 RIGHT
+
+Current turn number: 29   White player's turn
+
+
+     A B C D E F G H
+     _ _ _ _ _ _ _ _
+  8 |X|_|_|_|_|_|_|X|
+  7 |X|X|X|X|X|X|X|X|
+  6 |X|_|X|_|X|X|_|X|   Your total number of pieces:  16
+  5 |_|_|O|_|_|_|_|O|   Enemy total number of pieces: 16
+  4 |_|_|X|O|O|O|_|_|
+  3 |O|_|_|_|_|O|_|_|
+  2 |_|O|_|_|_|_|_|_|
+  1 |O|O|O|O|O|O|O|O|
+
+
+OK
+D4 FWD
+Current turn number: 30   Black player's turn
+
+
+     A B C D E F G H
+     _ _ _ _ _ _ _ _
+  8 |X|_|_|_|_|_|_|X|
+  7 |_|X|X|X|X|X|X|X|
+  6 |X|X|X|_|X|X|_|X|   Your total number of pieces:  16
+  5 |_|_|O|O|_|_|_|O|   Enemy total number of pieces: 16
+  4 |_|_|X|_|O|O|_|_|
+  3 |O|_|_|_|_|O|_|_|
+  2 |_|O|_|_|_|_|_|_|
+  1 |O|O|O|O|O|O|O|O|
+A7 LEFT
+
+Current turn number: 31   White player's turn
+
+
+     A B C D E F G H
+     _ _ _ _ _ _ _ _
+  8 |X|_|_|_|_|_|_|X|
+  7 |_|X|X|X|X|X|X|X|
+  6 |X|X|X|_|X|X|_|X|   Your total number of pieces:  16
+  5 |_|_|O|O|_|_|_|O|   Enemy total number of pieces: 16
+  4 |_|_|X|_|O|O|_|_|
+  3 |O|_|_|_|_|O|_|_|
+  2 |_|O|_|_|_|_|_|_|
+  1 |O|O|O|O|O|O|O|O|
+
+
+OK
+D5 FWD
+Current turn number: 32   Black player's turn
+
+
+     A B C D E F G H
+     _ _ _ _ _ _ _ _
+  8 |X|_|_|_|_|_|_|X|
+  7 |_|X|X|X|X|X|X|X|
+  6 |X|_|X|O|X|X|_|X|   Your total number of pieces:  16
+  5 |_|_|X|_|_|_|_|O|   Enemy total number of pieces: 15
+  4 |_|_|X|_|O|O|_|_|
+  3 |O|_|_|_|_|O|_|_|
+  2 |_|O|_|_|_|_|_|_|
+  1 |O|O|O|O|O|O|O|O|
+B6 LEFT
+
+Current turn number: 33   White player's turn
+
+
+     A B C D E F G H
+     _ _ _ _ _ _ _ _
+  8 |X|_|_|_|_|_|_|X|
+  7 |_|X|X|X|X|X|X|X|
+  6 |X|_|X|O|X|X|_|X|   Your total number of pieces:  15
+  5 |_|_|X|_|_|_|_|O|   Enemy total number of pieces: 16
+  4 |_|_|X|_|O|O|_|_|
+  3 |O|_|_|_|_|O|_|_|
+  2 |_|O|_|_|_|_|_|_|
+  1 |O|O|O|O|O|O|O|O|
+
+
+OK
+D6 LEFT
+Current turn number: 34   Black player's turn
+
+
+     A B C D E F G H
+     _ _ _ _ _ _ _ _
+  8 |_|_|_|_|_|_|_|X|
+  7 |X|X|O|X|X|X|X|X|
+  6 |X|_|X|_|X|X|_|X|   Your total number of pieces:  15
+  5 |_|_|X|_|_|_|_|O|   Enemy total number of pieces: 15
+  4 |_|_|X|_|O|O|_|_|
+  3 |O|_|_|_|_|O|_|_|
+  2 |_|O|_|_|_|_|_|_|
+  1 |O|O|O|O|O|O|O|O|
+A8 FWD
+
+Current turn number: 35   White player's turn
+
+
+     A B C D E F G H
+     _ _ _ _ _ _ _ _
+  8 |_|_|_|_|_|_|_|X|
+  7 |X|X|O|X|X|X|X|X|
+  6 |X|_|X|_|X|X|_|X|   Your total number of pieces:  15
+  5 |_|_|X|_|_|_|_|O|   Enemy total number of pieces: 15
+  4 |_|_|X|_|O|O|_|_|
+  3 |O|_|_|_|_|O|_|_|
+  2 |_|O|_|_|_|_|_|_|
+  1 |O|O|O|O|O|O|O|O|
+
+
+OK
+C7 FWD
+The White player reached the opponent's home row.
+This game's winner is the White player!
+
+Connection closed by foreign host.

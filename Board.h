@@ -134,7 +134,9 @@ public:
 	bool move_piece(Move move);								// move the specified piece
 	void end_turn();										// end the current turn and switch to the other player
 	void ai_turn();
-	void reset_turn(){turn_num =0;}
+	bool winner_black(){if(winner==Color::BLACK)return true;else return false;}
+	bool winner_white(){if(winner==Color::WHITE)return true;else return false;}
+	void reset_turn(){turn_num =1;}
 	void set_difficulty(std::string s);
 	Direction show_moves(int rows, char cols);				// show the valid moves for the specified piece
 	Direction show_moves(Piece* piece);						// show the valid moves for the specified piece
