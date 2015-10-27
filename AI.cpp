@@ -9,18 +9,20 @@
 #include <time.h>
 
 using namespace std;
-
+ 
 const int rows = 8;
 const int cols = 8;
 
 const int MAX_DEPTH = 3;
-const int ADJ_ENEMY_VAL = 1;//10;//3
-const int ADJ_ALLY_VAL = 1;//2;
+const int ADJ_ENEMY_VAL = 2;//10;//3
+const int ADJ_ALLY_VAL = 5;//2;
 const int MOVE_FWD_VAL = 1;//5;//1
-const int BLOCKED_VAL = 1;//2;
+const int BLOCKED_VAL = 2;//2;
 const int HOLE_VAL = 1;//10;
-const int HOLE_CREATE_VAL = 1;//1;
-const int EAT_BONUS = 50;//10; 
+const int HOLE_CREATE_VAL = 4;//1;
+const int EAT_BONUS = 10000;//10; 
+const int HOME_ROW_VAL = 1;
+const int INVADER_VAL = 50;
 
 const int INF = 999999;
 
@@ -71,8 +73,8 @@ n  }
 
   //cout << "AB: " << alpha_beta(s, 3, -999999, 999999, Color::BLACK, Color::BLACK).move<< endl;
   t1 = clock();
-  ret_move = alpha_beta(s, 4, -INF, INF, Color::BLACK, Color::WHITE).move;
-  //ret_move = minimax(s,4,Color::BLACK, Color::WHITE).move;
+  ret_move = alpha_beta(s, 4, -INF, INF, Color::BLACK, Color::BLACK).move;
+  //ret_move = minimax(s,3,Color::BLACK, Color::WHITE).move;
   t2 = clock();
   cout << "TIME: " << ((double)t2 - (double)t1) / CLOCKS_PER_SEC << endl;
   cout << "THE MOVE: " << ret_move << endl;
@@ -245,7 +247,8 @@ vector<state> AI::generate_moves(board b, Color player_color) {
 // IMPROVE THIS
 int AI::threat_level(board b, int x, int y) {
   int val = 0;
-
+  int openings = 0;
+  
   // Case White
   if (b[x][y] == Color::WHITE) {
     // Check if protected
@@ -272,6 +275,18 @@ int AI::threat_level(board b, int x, int y) {
 	val -= ADJ_ENEMY_VAL;
       }
     }
+  
+    for (int i = 0; i < cols; ++i) {
+      if (b[7][i] != Color::WHITE) {++openings;}
+    }
+    val -= openings*HOME_ROW_VAL;
+
+    // check for invaders
+    for (int i = 5; i < 8; ++i) {
+      for (int j = 0; j < 8; ++j) {
+	if (b[i][j] == Color::BLACK) {val -= INVADER_VAL;}
+      } 
+    }
   }
 
   // Case Black
@@ -282,7 +297,7 @@ int AI::threat_level(board b, int x, int y) {
 	val += ADJ_ALLY_VAL;
       }
     }
-    if (x < 7 && y < 7) {
+    if (x > 0 && y < 7) {
       if (b[x-1][y+1] == Color::BLACK) {
 	val += ADJ_ALLY_VAL;
       }
@@ -298,6 +313,19 @@ int AI::threat_level(board b, int x, int y) {
       if (b[x+1][y+1] == Color::WHITE) {
 	val -= ADJ_ENEMY_VAL;
       }
+    }
+    
+    // check if made openings
+    for (int i = 0; i < cols; ++i) {
+      if (b[0][i] != Color::BLACK) {++openings;}
+    }
+    val -= openings*HOME_ROW_VAL;
+  
+    // check for invaders
+    for (int i = 0; i < 3; ++i) {
+      for (int j = 0; j < 8; ++j) {
+	if (b[i][j] == Color::WHITE) {val -= INVADER_VAL;}
+      } 
     }
   }
 
@@ -320,7 +348,7 @@ vector<int> AI::hole_check(board b) {
 	if (b[i][j] != Color::NONE) {b_hole = false;}
       }
       // check white hole
-      if (i < 7 && i > 3) {
+      if (i < 8 && i > 3) {
 	if (b[i][j] != Color::NONE) {w_hole = false;}
       }
       if (b_hole) {
@@ -361,9 +389,9 @@ int AI::mobility_level(board b, int x, int y) {
     // Check if there's a path to the end
     for (int i = 7; i > x - 1; --i) {
       if (b[i][y] != Color::NONE) {hole = false;}
-      }
+    }
     if (hole) {mobi_val += HOLE_VAL;}
-}
+  }
   else {mobi_val -= -BLOCKED_VAL;}
 }
 
@@ -385,8 +413,8 @@ int AI::board_val(board b, bool ate, Color player_color) {
 
   // First check for wins??
   Color winner = win(b);
-  if (winner == player_color) {return -INF;}
-  else if (winner == enemy) {return INF;}
+  if (winner == player_color) {return INF;}
+  else if (winner == enemy) {return -INF;}
 
   // Bonus if a piece at another
   if (ate) {
@@ -576,6 +604,7 @@ scored_move AI::minimax(state s, int depth, Color cur_player, Color max_player) 
 	move = mov.move;
       }
     }
+
     m.move = move;
     m.score = cur_score;
     return m;
@@ -599,6 +628,7 @@ scored_move AI::minimax(state s, int depth, Color cur_player, Color max_player) 
 	move = mov.move;
       }
     }
+    
     m.move = move;
     m.score = cur_score;
     return m;
