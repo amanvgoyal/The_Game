@@ -10,11 +10,16 @@
 //typedef Color board [8][8];
 typedef std::array<std::array<Color, 8>, 8> board;
 
-struct Node {
-  board cur_board;
-  std::vector<board> branches;
-  int depth;
-}
+struct scored_move {
+  int score;
+  std::string move;
+};
+
+struct state {
+  board change;
+  bool ate = false;
+  std::string move;
+};
 
 class AI {
  private:
@@ -25,20 +30,25 @@ class AI {
   std::string ai_color;
 
   Color win(board);
-  std::vector<board> generate_moves(board, Color);
-  int board_val(board, Color);
+  std::vector<state> generate_moves(board, Color);
+  int board_val(board, bool, Color);
   int threat_level(board, int, int);
   int mobility_level(board, int, int);
   int piece_val(board, int, int);
 
+  std::vector<int> hole_check(board);
+
   void print_board(board);
 
-public:
-  std::string move(std::vector<std::vector<Piece*> >, std::string, std::string);
+  std::string move_str(int, int, int, int);
 
-  std::string random(std::string);
-  std::string minimax(std::string, string);
-  std::string alpha_beta(std::string);
+public:
+  std::string move(std::vector<std::vector<Piece*> >, std::string diff, std::string color);
+
+  std::string random(std::string diff);
+  //scored_move minimax(board, int, Color, Color);
+  scored_move minimax(state, int, Color, Color);
+  scored_move alpha_beta(state, int, int, int, Color, Color);
     
   void update_state(std::vector<std::vector<Piece*>>);
 };
