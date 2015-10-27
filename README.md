@@ -1,7 +1,7 @@
 # READ ME
 ##Compile Instructions Using Flex with C++
 1. Have two terminals open.
-2. Run "bash compile.sh && ./Game <port>" on One Terminal.
+2. Run "bash compile.sh && ./Game /<port/>" on One Terminal.
 This starts the server client.
 To kill that port number use fuser -k <port>/tcp
 3. On the other terminal type "telnet localhost <port>"
