@@ -17,7 +17,7 @@ struct scored_move {
 
 struct state {
   board change;
-  bool ate = false;;
+  bool ate = false;
   std::string move;
 };
 

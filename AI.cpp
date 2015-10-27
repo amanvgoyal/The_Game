@@ -14,15 +14,15 @@ const int rows = 8;
 const int cols = 8;
 
 const int MAX_DEPTH = 3;
-const int ADJ_ENEMY_VAL = 2;//10;//3
-const int ADJ_ALLY_VAL = 5;//2;
-const int MOVE_FWD_VAL = 1;//5;//1
-const int BLOCKED_VAL = 2;//2;
-const int HOLE_VAL = 1;//10;
-const int HOLE_CREATE_VAL = 4;//1;
-const int EAT_BONUS = 10000;//10; 
-const int HOME_ROW_VAL = 1;
-const int INVADER_VAL = 50;
+const int ADJ_ENEMY_VAL = 0;//2;//10;//3
+const int ADJ_ALLY_VAL = 0;//5;//2;
+const int MOVE_FWD_VAL = 1;//1;//5;//1
+const int BLOCKED_VAL = 0;//2;//2;
+const int HOLE_VAL = 0;//1;//10;
+const int HOLE_CREATE_VAL = 0;//4;//1;
+const int EAT_BONUS = 500;//10000;//10; 
+const int HOME_ROW_VAL = 0;//1;
+const int INVADER_VAL = 0;//50;
 
 const int INF = 999999;
 
@@ -74,6 +74,7 @@ n  }
   //cout << "AB: " << alpha_beta(s, 3, -999999, 999999, Color::BLACK, Color::BLACK).move<< endl;
   t1 = clock();
   ret_move = alpha_beta(s, 4, -INF, INF, Color::BLACK, Color::BLACK).move;
+  if (ret_move == "") {ret_move = random("BLACK");}
   //ret_move = minimax(s,3,Color::BLACK, Color::WHITE).move;
   t2 = clock();
   cout << "TIME: " << ((double)t2 - (double)t1) / CLOCKS_PER_SEC << endl;
