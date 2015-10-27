@@ -111,7 +111,7 @@ IP+" "{ID}    {
             tokens.push(temp);
             
 }
-";".*\n  { 
+";".*  { 
         cout<<"Comment"<<yytext;
         string s(yytext);
         Token temp(T_COMMENT,s);

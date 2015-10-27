@@ -9,23 +9,36 @@
 #include <time.h>
 
 using namespace std;
-
+ 
 const int rows = 8;
 const int cols = 8;
 
 const int MAX_DEPTH = 3;
-const int ADJ_ENEMY_VAL = 3;
-const int ADJ_ALLY_VAL = 2;
-const int MOVE_FWD_VAL = 1;
-const int BLOCKED_VAL = 2;
-const int HOLE_VAL = 3;
-const int HOLE_CREATE_VAL = 1;
-const int EAT_BONUS = 20;//10; 
+
+// AI evaluation parameters
+const int ADJ_ENEMY_VAL = 2; // Perhaps make this higher
+const int ADJ_ALLY_VAL = 1; // Bonus if protected
+const int MOVE_FWD_VAL = 1; // Bonus if mobile
+const int BLOCKED_VAL = 1; // Penalty if blocked
+const int HOLE_VAL = 1; // Bonus if can travel through to endgame
+const int HOLE_CREATE_VAL = 1; // Penalty if you made a hole
+const int EAT_BONUS = 600; // Major incentive to kill
+const int HOME_ROW_VAL = 1; // Penalty for each open space in home row
+const int INVADER_VAL = 2; // Penalty for each enemy you let near endgame
+
+const int INF = 999999;
 
 auto eng = default_random_engine();
 
 // In case need to check runtime
 clock_t t1, t2;
+
+void AI::set_difficulty(string s){
+  if(s=="EASY") level = Easy;
+  if(s=="MEDIUM") level = Medium;
+  if(s=="HARD") level = Hard;
+
+}
 
 string AI::move(vector<vector<Piece*> > board_state, string diff, string color) {
   update_state(board_state);
@@ -34,47 +47,26 @@ string AI::move(vector<vector<Piece*> > board_state, string diff, string color) 
   s.move = "";
 
   string ret_move;
-  /*
-  Color p1, p2;
-  if (color == "BLACK") {
-    p1 = Color::BLACK;
-    p2 = Color::WHITE;
-  }
 
-  else {
-    p1 = Color::WHITE;
-    p2 = Color::BLACK;
-  }
-
-  if (diff == "EASY") {
-    return random(color);
-  }
-   
-  else if (diff == "MEDIUM") {
-    return minimax(s,3,p1,p2).move;
-  }
-
-  else if (diff == "HARD") {
-    return alpha_beta(s,7,-999999,999999,p1,p2).move;
-  }
-  else {
-    cerr << "Difficulty string not well formed!" << endl;
-    return "";
-  }
-*/    
-
-  //cout << "MINIMAX: " << minimax(s, 3, Color::BLACK, Color::BLACK).move << endl;
-  //return minimax(s, 3, Color::BLACK, Color::WHITE).move; // wrong? always eats?
-  //return minimax(s, 3, Color::BLACK, Color::BLACK).move; // eats for depth 1
-
-  //cout << "AB: " << alpha_beta(s, 3, -999999, 999999, Color::BLACK, Color::BLACK).move<< endl;
   t1 = clock();
-  ret_move = alpha_beta(s, 5, -999999, 999999, Color::BLACK, Color::WHITE).move;
+  cout<<"Difficulty Level:";
+  if(level == Hard){
+    ret_move = alpha_beta(s, 4, -INF, INF, Color::BLACK, Color::WHITE).move;
+    cout<<"Alpha Beta"<<endl;
+  }
+  if(level == Medium){
+    ret_move = minimax(s,3,Color::BLACK, Color::WHITE).move;
+    cout<<"MINIMAX"<<endl;
+  }
+  if(level == Easy){
+    ret_move = random(color);
+    cout<<"Random"<<endl;
+  }
+  if (ret_move == "") {ret_move = random(color);}
   t2 = clock();
   cout << "TIME: " << ((double)t2 - (double)t1) / CLOCKS_PER_SEC << endl;
   cout << "THE MOVE: " << ret_move << endl;
   return ret_move;
-  //return random("BLACK");
 }
 
 void AI::update_state(vector<vector<Piece*>> state) {
@@ -85,11 +77,12 @@ void AI::update_state(vector<vector<Piece*>> state) {
     }
   }
 
+  // Fill board structure with colors corresponding to pieces
   for (auto v : state) {
     for (auto p : v) {
       if (p != nullptr) {
-	pos = p->position(); 
-	brd[7-pos.row][pos.col] = p->color();
+  pos = p->position(); 
+  brd[7-pos.row][pos.col] = p->color();
       }
     }
   }
@@ -110,7 +103,8 @@ Color AI::win(board b) {
   }
 
   // Check if someone lost all of their pieces
-  int b_ct, w_ct;
+  int b_ct = 0;
+  int w_ct = 0;
   for (int i = 0; i < rows; ++i) {
     for (int j =0; j < cols; ++j) {
       if (b[i][j] == Color::WHITE) {++w_ct;}
@@ -125,8 +119,8 @@ Color AI::win(board b) {
 }
 
 vector<state> AI::generate_moves(board b, Color player_color) {
-  //board b_copy = b;
   srand(unsigned(time(0)));
+
   vector<state> ret;
   Color original;
   int ct = 0;
@@ -134,139 +128,150 @@ vector<state> AI::generate_moves(board b, Color player_color) {
   for (int i = 0; i < rows; ++i) {
     for (int j = 0; j < cols; ++j) {
       if (b[i][j] == player_color) {
-	
-	if (player_color == Color::WHITE) {
-	  // Can go up
-	  if (i > 0) {
-	    if (b[i-1][j] == Color::NONE) {
-	      b[i-1][j] = player_color;
-	      b[i][j] = Color::NONE;
-	      temp.change = b;
-	      temp.move = move_str(i,j,i-1,j);
-	      temp.ate = false;
-	      ret.push_back(temp);
-	      b[i-1][j] = Color::NONE;
-	      b[i][j] = player_color;
-	    }
-	  }
+  
+  if (player_color == Color::WHITE) {
+    // Can go up
+    if (i > 0) {
+      if (b[i-1][j] == Color::NONE) {
+        b[i-1][j] = player_color;
+        b[i][j] = Color::NONE;
+        temp.change = b;
+        temp.move = move_str(i,j,i-1,j);
+        temp.ate = false;
+        ret.push_back(temp);
+        b[i-1][j] = Color::NONE;
+        b[i][j] = player_color;
+      }
+    }
 
-	  // Can go diag left
-	  if (i > 0 && j > 0) {
-	    if (b[i-1][j-1] != player_color) {
-	      (b[i-1][j-1] != Color::NONE) ? temp.ate = true : temp.ate = false;
-	      original = b[i-1][j-1];
-	      b[i-1][j-1] = player_color;
-	      b[i][j] = Color::NONE;
-	      temp.change = b;
-	      temp.move = move_str(i,j,i-1,j-1);
-	      ret.push_back(temp);
-	      b[i][j] = player_color;
-	      b[i-1][j-1] = original;
-	    }
-	  }
+    // Can go diag left
+    if (i > 0 && j > 0) {
+      if (b[i-1][j-1] != player_color) {
+        (b[i-1][j-1] != Color::NONE) ? temp.ate = true : temp.ate = false;
+        original = b[i-1][j-1];
+        b[i-1][j-1] = player_color;
+        b[i][j] = Color::NONE;
+        temp.change = b;
+        temp.move = move_str(i,j,i-1,j-1);
+        ret.push_back(temp);
+        b[i][j] = player_color;
+        b[i-1][j-1] = original;
+      }
+    }
       
-	  // Can go diag right
-	  if (i > 0 && j < 7) {
-	    if (b[i-1][j+1] != player_color) {
-	      (b[i-1][j+1] != Color::NONE) ? temp.ate = true : temp.ate = false;
-	      original = b[i-1][j+1];
-	      b[i-1][j+1] = player_color;
-	      b[i][j] = Color::NONE;
-	      temp.change = b;
-	      temp.move = move_str(i,j,i-1,j+1);
-	      ret.push_back(temp);
-	      b[i-1][j+1] = original;
-	      b[i][j] = player_color;
-	    }
-	  }
-	}
-
-	if (player_color == Color::BLACK) {
-	  // Can go down 
-	  if (i < 7) {
-	    if (b[i+1][j] == Color::NONE) {
-	      original = b[i+1][j];
-	      b[i+1][j] = player_color;
-	      b[i][j] = Color::NONE;
-	      temp.change = b;
-	      temp.move = move_str(i,j,i+1,j);
-	      temp.ate = false;
-	      ret.push_back(temp);
-	      b[i+1][j] = original;
-	      b[i][j] = player_color;
-	    }
-	  }
-
-	  // Can go diag left
-	  if (i < 7 && j > 0) {
-	    if (b[i+1][j-1] != player_color) {
-	      (b[i+1][j-1] != Color::NONE) ? temp.ate = true : temp.ate = false;
-	      original = b[i+1][j-1];
-	      b[i+1][j-1] = player_color;
-	      b[i][j] = Color::NONE;
-	      temp.change = b;
-	      temp.move = move_str(i,j,i+1,j-1);
-	      ret.push_back(temp);
-	      b[i+1][j-1] = original;
-	      b[i][j] = player_color;	    
-	    }
-	  }
-
-	  // Can go diag right
-	  if (i < 7 && j < 7) {
-	    if (b[i+1][j+1] != player_color) {
-	      (b[i+1][j+1] != Color::NONE) ? temp.ate = true : temp.ate = false;
-	      original = b[i+1][j+1];
-	      b[i+1][j+1] = player_color;
-	      b[i][j] = Color::NONE;
-	      temp.change = b;
-	      temp.move = move_str(i,j,i+1,j+1);
-	      ret.push_back(temp);
-	      b[i+1][j+1] = original;
-	      b[i][j] = player_color;
-	    }
-	  }
-	}
+    // Can go diag right
+    if (i > 0 && j < 7) {
+      if (b[i-1][j+1] != player_color) {
+        (b[i-1][j+1] != Color::NONE) ? temp.ate = true : temp.ate = false;
+        original = b[i-1][j+1];
+        b[i-1][j+1] = player_color;
+        b[i][j] = Color::NONE;
+        temp.change = b;
+        temp.move = move_str(i,j,i-1,j+1);
+        ret.push_back(temp);
+        b[i-1][j+1] = original;
+        b[i][j] = player_color;
       }
     }
   }
 
-  //  random_shuffle(ret.begin(), ret.end()); // MAYBE DONT DO THIS
+  if (player_color == Color::BLACK) {
+    // Can go down 
+    if (i < 7) {
+      if (b[i+1][j] == Color::NONE) {
+        original = b[i+1][j];
+        b[i+1][j] = player_color;
+        b[i][j] = Color::NONE;
+        temp.change = b;
+        temp.move = move_str(i,j,i+1,j);
+        temp.ate = false;
+        ret.push_back(temp);
+        b[i+1][j] = original;
+        b[i][j] = player_color;
+      }
+    }
+
+    // Can go diag left
+    if (i < 7 && j > 0) {
+      if (b[i+1][j-1] != player_color) {
+        (b[i+1][j-1] != Color::NONE) ? temp.ate = true : temp.ate = false;
+        original = b[i+1][j-1];
+        b[i+1][j-1] = player_color;
+        b[i][j] = Color::NONE;
+        temp.change = b;
+        temp.move = move_str(i,j,i+1,j-1);
+        ret.push_back(temp);
+        b[i+1][j-1] = original;
+        b[i][j] = player_color;     
+      }
+    }
+
+    // Can go diag right
+    if (i < 7 && j < 7) {
+      if (b[i+1][j+1] != player_color) {
+        (b[i+1][j+1] != Color::NONE) ? temp.ate = true : temp.ate = false;
+        original = b[i+1][j+1];
+        b[i+1][j+1] = player_color;
+        b[i][j] = Color::NONE;
+        temp.change = b;
+        temp.move = move_str(i,j,i+1,j+1);
+        ret.push_back(temp);
+        b[i+1][j+1] = original;
+        b[i][j] = player_color;
+      }
+    }
+  }
+      }
+    }
+  }
+
   eng = default_random_engine{};
   shuffle(begin(ret), end(ret), eng);
-  if (ret.size() == 0) {cout << "RET SIZE IS ZERO!!!!!!!!" << endl;}
+ 
   return ret;
 } 
 
-// IMPROVE THIS
 int AI::threat_level(board b, int x, int y) {
   int val = 0;
-
+  int openings = 0;
+  
   // Case White
   if (b[x][y] == Color::WHITE) {
     // Check if protected
-    if (x < 7 && y > 0) {
+    if (x > 0 && y > 0) {
       if (b[x+1][y-1] == Color::WHITE) {
-	val += ADJ_ALLY_VAL;
+  val += ADJ_ALLY_VAL;
       }
     }
     
-    if (x < 7 && y < 7) {
+    if (x > 0 && y < 7) {
       if (b[x+1][y+1] == Color::WHITE) {
-	val += ADJ_ALLY_VAL;
+  val += ADJ_ALLY_VAL;
       }
     }
     
     // Check for Attackers
-    if (x < 7 && y > 0) {
-      if (b[x+1][y-1] == Color::BLACK) {
-	val -= ADJ_ENEMY_VAL;
+    if (x > 0 && y > 0) {
+      if (b[x-1][y-1] == Color::BLACK) {
+  val -= ADJ_ENEMY_VAL;
       }
     }
-    if (x < 7 && y < 7) {
-      if (b[x+1][y+1] == Color::BLACK) {
-	val -= ADJ_ENEMY_VAL;
+    if (x > 0 && y < 7) {
+      if (b[x-1][y+1] == Color::BLACK) {
+  val -= ADJ_ENEMY_VAL;
       }
+    }
+  
+    for (int i = 0; i < cols; ++i) {
+      if (b[7][i] != Color::WHITE) {++openings;}
+    }
+    val -= openings*HOME_ROW_VAL;
+
+    // check for invaders
+    for (int i = 5; i < 8; ++i) {
+      for (int j = 0; j < 8; ++j) {
+  if (b[i][j] == Color::BLACK) {val -= INVADER_VAL;}
+      } 
     }
   }
 
@@ -275,25 +280,38 @@ int AI::threat_level(board b, int x, int y) {
     // Check if protected
     if (x > 0 && y > 0) {
       if (b[x-1][y-1] == Color::BLACK) {
-	val += ADJ_ALLY_VAL;
+  val += ADJ_ALLY_VAL;
       }
     }
     if (x > 0 && y < 7) {
       if (b[x-1][y+1] == Color::BLACK) {
-	val += ADJ_ALLY_VAL;
+  val += ADJ_ALLY_VAL;
       }
     }
     
     // Check for Attackers
-    if (x > 0 && y > 0) {
-      if (b[x-1][y-1] == Color::WHITE) {
-	val -= ADJ_ENEMY_VAL;
+    if (x < 7 && y > 0) {
+      if (b[x+1][y-1] == Color::WHITE) {
+  val -= ADJ_ENEMY_VAL;
       }
     }
-    if (x > 0 && y < 7) {
-      if (b[x-1][y+1] == Color::WHITE) {
-	val -= ADJ_ENEMY_VAL;
+    if (x < 7 && y < 7) {
+      if (b[x+1][y+1] == Color::WHITE) {
+  val -= ADJ_ENEMY_VAL;
       }
+    }
+    
+    // check if made openings
+    for (int i = 0; i < cols; ++i) {
+      if (b[0][i] != Color::BLACK) {++openings;}
+    }
+    val -= openings*HOME_ROW_VAL;
+  
+    // check for invaders
+    for (int i = 0; i < 3; ++i) {
+      for (int j = 0; j < 8; ++j) {
+  if (b[i][j] == Color::WHITE) {val -= INVADER_VAL;}
+      } 
     }
   }
 
@@ -313,21 +331,24 @@ vector<int> AI::hole_check(board b) {
     for (int j = 0; j < cols; ++j) {
       // check black hole
       if (i > 0 && i < 3) {
-	if (b[i][j] != Color::NONE) {b_hole = false;}
+  if (b[i][j] != Color::NONE) {b_hole = false;}
       }
+
       // check white hole
-      if (i < 7 && i > 3) {
-	if (b[i][j] != Color::NONE) {w_hole = false;}
+      if (i < 8 && i > 3) {
+  if (b[i][j] != Color::NONE) {w_hole = false;}
       }
+
       if (b_hole) {
-	++b_hole_ct;
-	//cout << "BLACK HOLE!!!!!!!!!!!" << endl;
+  ++b_hole_ct;
       }
+
       if (w_hole) {++w_hole_ct;}
       b_hole = true;
       w_hole = true;
     }
   }
+
   num_holes = {b_hole_ct, w_hole_ct};
   return num_holes;
 }
@@ -343,10 +364,10 @@ int AI::mobility_level(board b, int x, int y) {
     mobi_val += MOVE_FWD_VAL;
 
     // Check if there's a path to the end
-    /* for (int i = 0; i < x; ++i) {
+    for (int i = 0; i < x; ++i) {
       if (b[i][y] != Color::NONE) {hole = false;}
     }
-    if (hole) {mobi_val += HOLE_VAL;}*/
+    if (hole) {mobi_val += HOLE_VAL;}
   }
   else {mobi_val -= BLOCKED_VAL;}
   
@@ -355,20 +376,21 @@ int AI::mobility_level(board b, int x, int y) {
     mobi_val += MOVE_FWD_VAL;
     
     // Check if there's a path to the end
-    /*for (int i = 7; i > x - 1; --i) {
+    for (int i = 7; i > x - 1; --i) {
       if (b[i][y] != Color::NONE) {hole = false;}
-      }*/
+    }
     if (hole) {mobi_val += HOLE_VAL;}
-}
+  }
   else {mobi_val -= -BLOCKED_VAL;}
 }
 
+// Pieces score higher if they are mobile and protected
+// low score if immobile and threatened
 int AI::piece_val(board b, int x, int y) {
   int piece_val = 0;
   piece_val += threat_level(b, x, y);
   piece_val += mobility_level(b, x, y);
 
-  //cout << "PIECE @ (" << x << ", " << y << ") VAL: " << piece_val << endl;
   return piece_val;
 }
 
@@ -379,10 +401,10 @@ int AI::board_val(board b, bool ate, Color player_color) {
 
   (player_color == Color::BLACK) ? enemy = Color::WHITE : enemy = Color::BLACK;
 
-  // First check for wins??
+  // First check for wins
   Color winner = win(b);
-  if (winner == player_color) {return 999999;}
-  else if (winner == enemy) {return -999999;}
+  if (winner == player_color) {return INF;}
+  else if (winner == enemy) {return -INF;}
 
   // Bonus if a piece at another
   if (ate) {
@@ -405,15 +427,15 @@ int AI::board_val(board b, bool ate, Color player_color) {
   for (int i = 0; i < rows; ++i) {
     for (int j = 0; j < cols; ++j) {
       if (b[i][j] == Color::NONE) {
-	continue; // No Piece on this square
+  continue; // No Piece on this square
       }
 
       else if (b[i][j] == player_color) {
-	board_val += piece_val(b, i, j); //???
+  board_val += piece_val(b, i, j); // benefit from your pieces
       }
 
-      else if (b[i][j] != player_color) {
-	board_val -= piece_val(b, i, j); //???
+      else if (b[i][j] == enemy) {
+  board_val -= piece_val(b, i, j); // lose advantage from your opponents 
       }
     }
   }
@@ -426,7 +448,7 @@ void AI::print_board(board b) {
     for (int j = 0; j < cols; ++j) {
 
       if (b[i][j] == Color::WHITE) {
-	cout << "w ";
+  cout << "w ";
       }
 
       else if (b[i][j] == Color::BLACK) {
@@ -461,68 +483,66 @@ string AI::random(string color) {
   for (int i = 0; i < rows; ++i) {
     for (int j = 0; j < cols; ++j) {
       if (brd[i][j] == player_color) {
-	if (player_color == Color::WHITE) {
+  if (player_color == Color::WHITE) {
 
-	  // Can go up
-	  if (i > 0) {
-	    if (brd[i-1][j] != Color::NONE) {
-	      possible_moves.push_back(move_str(i,j,i-1,j));
-	    }
-	  }
+    // Can go up
+    if (i > 0) {
+      if (brd[i-1][j] != Color::NONE) {
+        possible_moves.push_back(move_str(i,j,i-1,j));
+      }
+    }
 
-	  // Can go diag left
-	  if (i > 0 && j > 0) {
-	    if (brd[i-1][j-1] != player_color) {
-	      if (brd[i-1][j-1] == enemy_color) {
-		eat_moves.push_back(move_str(i,j,i-1,j-1));
-	      }
-	      else {
-		possible_moves.push_back(move_str(i,j,i-1,j-1));
-	      }
-	    }
-	  }
+    // Can go diag left
+    if (i > 0 && j > 0) {
+      if (brd[i-1][j-1] != player_color) {
+        if (brd[i-1][j-1] == enemy_color) {
+    eat_moves.push_back(move_str(i,j,i-1,j-1));
+        }
+        else {
+    possible_moves.push_back(move_str(i,j,i-1,j-1));
+        }
+      }
+    }
       
-	  // Can go diag right
-	  if (i > 0 && j < 7) {
-	    if (brd[i-1][j+1] != player_color) {
-	      if (brd[i-1][j+1] == enemy_color) {
-		eat_moves.push_back(move_str(i,j,i-1,j+1));
-	      }
-	      else {possible_moves.push_back(move_str(i,j,i-1,j+1));}
-	    }
-	  }
-	}
+    // Can go diag right
+    if (i > 0 && j < 7) {
+      if (brd[i-1][j+1] != player_color) {
+        if (brd[i-1][j+1] == enemy_color) {
+    eat_moves.push_back(move_str(i,j,i-1,j+1));
+        }
+        else {possible_moves.push_back(move_str(i,j,i-1,j+1));}
+      }
+    }
+  }
 
-	if (player_color == Color::BLACK) {
-	  // Can go down 
-	  if (i < 7) {
-	    if (brd[i+1][j] == Color::NONE) {
-	      possible_moves.push_back(move_str(i,j,i+1,j));
-	    }
-	  }
+  if (player_color == Color::BLACK) {
+    // Can go down 
+    if (i < 7) {
+      if (brd[i+1][j] == Color::NONE) {
+        possible_moves.push_back(move_str(i,j,i+1,j));
+      }
+    }
 
-	  // Can go diag left
-	  if (i < 7 && j > 0) {
-	    if (brd[i+1][j-1] != player_color) {
-	      if (brd[i+1][j-1] == enemy_color) {
-		cout << "EATING!!!!!!!!!!!!!!!!!" << endl;
-		eat_moves.push_back(move_str(i,j,i+1,j-1));
-	      }
-	      else {possible_moves.push_back(move_str(i,j,i+1,j-1));}
-	    }
-	  }
+    // Can go diag left
+    if (i < 7 && j > 0) {
+      if (brd[i+1][j-1] != player_color) {
+        if (brd[i+1][j-1] == enemy_color) {
+    eat_moves.push_back(move_str(i,j,i+1,j-1));
+        }
+        else {possible_moves.push_back(move_str(i,j,i+1,j-1));}
+      }
+    }
 
-	  // Can go diag right
-	  if (i < 7 && j < 7) {
-	    if (brd[i+1][j+1] != player_color) {
-	      if (brd[i+1][j+1] == enemy_color) {
-		cout << "EATING!!!!!!!!!!!!!!!!!" << endl;
-		eat_moves.push_back(move_str(i,j,i+1,j+1));
-	      }
-	      else {possible_moves.push_back(move_str(i,j,i+1,j+1));}
-	    }
-	  }
-	}
+    // Can go diag right
+    if (i < 7 && j < 7) {
+      if (brd[i+1][j+1] != player_color) {
+        if (brd[i+1][j+1] == enemy_color) {
+    eat_moves.push_back(move_str(i,j,i+1,j+1));
+        }
+        else {possible_moves.push_back(move_str(i,j,i+1,j+1));}
+      }
+    }
+  }
       }
     }
   }
@@ -548,6 +568,9 @@ scored_move AI::minimax(state s, int depth, Color cur_player, Color max_player) 
   if (max_player == Color::BLACK) {enemy = Color::WHITE;}
   else {enemy = Color::BLACK;}
 
+  // moves = generate_moves(s.change, cur_player);
+
+  // if (depth == 0 || moves.size() == 0) {
   if (depth == 0 || win(s.change) != Color::NONE) {
     m.move = s.move;
     m.score = board_val(s.change, s.ate, cur_player);
@@ -555,32 +578,46 @@ scored_move AI::minimax(state s, int depth, Color cur_player, Color max_player) 
   }
 
   if (cur_player == max_player) {
-    cur_score = -99999;
+    cur_score = -INF;
     moves = generate_moves(s.change, cur_player);
+
+    if (moves.size() == 0) {
+      m.move = s.move;
+      m.score = board_val(s.change, s.ate, cur_player);
+      return m;
+    }
+
     for (auto mov : moves) {
-      //cout << mov.move << endl;
-      temp = minimax(mov, depth - 1, enemy, max_player);
+     temp = minimax(mov, depth - 1, enemy, max_player);
       if (temp.score > cur_score) {
-	cur_score = temp.score;
-	move = mov.move;
+  cur_score = temp.score;
+  move = mov.move;
       }
     }
+
     m.move = move;
     m.score = cur_score;
     return m;
   }
 
   else if (cur_player != max_player) {
-    cur_score = 99999;
+    cur_score = INF;
     moves = generate_moves(s.change, cur_player);
+
+    if (moves.size() == 0) {
+      m.move = s.move;
+      m.score = board_val(s.change, s.ate, cur_player);
+      return m;
+    }
+
     for (auto mov : moves) {
-      //cout << mov.move << endl;
       temp = minimax(mov, depth - 1, max_player, max_player);
       if (temp.score < cur_score) {
-	cur_score = temp.score;
-	move = mov.move;
+  cur_score = temp.score;
+  move = mov.move;
       }
     }
+    
     m.move = move;
     m.score = cur_score;
     return m;
@@ -597,23 +634,25 @@ scored_move AI::alpha_beta(state s, int depth, int alpha, int beta, Color cur_pl
   if (max_player == Color::BLACK) {enemy = Color::WHITE;}
   else {enemy = Color::BLACK;}
 
-  if (depth == 0 || win(s.change) != Color::NONE) {
+  moves = generate_moves(s.change, cur_player);
+
+  if (depth == 0 || win(s.change) != Color::NONE || moves.size() == 0) {
+  //if (depth == 0 || win(s.change) != Color::NONE) {
     m.move = s.move;
     m.score = board_val(s.change, s.ate, cur_player);
     return m;
   }
 
   if (cur_player == max_player) { 
-    cur_score = -999999;
-    moves = generate_moves(s.change, cur_player);
+    cur_score = -INF;
     for (auto mov : moves) {
       temp = alpha_beta(mov, depth - 1, alpha, beta, enemy, max_player);
       if (temp.score > cur_score) {
-	cur_score = temp.score;
-	move = mov.move;
+  cur_score = temp.score;
+  move = mov.move;
       }
       if (temp.score > alpha) {alpha = temp.score;}
-      if (beta <= alpha) {break;}
+      if (beta <= alpha) {break;} // cut off to save time
     }
     m.score = cur_score;
     m.move = move;
@@ -622,16 +661,15 @@ scored_move AI::alpha_beta(state s, int depth, int alpha, int beta, Color cur_pl
   }
 
   else {
-    cur_score = 999999;
-    moves = generate_moves(s.change, cur_player);
+    cur_score = INF;
     for (auto mov : moves) {
       temp = alpha_beta(mov, depth - 1, alpha, beta, max_player, max_player);
       if (temp.score < cur_score) {
-	cur_score = temp.score;
-	move = mov.move;
+  cur_score = temp.score;
+  move = mov.move;
       }
       if (temp.score < beta) {beta = temp.score;}
-      if (beta <= alpha) {break;}
+      if (beta <= alpha) {break;} // cut off to save time
     }
     m.score = cur_score;
     m.move = move;

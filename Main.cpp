@@ -6,7 +6,8 @@
 #include <sstream>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <stdio.h>      
+#include <stdio.h> 
+#include <netdb.h>     
 #include <stdlib.h>
 #include <errno.h>
 #include <unistd.h>
@@ -24,51 +25,19 @@
 using namespace std;
 
 /*string parse(string S);*/
-int server();
+int server(int port_num, string server_name);
 Parser run;
 int main(int argc,  char** argv) {
-    server();
-/*    printf("--beginning of program\n");
-    int counter = 0;
-    pid_t pid = fork();
-
-    if (pid == 0)
+     if (argc < 2)
     {
-        // child process
-        //game.start();
+        cerr << "Syntam : ./server <port>" << endl;
+        return 0;
     }
-    else if (pid > 0)
-    {
-        // parent process
-        server();
-    }
-    else
-    {
-        printf("fork() failed!\n");
-        return 1;
-    }
-    printf("--end of program--\n");*/
+    else server(atoi(argv[1]),"127.0.0.1");
   return 0;
 }
-/*string parse(string S){
-  Parser dp;
-  const char * c = S.c_str();
-    YY_BUFFER_STATE bp = yy_scan_string(c);
-    yy_switch_to_buffer(bp);
-    yylex();
-
-    string temp = dp.par_program(tokens,errors);
-    yy_delete_buffer(bp);
-    errors =0;
-    while(!tokens.empty()){
-      tokens.pop();
-    }
-    dp.par_empty();
-    return temp;
-
-}*/
-int server()
-{     
+int server(int port_num, string server_name)
+{       
         int sock, connected, bytes_recieved , truea = 1;  
         string send_data;
         char recv_data[1024];       
@@ -85,10 +54,20 @@ int server()
             perror("Setsockopt");
             exit(1);
         }
-        
+         struct hostent *hostp; 
         server_addr.sin_family = AF_INET;         
-        server_addr.sin_port = htons(5000);     
-        server_addr.sin_addr.s_addr = INADDR_ANY; 
+        server_addr.sin_port = htons(port_num);  
+         if((server_addr.sin_addr.s_addr = inet_addr(server_name.c_str())) == (unsigned long)INADDR_NONE){
+
+            hostp = gethostbyname(server_name.c_str());
+             if(hostp == (struct hostent *)NULL){
+              printf("HOST NOT FOUND --> ");
+              printf("h_errno = %d\n",h_errno);
+              exit(-1);
+              }
+            memcpy(&server_addr.sin_addr, hostp->h_addr, sizeof(server_addr.sin_addr));
+
+          }
         bzero(&(server_addr.sin_zero),8); 
 
         if (bind(sock, (struct sockaddr *)&server_addr, sizeof(struct sockaddr))
@@ -102,7 +81,7 @@ int server()
             exit(1);
         }
         
-          printf("\nTCPServer Waiting for client on port 5000");
+          cout<<"\nTCPServer Waiting for client on port "<<port_num;
         fflush(stdout);
 
 
@@ -163,13 +142,12 @@ int server()
                     if (iswprint(check_pass[i]))
                             temp+=check_pass[i];
                   }
-              //temp.erase(temp.begin()+temp.length()-2,temp.end());
               cout<<"Parsing this:"<<temp<<endl;
               if(temp.length()>0){
                   string value = run.parse(temp);
                   if(value=="FALSE"){
                     send_data.clear();
-                    send_data = "INVALID INPUT\n";
+                    send_data = "ILLEGAL \n";
                     send(connected, send_data.c_str(),send_data.length(), 0);
                   }
                   else if(value == "EXIT"){
@@ -179,10 +157,23 @@ int server()
                         close(connected);
                         break;
                   }
+                  else if(value=="TRUE")
+                  {
+
+                  }
                   else{
                     send_data.clear();
                     send_data = value+"\n";
                     send(connected, send_data.c_str(),send_data.length(), 0);
+                    if(Game.game_ended()){
+                        close(connected);
+                        Game.clear();
+                        Game.init();
+                        Game.end_turn();
+                        Game.reset_turn();
+                        run.reset();
+                        break;
+                    }
                   }
               }
               cout<<"\n RECIEVED DATA = " <<temp;

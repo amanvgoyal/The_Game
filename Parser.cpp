@@ -70,12 +70,17 @@ bool Parser::par_empty(){
 int Parser::par_stacksize(){
   return ordered.size();
 }
-string a;
+
 string Parser::par_display(){
   if(counter!=-1){
-  string temp = a+Game.output_board();
-  a.clear();
-  return temp;
+    if(Game.game_ended())
+        return Game.output_board();
+  else{
+    string temp = print+Game.output_board();
+    print.clear();
+    return temp;
+  }
+  
   }
   string temp = "NO GAME HAS STARTED";
   return temp;
@@ -88,6 +93,12 @@ string Parser::par_line(){
   if(counter!=-1){
     string move;
     if(temp.get_type()==T_EASY||temp.get_type()==T_MEDIUM||temp.get_type()==T_HARD){
+        if(temp.get_type()==T_EASY)
+          Game.set_difficulty("EASY");
+        if(temp.get_type()==T_MEDIUM)
+          Game.set_difficulty("MEDIUM");
+        if(temp.get_type()==T_HARD)
+          Game.set_difficulty("HARD");
         return "TRUE";
     }
     if(temp.get_type()==T_MOVE){
@@ -106,8 +117,11 @@ string Parser::par_line(){
           if(Game.move_piece(atoi(row.c_str()),move[0],FORWARD)){
             Game.end_turn();
             Game.ai_turn();
-            a = Game.output_board();
+            print = Game.output_board();
             Game.end_turn();
+            /*if(Game.game_ended()){
+              return par_results();
+            }*/
             return par_display();
           }
           else return "FALSE";
@@ -120,8 +134,11 @@ string Parser::par_line(){
           if(Game.move_piece(atoi(row.c_str()),move[0],LEFT)){
             Game.end_turn();
             Game.ai_turn();
-            a = Game.output_board();
+            print = Game.output_board();
             Game.end_turn();
+             /*if(Game.game_ended()){
+              return par_results();
+            }*/
             return par_display();
           }
           else return "FALSE";
@@ -134,8 +151,11 @@ string Parser::par_line(){
           if(Game.move_piece(atoi(row.c_str()),move[0],RIGHT)){
             Game.end_turn();
             Game.ai_turn();
-            a = Game.output_board();
+            print = Game.output_board();
             Game.end_turn();
+            /* if(Game.game_ended()){
+              return par_results();
+            }*/
             return par_display();
           }
           else return "FALSE";
@@ -167,21 +187,21 @@ string Parser::par_line(){
   				case T_EASY:{
   					ordered.pop();
             ++counter;
-  					random();
+  					Game.set_difficulty("EASY");
   					return "TRUE";
   					break;
   				}
   				case T_MEDIUM:{
   					ordered.pop();
             ++counter;
-  					mini_max();
+  					Game.set_difficulty("MEDIUM");
   					return "TRUE";
   					break;
   				}
   				case T_HARD:{
   					ordered.pop();
             ++counter;
-  					alpha_beta();
+  					Game.set_difficulty("HARD");
   					return "TRUE";
   					break;
   				}
@@ -262,13 +282,4 @@ string Parser::par_line(){
   }
   else if(counter==-1) return par_display();
   return "FALSE"; //if none of the above conditions match its not part of our language
-}
-void Parser::random(){
-
-}
-void Parser::mini_max(){
-	
-}
-void Parser::alpha_beta(){
-	
 }
