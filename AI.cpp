@@ -21,8 +21,8 @@ const int BLOCKED_VAL = 1;//2;//2;
 const int HOLE_VAL = 1;//1;//10;
 const int HOLE_CREATE_VAL = 1;//4;//1;
 const int EAT_BONUS = 500;//10000;//10; 
-const int HOME_ROW_VAL = 1;//1;
-const int INVADER_VAL = 1;//50;
+const int HOME_ROW_VAL = 2;//1;
+const int INVADER_VAL = 5;//50;
 
 const int INF = 999999;
 
