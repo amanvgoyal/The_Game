@@ -14,15 +14,15 @@ const int rows = 8;
 const int cols = 8;
 
 const int MAX_DEPTH = 3;
-const int ADJ_ENEMY_VAL = 1;//2;//10;//3
-const int ADJ_ALLY_VAL = 1;//5;//2;
-const int MOVE_FWD_VAL = 1;//1;//5;//1
-const int BLOCKED_VAL = 1;//2;//2;
-const int HOLE_VAL = 1;//1;//10;
-const int HOLE_CREATE_VAL = 1;//4;//1;
-const int EAT_BONUS = 500;//10000;//10; 
-const int HOME_ROW_VAL = 2;//1;
-const int INVADER_VAL = 5;//50;
+const int ADJ_ENEMY_VAL = 1;
+const int ADJ_ALLY_VAL = 1;
+const int MOVE_FWD_VAL = 1;
+const int BLOCKED_VAL = 1;
+const int HOLE_VAL = 1;
+const int HOLE_CREATE_VAL = 1;
+const int EAT_BONUS = 600;
+const int HOME_ROW_VAL = 1;
+const int INVADER_VAL = 2;
 
 const int INF = 999999;
 
@@ -581,6 +581,9 @@ scored_move AI::minimax(state s, int depth, Color cur_player, Color max_player) 
   if (max_player == Color::BLACK) {enemy = Color::WHITE;}
   else {enemy = Color::BLACK;}
 
+  // moves = generate_moves(s.change, cur_player);
+
+  // if (depth == 0 || moves.size() == 0) {
   if (depth == 0 || win(s.change) != Color::NONE) {
     m.move = s.move;
     m.score = board_val(s.change, s.ate, cur_player);
