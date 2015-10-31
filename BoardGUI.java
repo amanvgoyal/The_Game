@@ -16,6 +16,9 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import javax.swing.*;
 import javax.swing.border.*;
+import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  ************************************************************************
@@ -37,12 +40,15 @@ public class BoardGUI {
     private Image whitePiece;
     private JPanel board;
     private final JLabel currentPlayerTurn = new JLabel("No game has started.");
+    private final JLabel currentTurn = new JLabel("");
     private final JLabel numWhitePieces = new JLabel("White pieces: 0");
     private final JLabel numBlackPieces = new JLabel("Black pieces: 0");
     private final JLabel playerMessage = new JLabel("Press the New Game button to start a new game.");
     private String firstSelectedPiece = "";
     private String output = "";
     private boolean outputReady = false;
+    private boolean gameStarted = true;
+    private Object lock;
 
     BoardGUI() {
         initializeGUI();
@@ -50,11 +56,33 @@ public class BoardGUI {
 
     public final String getOutput(String input) {
         // check what the input is and generate an output from that
-
-        return output;
+        try {
+            if (input == "OK") {
+                // wait for move
+            } else if (input.contains("Current turn number:")) {
+                // redisplay board
+                displayBoard(input);
+            } else if (input == "ILLEGAL") {
+                // illegal move, must request input again
+                playerMessage.setText("In move was invalid, please try again.");
+            } else {
+                System.out.println("Input \"" + input + "\" not recognized!");
+            }
+            System.out.println("Waiting for output to be produced");
+            synchronized (lock) {
+                while (!outputReady) {
+                    lock.wait();
+                }
+            }
+            return output;
+        } catch (InterruptedException ex) {
+            Logger.getLogger(BoardGUI.class.getName()).log(Level.SEVERE, null, ex);
+            return "EXIT";
+        }
     }
 
     public final void initializeGUI() {   // render the window
+        System.out.println("Initializing GUI.");
         createPieces();
         gui.setBorder(new EmptyBorder(5, 5, 5, 5));
         JToolBar tools = new JToolBar();
@@ -65,6 +93,8 @@ public class BoardGUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 output = "NEW GAME";            // TODO: change this to correct value
+                gameStarted = true;
+                System.out.println("Setting up a new game.");
                 setupGame();
             }
         };
@@ -74,14 +104,17 @@ public class BoardGUI {
             public void actionPerformed(ActionEvent e) {
                 output = "EXIT";
                 outputReady = true;
+                gameStarted = false;
+                System.out.println("Quitting game.");
                 // send output;
                 System.exit(0);
             }
         };
 
-        Action showMovesAction = new AbstractAction("Clear selection") {
+        Action clearSelectionAction = new AbstractAction("Clear selection") {
             @Override
             public void actionPerformed(ActionEvent e) {
+                System.out.println("Clearing selection.");
                 firstSelectedPiece = "";
             }
         };
@@ -91,6 +124,7 @@ public class BoardGUI {
             public void actionPerformed(ActionEvent e) {
                 output = "UNDO";
                 outputReady = true;
+                System.out.println("Undoing last two turns.");
             }
         };
 
@@ -98,8 +132,10 @@ public class BoardGUI {
         tools.add(newGameAction);
         tools.add(quitAction);
         tools.addSeparator();
-        tools.add(showMovesAction);
+        tools.add(clearSelectionAction);
         tools.add(undoAction);
+        tools.addSeparator();
+        tools.add(currentTurn);
         tools.addSeparator();
         tools.add(currentPlayerTurn);
         tools.addSeparator();
@@ -141,6 +177,21 @@ public class BoardGUI {
         for (int i = 0; i < boardSquares.length; ++i) {
             for (int j = 0; j < boardSquares[i].length; ++j) {
                 JButton b = new JButton();
+                final int ii = 7 - i;
+                final int jj = j;
+                Action selectSpace = new AbstractAction(Integer.toString(i) + Integer.toString(j)) {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if (gameStarted) {
+                            String space = Integer.toString(ii) + Integer.toString(jj);
+                            moveCommand(space);
+                        } else {
+                            playerMessage.setText("Please start a new game before selecting a piece.");
+                        }
+                    }
+                };
+                b.addActionListener(selectSpace);
+                b.setActionCommand("Piece " + Integer.toString(i) + Integer.toString(j));
                 b.setMargin(buttonMargin);
                 // make space 64x64 large
                 ImageIcon piece = new ImageIcon(new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB));
@@ -165,62 +216,59 @@ public class BoardGUI {
                         rLabel.setForeground(Color.WHITE);
                         board.add(rLabel);
                     default:
-                    	// boardSquares[i][j].addActionListener(this);
+                        // boardSquares[i][j].addActionListener(this);
                         // create action command that identifies the space
-                        boardSquares[i][j].setActionCommand("Piece " + Integer.toString(i) + Integer.toString(j));
+                        //boardSquares[i][j]
                         board.add(boardSquares[i][j]);
                 }
             }
         }
     }
 
-    public void actionPerformed(ActionEvent e) {
-        String command = e.getActionCommand();
-        if (command.contains("Piece ")) {
-            // piece selected on board
-            command.replace("Piece ", "");
-            moveCommand(command);
-        }
-    }
-
     private void moveCommand(String space) {
+        char r = (char) (Character.getNumericValue(space.charAt(0)) + Character.valueOf('1'));
+        char c = (char) (Character.getNumericValue(space.charAt(1)) + Character.valueOf('A'));
+        System.out.println("Space " + c + r + " selected.");
         if (firstSelectedPiece == "") {
             // No first piece has been selected, add to this string
+
+            playerMessage.setText("Space " + c + r + " selected.");
             firstSelectedPiece = space;
-        } 
-        else {
+        } else {
             // First piece has been selected, calculate move direction
             String direction = "";
-            output = firstSelectedPiece + " ";
             int orig_r = Character.getNumericValue(firstSelectedPiece.charAt(0));
             int orig_c = Character.getNumericValue(firstSelectedPiece.charAt(1));
             int move_r = Character.getNumericValue(space.charAt(0));
             int move_c = Character.getNumericValue(space.charAt(1));
+            playerMessage.setText("Space " + c + r + " selected.");
             if (orig_r + 1 == move_r) {
                 // check if moving forward one row
                 if (orig_c == move_c) {
                     direction = "FWD";
-                }
-                else if (orig_c + 1 == move_c) {
+                } else if (orig_c + 1 == move_c) {
                     direction = "RIGHT";
-                }
-                else if (orig_c - 1 == move_c) {
+                } else if (orig_c - 1 == move_c) {
                     direction = "LEFT";
-                }
-                else {
+                } else {
                     // inform user that move is invalid
+                    System.out.println("Invalid move!");
                     firstSelectedPiece = "";
                 }
-            }
-            else {
+            } else {
                 // inform user that move is invalid
+                System.out.println("Invalid move!");
                 firstSelectedPiece = "";
             }
             if (direction != "") {
                 // valid move was made
-                output += direction;
+                char rr = (char) (Character.getNumericValue(firstSelectedPiece.charAt(0)) + Character.valueOf('1'));
+                char cc = (char) (Character.getNumericValue(firstSelectedPiece.charAt(1)) + Character.valueOf('A'));
+                output = Character.toString(cc) + Character.toString(rr) + " " + direction;
                 outputReady = true;
+                System.out.println("Performing move: " + output);
             }
+            firstSelectedPiece = "";
         }
     }
 
@@ -269,8 +317,12 @@ public class BoardGUI {
         }
     }
 
-    private final void displayGame(String board) {
+    private final void displayBoard(String board) {
         // decode string
+        String[] lines = board.split(System.getProperty("line.separator"));
+        lines[0].replace("Current turn number: ", "");
+        //lines[0].replace("\t\tWhite", board)
+        //currentTurn = 
     }
 
     public static void main(String[] args) {
