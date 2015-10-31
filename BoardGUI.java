@@ -47,8 +47,10 @@ public class BoardGUI {
     private String firstSelectedPiece = "";
     private String output = "";
     private boolean outputReady = false;
-    private boolean gameStarted = true;
+    private boolean gameStarted = false;
     private Object lock;
+    private int whitePieces = 0;
+    private int blackPieces = 0;
 
     BoardGUI() {
         initializeGUI();
@@ -196,7 +198,7 @@ public class BoardGUI {
                 // make space 64x64 large
                 ImageIcon piece = new ImageIcon(new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB));
                 b.setIcon(piece);
-                b.setBackground(Color.DARK_GRAY);
+                b.setBackground(Color.LIGHT_GRAY);
                 boardSquares[i][j] = b;
             }
         }
@@ -316,13 +318,79 @@ public class BoardGUI {
             }
         }
     }
+    
+    private final void addPiece(int row, int col, char type) {
+        switch(type) {
+            case 'X': {
+                ++blackPieces;
+                boardSquares[row][col].setIcon(new ImageIcon(blackPiece));
+                break;
+            }
+            case 'O': {
+                boardSquares[row][col].setIcon(new ImageIcon(whitePiece));
+                ++whitePieces;
+                break;
+            }
+            case '_': {
+                boardSquares[row][col].setIcon(new ImageIcon(new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
+                break;
+            }
+            default : {
+                break;
+            }
+        }
+    }
 
     private final void displayBoard(String board) {
         // decode string
+        /*
+         1  Current turn number: 1		White player's turn
+         2
+         3
+         4       A B C D E F G H
+         5       _ _ _ _ _ _ _ _
+         6    8 |X|X|X|X|X|X|X|X|
+         7    7 |X|X|X|X|X|X|X|X|
+         8    6 |_|_|_|_|_|_|_|_|		Your total number of pieces:  16
+         9    5 |_|_|_|_|_|_|_|_|		Enemy total number of pieces: 16
+         10   4 |_|_|_|_|_|_|_|_|
+         11   3 |_|_|_|_|_|_|_|_|
+         12   2 |O|O|O|O|O|O|O|O|
+         13   1 |O|O|O|O|O|O|O|O|
+         14
+         15
+         */
+        // get turn number and current player turn from line 1
+        int searchInx = 0;
+        int searchInx2 = 0;
+        String temp;
         String[] lines = board.split(System.getProperty("line.separator"));
-        lines[0].replace("Current turn number: ", "");
-        //lines[0].replace("\t\tWhite", board)
-        //currentTurn = 
+        searchInx = lines[0].indexOf(':');
+        searchInx2 = lines[0].indexOf(' ', searchInx);
+        searchInx += 2;
+        temp = lines[0].substring(searchInx, searchInx2);
+        currentTurn.setText("Turn: " + temp);
+        searchInx = lines[0].lastIndexOf('\t');
+        searchInx2 = lines[0].lastIndexOf('n');
+        temp = lines[0].substring(searchInx, searchInx2);
+        currentPlayerTurn.setText(temp);
+        // start getting board info from lines 6 to 13
+        blackPieces = 0;
+        whitePieces = 0;
+        searchInx2 = 0;
+        for (int i = 5; i < 14; ++i) {
+            int r = (i - 5);
+            int c = 0;
+            while (searchInx2 != lines[i].lastIndexOf('|') - 2) {
+                searchInx = lines[i].indexOf('|', searchInx2);
+                char space = lines[i].charAt(searchInx + 1);
+                addPiece(r, c, space);
+                searchInx2 = searchInx;
+                ++c;
+            }
+        }
+        numWhitePieces.setText("White pieces: " + Integer.toString(whitePieces));
+        numBlackPieces.setText("Black pieces: " + Integer.toString(blackPieces));
     }
 
     public static void main(String[] args) {
