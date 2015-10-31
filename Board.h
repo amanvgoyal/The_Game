@@ -126,14 +126,18 @@ public:
 	const bool game_ended();								// true if the game has finished
 	const bool game_aborted();								// true if the game has been aborted
 	void game_aborted(bool aborted);						// set to true if the game has been aborted
-	bool init();											// initialize the board
-	bool clear();											// clear the board
+	void init();											// initialize the board
+	void clear();											// clear the board
 	bool set_size(int rows, int cols);						// set the size of the board
 	bool move_piece(int piece_row, char piece_col, int move_row, char move_col);
 	bool move_piece(int rows, char cols, Direction direction);// move the specified piece
 	bool move_piece(Move move);								// move the specified piece
 	void end_turn();										// end the current turn and switch to the other player
 	void ai_turn();
+	bool winner_black(){if(winner==Color::BLACK)return true;else return false;}
+	bool winner_white(){if(winner==Color::WHITE)return true;else return false;}
+	void reset_turn(){turn_num =1;}
+	void set_difficulty(std::string s);
 	Direction show_moves(int rows, char cols);				// show the valid moves for the specified piece
 	Direction show_moves(Piece* piece);						// show the valid moves for the specified piece
 	bool undo_move();										// undo the previous move

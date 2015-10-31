@@ -10,7 +10,7 @@
 
 Board Game;
 int counter =-1;
-
+string print;
 class Parser
 {
  private:
@@ -25,13 +25,11 @@ class Parser
   bool check_pass(std::string s);
   void set_pass(std::string s);
   std::string parse(std::string S);
+  void reset(){counter=-1;print.clear();}
   /*------------PROGRAM----------------------------*/
   std::string par_program(std::stack<Token>& theStack, int error_count);
   std::string par_statment();
   std::string par_display();
-  /*------------Difficulty----------------------------*/
-  void random();
-  void mini_max();
-  void alpha_beta();
+  std::string par_results();
 };
 #endif 
