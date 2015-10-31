@@ -109,15 +109,15 @@ public class SwingLayoutDemo {
 	panel.add("Text", textBoxPanel);
 	panel.add("Button", buttonPanel);
 
-	//final DefaultComboBoxModel panelName = new DefaultComboBoxModel();
+	final DefaultComboBoxModel panelName = new DefaultComboBoxModel();
 
-	//panelName.addElement("Text");
-	//panelName.addElement("Button");
+	panelName.addElement("Text");
+	panelName.addElement("Button");
       
-	//final JComboBox listCombo = new JComboBox(panelName);    
-	//listCombo.setSelectedIndex(0);
+	final JComboBox listCombo = new JComboBox(panelName);    
+	listCombo.setSelectedIndex(0);
 
-	//JScrollPane listComboScrollPane = new JScrollPane(listCombo);    
+	JScrollPane listComboScrollPane = new JScrollPane(listCombo);    
 
 	JButton loginButton = new JButton("Login");
         loginButton.addActionListener(new ActionListener() {
@@ -149,7 +149,7 @@ public class SwingLayoutDemo {
 		}
 	    }); 
 	*/
-	//controlPanel.add(listComboScrollPane);
+	controlPanel.add(listComboScrollPane);
 	controlPanel.add(loginButton);
 	//	controlPanel.add(showButton);
 	controlPanel.add(panel);
