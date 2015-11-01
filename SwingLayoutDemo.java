@@ -83,8 +83,10 @@ public class SwingLayoutDemo {
         gTypeBtn1.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
 		    JOptionPane.showMessageDialog(mainFrame,"Human-AI Chosen");
+		    CardLayout cardLayout = (CardLayout)(panel.getLayout());
+		    cardLayout.show(panel, "Command");
 		}
-            });
+	    });
 	    
 	JButton gTypeBtn2 = new JButton("AI - AI");
         gTypeBtn2.addActionListener(new ActionListener() {
@@ -96,18 +98,26 @@ public class SwingLayoutDemo {
 	buttonPanel.add(gTypeBtn1);
 	buttonPanel.add(gTypeBtn2);
 
-	JPanel textBoxPanel = new JPanel(new FlowLayout());
+	JPanel passBoxPanel = new JPanel(new FlowLayout());
 
 	//textBoxPanel.add(new JLabel("Password: "));
 	//textBoxPanel.add(new JTextField(20));
 	JLabel passLabel = new JLabel("Password: ");
+
 	final JPasswordField passField = new JPasswordField(10);
-	textBoxPanel.add(passLabel);
-	textBoxPanel.add(passField);
+	passBoxPanel.add(passLabel);
+	passBoxPanel.add(passField);
 
 	//	panel.add("Button", buttonPanel);
-	panel.add("Text", textBoxPanel);
+	panel.add("Text", passBoxPanel);
 	panel.add("Button", buttonPanel);
+
+	JPanel cmdBoxPanel = new JPanel(new FlowLayout());
+	JLabel cmdLabel = new JLabel("Enter Command: ");
+	cmdBoxPanel.add(cmdLabel);
+	cmdBoxPanel.add(new JTextField(20)); // change
+	
+	panel.add("Command", cmdBoxPanel);
 
 	//final DefaultComboBoxModel panelName = new DefaultComboBoxModel();
 
@@ -119,11 +129,12 @@ public class SwingLayoutDemo {
 
 	//JScrollPane listComboScrollPane = new JScrollPane(listCombo);    
 
-	JButton loginButton = new JButton("Login");
+	final JButton loginButton = new JButton("Login");
         loginButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     String password = new String(passField.getPassword());
                     if (password.equals("password")) {
+			loginButton.setVisible(false);
 			JOptionPane.showMessageDialog(mainFrame,"Welcome.");
 			CardLayout cardLayout = (CardLayout)(panel.getLayout());
 			cardLayout.show(panel, "Button");
