@@ -51,11 +51,11 @@ string AI::move(vector<vector<Piece*> > board_state, string diff, string color) 
   t1 = clock();
   cout<<"Difficulty Level:";
   if(level == Hard){
-    ret_move = alpha_beta(s, 4, -INF, INF, Color::BLACK, Color::WHITE).move;
+    ret_move = alpha_beta(s, 4, -INF, INF, Color::BLACK, Color::BLACK).move;
     cout<<"Alpha Beta"<<endl;
   }
   if(level == Medium){
-    ret_move = minimax(s,3,Color::BLACK, Color::WHITE).move;
+    ret_move = minimax(s,3,Color::BLACK, Color::BLACK).move;
     cout<<"MINIMAX"<<endl;
   }
   if(level == Easy){

@@ -29,6 +29,11 @@ DIGIT [0-9]
 }
 " "  { 
 }
+NEW" "GAME  {
+    cout<<"COMMAND "<<yytext<<endl;
+    Token temp(T_NEWGAME);
+    tokens.push(temp);
+}
 EXIT|DISPLAY|UNDO|HUMAN-AI|AI-AI  {
             // Push Command to Stack
             cout<<"COMMAND "<<yytext<<endl;

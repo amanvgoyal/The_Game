@@ -161,6 +161,17 @@ int server(int port_num, string server_name)
                   {
 
                   }
+                  else if(value=="NEWGAME")
+                  {
+                    send_data.clear();
+                    send_data = string("Starting NEW GAME")+"\n";
+                    send(connected, send_data.c_str(),send_data.length(), 0);
+                    Game.clear();
+                    Game.init();
+                    //Game.end_turn();
+                    Game.reset_turn();
+                    run.reset();
+                  }
                   else{
                     send_data.clear();
                     send_data = value+"\n";

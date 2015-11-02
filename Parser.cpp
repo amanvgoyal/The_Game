@@ -91,6 +91,9 @@ string Parser::par_line(){
         return "FALSE";
     }
   if(counter!=-1){
+    if(temp.get_type()==T_NEWGAME){
+        return "NEWGAME";
+    }
     string move;
     if(temp.get_type()==T_EASY||temp.get_type()==T_MEDIUM||temp.get_type()==T_HARD){
         if(temp.get_type()==T_EASY)
