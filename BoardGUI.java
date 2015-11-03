@@ -10,13 +10,13 @@
  **    Imports    *********************************************************
  ************************************************************************
  */
+package boardgui;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import javax.swing.*;
 import javax.swing.border.*;
-import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -46,7 +46,7 @@ public class BoardGUI {
     private final JLabel playerMessage = new JLabel("Press the New Game button to start a new game.");
     private String firstSelectedPiece = "";
     private String output = "";
-    private boolean outputReady = false;
+    //private boolean outputReady = false;
     private boolean gameStarted = false;
     private Object lock;
     private int whitePieces = 0;
@@ -56,31 +56,30 @@ public class BoardGUI {
         initializeGUI();
     }
 
-    public final String getOutput(String input) {
+    public final void sendInput(String input) {
         // check what the input is and generate an output from that
-        try {
-            if (input == "OK") {
-                // wait for move
-            } else if (input.contains("Current turn number:")) {
-                // redisplay board
-                displayBoard(input);
-            } else if (input == "ILLEGAL") {
-                // illegal move, must request input again
-                playerMessage.setText("In move was invalid, please try again.");
-            } else {
-                System.out.println("Input \"" + input + "\" not recognized!");
-            }
-            System.out.println("Waiting for output to be produced");
-            synchronized (lock) {
-                while (!outputReady) {
-                    lock.wait();
-                }
-            }
-            return output;
-        } catch (InterruptedException ex) {
-            Logger.getLogger(BoardGUI.class.getName()).log(Level.SEVERE, null, ex);
-            return "EXIT";
+        if ("OK".equals(input)) {
+            // wait for move
+            gameStarted = true;
+            System.out.println("\"OK\" command received.");
+        } else if (input.contains("Current turn number:")) {
+            // redisplay board
+            gameStarted = true;
+            System.out.println("Board configuration received.");
+            displayBoard(input);
+        } else if ("ILLEGAL".equals(input)) {
+            // illegal move, must request input again
+            System.out.println("\"ILLEGAL\" command received.");
+            playerMessage.setText("In move was invalid, please try again.");
+        } else {
+            System.out.println("Input \"" + input + "\" not recognized!");
         }
+    }
+
+    public final String getOutput() {
+        String temp = output;
+        output = "";
+        return temp;
     }
 
     public final void initializeGUI() {   // render the window
@@ -91,13 +90,14 @@ public class BoardGUI {
         tools.setFloatable(false);
         gui.add(tools, BorderLayout.PAGE_START);
         gui.add(playerMessage, BorderLayout.LINE_START);
-        Action newGameAction = new AbstractAction("New Game") {
+        Action newGameAction = new AbstractAction("Reset Board") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 output = "NEW GAME";            // TODO: change this to correct value
+                //outputReady = true;
                 gameStarted = true;
                 System.out.println("Setting up a new game.");
-                setupGame();
+                //setupGame();
             }
         };
 
@@ -105,11 +105,11 @@ public class BoardGUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 output = "EXIT";
-                outputReady = true;
+                //outputReady = true;
                 gameStarted = false;
                 System.out.println("Quitting game.");
                 // send output;
-                System.exit(0);
+                //System.exit(0);
             }
         };
 
@@ -125,7 +125,7 @@ public class BoardGUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 output = "UNDO";
-                outputReady = true;
+                //outputReady = true;
                 System.out.println("Undoing last two turns.");
             }
         };
@@ -231,7 +231,7 @@ public class BoardGUI {
         char r = (char) (Character.getNumericValue(space.charAt(0)) + Character.valueOf('1'));
         char c = (char) (Character.getNumericValue(space.charAt(1)) + Character.valueOf('A'));
         System.out.println("Space " + c + r + " selected.");
-        if (firstSelectedPiece == "") {
+        if ("".equals(firstSelectedPiece)) {
             // No first piece has been selected, add to this string
 
             playerMessage.setText("Space " + c + r + " selected.");
@@ -262,12 +262,12 @@ public class BoardGUI {
                 System.out.println("Invalid move!");
                 firstSelectedPiece = "";
             }
-            if (direction != "") {
+            if (!"".equals(direction)) {
                 // valid move was made
                 char rr = (char) (Character.getNumericValue(firstSelectedPiece.charAt(0)) + Character.valueOf('1'));
                 char cc = (char) (Character.getNumericValue(firstSelectedPiece.charAt(1)) + Character.valueOf('A'));
                 output = Character.toString(cc) + Character.toString(rr) + " " + direction;
-                outputReady = true;
+                //outputReady = true;
                 System.out.println("Performing move: " + output);
             }
             firstSelectedPiece = "";
@@ -278,7 +278,7 @@ public class BoardGUI {
         return gui;
     }
 
-    private final void createPieces() {
+    private void createPieces() {
         BufferedImage whiteCircle = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
         BufferedImage blackCircle = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
         Graphics2D gW = whiteCircle.createGraphics();
@@ -318,25 +318,28 @@ public class BoardGUI {
             }
         }
     }
-    
-    private final void addPiece(int row, int col, char type) {
-        switch(type) {
-            case 'X': {
-                ++blackPieces;
-                boardSquares[row][col].setIcon(new ImageIcon(blackPiece));
-                break;
-            }
-            case 'O': {
-                boardSquares[row][col].setIcon(new ImageIcon(whitePiece));
-                ++whitePieces;
-                break;
-            }
-            case '_': {
-                boardSquares[row][col].setIcon(new ImageIcon(new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
-                break;
-            }
-            default : {
-                break;
+
+    private void addPiece(int row, int col, char type) {
+        if (row >= 0
+                && row < boardSquares.length
+                && col >= 0
+                && col < boardSquares[row].length) {
+            switch (type) {
+                case 'X': {
+                    boardSquares[row][col].setIcon(new ImageIcon(blackPiece));
+                    break;
+                }
+                case 'O': {
+                    boardSquares[row][col].setIcon(new ImageIcon(whitePiece));
+                    break;
+                }
+                case '_': {
+                    boardSquares[row][col].setIcon(new ImageIcon(new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
+                    break;
+                }
+                default: {
+                    break;
+                }
             }
         }
     }
@@ -366,34 +369,42 @@ public class BoardGUI {
         String temp;
         String[] lines = board.split(System.getProperty("line.separator"));
         searchInx = lines[0].indexOf(':');
-        searchInx2 = lines[0].indexOf(' ', searchInx);
+        searchInx2 = lines[0].indexOf('\t', searchInx);
         searchInx += 2;
         temp = lines[0].substring(searchInx, searchInx2);
         currentTurn.setText("Turn: " + temp);
         searchInx = lines[0].lastIndexOf('\t');
-        searchInx2 = lines[0].lastIndexOf('n');
+        searchInx2 = lines[0].lastIndexOf('n') + 1;
         temp = lines[0].substring(searchInx, searchInx2);
         currentPlayerTurn.setText(temp);
         // start getting board info from lines 6 to 13
-        blackPieces = 0;
-        whitePieces = 0;
-        searchInx2 = 0;
-        for (int i = 5; i < 14; ++i) {
+        int bp = 0;
+        int wp = 0;
+        for (int i = 5; i < 13; ++i) {
             int r = (i - 5);
             int c = 0;
-            while (searchInx2 != lines[i].lastIndexOf('|') - 2) {
-                searchInx = lines[i].indexOf('|', searchInx2);
-                char space = lines[i].charAt(searchInx + 1);
+            searchInx2 = 0;
+            temp = lines[i];
+            while (temp.lastIndexOf('|') - 2 != searchInx2) {
+                searchInx = temp.indexOf('|', searchInx2 + 1);
+                char space = temp.charAt(searchInx + 1);
                 addPiece(r, c, space);
                 searchInx2 = searchInx;
+                if (space == 'X') {
+                    ++bp;
+                } else if (space == 'O') {
+                    ++wp;
+                }
                 ++c;
             }
         }
+        whitePieces = wp;
+        blackPieces = bp;
         numWhitePieces.setText("White pieces: " + Integer.toString(whitePieces));
         numBlackPieces.setText("Black pieces: " + Integer.toString(blackPieces));
     }
 
-    public static void main(String[] args) {
+    /*public void openGUI() {
         Runnable r = new Runnable() {
             @Override
             public void run() {
@@ -410,5 +421,24 @@ public class BoardGUI {
         };
 
         SwingUtilities.invokeLater(r);
-    }
+    }*/
+
+    /*public static void main(String[] args) {
+     Runnable r = new Runnable() {
+     @Override
+     public void run() {
+     BoardGUI bgui = new BoardGUI();
+
+     JFrame f = new JFrame("Breakthrough");
+     f.add(bgui.getGUI());
+     f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+     f.setLocationByPlatform(true);
+     f.pack();           // sets the window to the minimum required size
+     f.setMinimumSize(f.getSize());
+     f.setVisible(true);
+     }
+     };
+
+     SwingUtilities.invokeLater(r);
+     }*/
 }
