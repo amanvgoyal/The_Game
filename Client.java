@@ -33,13 +33,33 @@ public class Client {
     private JPanel controlPanel;
     private JLabel msglabel;
 
+    private static String serverName;
+    private static int port;
+    
+    private Socket clientSock;
+    private OutputStreamWriter osw;
+
+
     private String AIdiff;
 
     public Client(){
+	try {
+	    System.out.println(serverName);
+            //Client gets started Here                                             
+            clientSock = new Socket(serverName, port);
+            //osw is what it sends to the server                                 
+	    osw = new OutputStreamWriter(clientSock.getOutputStream());
+        } 
+	catch (UnknownHostException e) {e.printStackTrace();}
+	catch (IOException e) {e.printStackTrace();}
+
 	prepareGUI();
     }
 
     public static void main(String[] args) throws IOException{
+	serverName = args[0];// 
+	port = Integer.parseInt(args[1]);//
+
 	Client c = new Client();
 	c.showWin();
     }
