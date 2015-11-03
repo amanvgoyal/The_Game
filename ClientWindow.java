@@ -49,10 +49,6 @@ public class ClientWindow extends JFrame {
 		    }}});
     }
 
-    public LoginWindow() {
-
-    }
-
     /**
      * Create the frame.
      */
@@ -110,7 +106,7 @@ public class ClientWindow extends JFrame {
 			catch(InterruptedException ex) {
 			    Thread.currentThread().interrupt();
 			}
-p
+
 			//Recieving Input from Server
 			BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 			BufferedReader br = new BufferedReader(in);
