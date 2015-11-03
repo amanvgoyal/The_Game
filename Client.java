@@ -33,7 +33,7 @@ public class Client {
     private JPanel controlPanel;
     private JLabel msglabel;
 
-    private static String serverName;
+   private static String serverName;
     private static int port;
     
     private Socket clientSock;
@@ -132,7 +132,6 @@ public class Client {
 	panel.add("Login", passBoxPanel);
 	panel.add("GameType", buttonPanel);
 
-
 	// Screen for entering commands in Human-AI game
 	JPanel cmdBoxPanel = new JPanel(new FlowLayout());
 	JLabel cmdLabel = new JLabel("Command: ");
@@ -195,6 +194,7 @@ public class Client {
 	final JButton loginButton = new JButton("Login");
         loginButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
+		    // CAN SEND BELOW TO SERVER IF NEEDED
                     String password = new String(passField.getPassword());
                     if (password.equals("password")) {
 			loginButton.setVisible(false);
