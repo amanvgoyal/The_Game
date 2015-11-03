@@ -105,6 +105,13 @@ public class Client {
                 public void actionPerformed(ActionEvent e) {
 		    JOptionPane.showMessageDialog(mainFrame,"Human-AI Chosen");
 		    CardLayout cardLayout = (CardLayout)(panel.getLayout());
+		    
+		    try {
+			osw.write("human-ai " + AIdiff + "\n");
+			osw.flush();
+		    }
+		    catch(IOException e1){e1.printStackTrace();}
+
 		    cardLayout.show(panel, "Command");
 		}
 	    });
@@ -142,7 +149,13 @@ public class Client {
 		public void actionPerformed(ActionEvent e) {
 		    // HUMAN AI COMMAND STRING HERE
 		    String cmd = cmdField.getText();
-		    JOptionPane.showMessageDialog(mainFrame, cmd);
+
+		    try {
+			osw.write(cmd + "\n");
+			osw.flush();
+		    }
+		    catch(IOException e1) {e1.printStackTrace();}
+		    //JOptionPane.showMessageDialog(mainFrame, cmd);
 		}
 	    });
 
@@ -198,6 +211,23 @@ public class Client {
                 public void actionPerformed(ActionEvent e) {
 		    // PASSWORD STRING HERE
                     String password = new String(passField.getPassword());
+		    try {
+			osw.write(password+"\n");
+			osw.flush();
+		    }
+		    catch(IOException e1) {e1.printStackTrace();}
+		    try {
+			//Expecting inital Password Request from Server                          
+			BufferedReader in = new BufferedReader(new InputStreamReader(clientSock.getInputStream()));
+			BufferedReader br = new BufferedReader(in);
+			char[] buffer = new char[300];
+			int count = br.read(buffer, 0, 300);
+			String reply = new String(buffer, 0, count);
+			System.out.println("Server:"+reply);
+		    } catch (IOException e1) {
+			e1.printStackTrace();
+		    }
+
                     if (password.equals("password")) {
 			loginButton.setVisible(false);
 			JOptionPane.showMessageDialog(mainFrame,"Welcome.");
