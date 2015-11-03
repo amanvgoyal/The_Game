@@ -140,6 +140,7 @@ public class Client {
 	
 	cmdEnter.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
+		    // HUMAN AI COMMAND STRING HERE
 		    String cmd = cmdField.getText();
 		    JOptionPane.showMessageDialog(mainFrame, cmd);
 		}
@@ -159,6 +160,7 @@ public class Client {
  
         diffEnter.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
+		    // AI DIFFICULTY STRING HERE
 		    String diff = diffField.getText();
 		    
 		    if (diff.equalsIgnoreCase("easy") ||
@@ -194,7 +196,7 @@ public class Client {
 	final JButton loginButton = new JButton("Login");
         loginButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-		    // CAN SEND BELOW TO SERVER IF NEEDED
+		    // PASSWORD STRING HERE
                     String password = new String(passField.getPassword());
                     if (password.equals("password")) {
 			loginButton.setVisible(false);
