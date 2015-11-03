@@ -27,7 +27,7 @@ import java.net.Socket;
 import java.io.InputStreamReader;
 import java.net.UnknownHostException;
 
-public class SwingLayoutDemo {
+public class Client {
     private JFrame mainFrame;
     private JLabel statusLabel;
     private JPanel controlPanel;
@@ -35,13 +35,13 @@ public class SwingLayoutDemo {
 
     private String AIdiff;
 
-    public SwingLayoutDemo(){
+    public Client(){
 	prepareGUI();
     }
 
     public static void main(String[] args) throws IOException{
-	SwingLayoutDemo swingLayoutDemo = new SwingLayoutDemo();  
-	swingLayoutDemo.showCardLayoutDemo();       
+	Client c = new Client();
+	c.showWin();
     }
       
     private void prepareGUI(){
@@ -65,7 +65,7 @@ public class SwingLayoutDemo {
 	mainFrame.setVisible(true);  
     }
    
-    private void showCardLayoutDemo(){
+    private void showWin(){
 	final JPanel panel = new JPanel();
 	Color maroon = new Color(128, 0, 0);
 	panel.setBackground(maroon);
