@@ -42,7 +42,7 @@ public class Client {
     public static OutputStreamWriter osw;
 
     private String AIdiff;
-    private static final BoardGUI bgui = new BoardGUI();
+    public static final BoardGUI bgui = new BoardGUI();
 
     public Client() {
         try {

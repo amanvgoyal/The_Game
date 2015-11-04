@@ -61,7 +61,7 @@ public class BoardGUI {
 
     public final void sendInput(String input) {
         // check what the input is and generate an output from that
-        if (input.contains("OK")) {
+        if (input.contains("OKa")) {
             // wait for move
             gameStarted = true;
             System.out.println("\"OK\" command received.");
@@ -309,7 +309,7 @@ public class BoardGUI {
                     int count2 = br2.read(buffer2, 0, 1000);
                     String reply2 = new String(buffer2, 0, count2);
                     System.out.println("Server:" + reply2);
-                    sendInput(reply2);
+                    Client.bgui.sendInput(reply2);
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
