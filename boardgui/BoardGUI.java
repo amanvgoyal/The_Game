@@ -14,9 +14,13 @@ package boardgui;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.awt.image.BufferedImage;
 import javax.swing.*;
 import javax.swing.border.*;
+import java.io.InputStreamReader;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -33,7 +37,6 @@ import java.util.logging.Logger;
  ************************************************************************
  */
 public class BoardGUI {
-
     private final JPanel gui = new JPanel(new BorderLayout(3, 3));
     private final JButton[][] boardSquares = new JButton[8][8];
     private Image blackPiece;
@@ -297,6 +300,20 @@ public class BoardGUI {
                 output = Character.toString(cc) + Character.toString(rr) + " " + direction;
                 //outputReady = true;
                 System.out.println("Performing move: " + output);
+                try {
+                    Client.osw.write(output);
+                    Client.osw.flush();
+                    BufferedReader in2 = new BufferedReader(new InputStreamReader(Client.clientSock.getInputStream()));
+                    BufferedReader br2 = new BufferedReader(in2);
+                    char[] buffer2 = new char[1000];
+                    int count2 = br2.read(buffer2, 0, 1000);
+                    String reply2 = new String(buffer2, 0, count2);
+                    System.out.println("Server:" + reply2);
+                    sendInput(reply2);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+                output = "";
             }
             firstSelectedPiece = "";
         }

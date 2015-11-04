@@ -164,6 +164,7 @@ int server(int port_num, string server_name)
                   else{
                     send_data.clear();
                     send_data = value+"\n";
+                    cout<<"Sending:"<<send_data<<endl;
                     send(connected, send_data.c_str(),send_data.length(), 0);
                     if(Game.game_ended()){
                         close(connected);

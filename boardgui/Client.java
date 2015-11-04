@@ -38,8 +38,8 @@ public class Client {
     private static String serverName;
     private static int port;
 
-    private Socket clientSock;
-    private OutputStreamWriter osw;
+    public static Socket clientSock;
+    public static OutputStreamWriter osw;
 
     private String AIdiff;
     private static final BoardGUI bgui = new BoardGUI();
@@ -112,6 +112,12 @@ public class Client {
                 try {
                     osw.write("human-ai " + AIdiff + "\n");
                     osw.flush();
+                    BufferedReader in1 = new BufferedReader(new InputStreamReader(clientSock.getInputStream()));
+                    BufferedReader br1 = new BufferedReader(in1);
+                    char[] buffer1 = new char[10];
+                    int count1 = br1.read(buffer1, 0, 10);
+                    String reply1 = new String(buffer1, 0, count1);
+                    System.out.println("Server:" + reply1);
                     osw.write("display" + "\n");
                     osw.flush();
                     BufferedReader in = new BufferedReader(new InputStreamReader(clientSock.getInputStream()));
@@ -120,7 +126,6 @@ public class Client {
                     int count = br.read(buffer, 0, 1000);
                     String reply = new String(buffer, 0, count);
                     System.out.println("Server:" + reply);
-                    reply.replace
                     bgui.sendInput(reply);
                 } catch (IOException e1) {
                     e1.printStackTrace();
