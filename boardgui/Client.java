@@ -70,12 +70,12 @@ public class Client {
 
     private void prepareGUI() {
         mainFrame = new JFrame("b0ss Breakthrough Client");
-        mainFrame.setSize(1000, 1000);
-        mainFrame.setLayout(new GridLayout(3, 3));
+        mainFrame.setSize(400, 400);
+        mainFrame.setLayout(new GridLayout(1, 1));
 
-        statusLabel = new JLabel("", JLabel.CENTER);
+        //statusLabel = new JLabel("", JLabel.CENTER);
 
-        statusLabel.setSize(350, 100);
+        //statusLabel.setSize(350, 100);
         mainFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent windowEvent) {
                 System.exit(0);
@@ -85,7 +85,7 @@ public class Client {
         controlPanel.setLayout(new FlowLayout());
 
         mainFrame.add(controlPanel);
-        mainFrame.add(statusLabel);
+        //mainFrame.add(statusLabel);
         mainFrame.setVisible(true);
     }
 
@@ -112,6 +112,16 @@ public class Client {
                 try {
                     osw.write("human-ai " + AIdiff + "\n");
                     osw.flush();
+                    osw.write("display" + "\n");
+                    osw.flush();
+                    BufferedReader in = new BufferedReader(new InputStreamReader(clientSock.getInputStream()));
+                    BufferedReader br = new BufferedReader(in);
+                    char[] buffer = new char[1000];
+                    int count = br.read(buffer, 0, 1000);
+                    String reply = new String(buffer, 0, count);
+                    System.out.println("Server:" + reply);
+                    reply.replace
+                    bgui.sendInput(reply);
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
@@ -200,7 +210,6 @@ public class Client {
         AIDiffPanel.add(diffEnter);
 
         panel.add("AIDiff", AIDiffPanel);
-
         panel.add("Game", bgui.getGUI());
 
         // Screen for AI-AI game

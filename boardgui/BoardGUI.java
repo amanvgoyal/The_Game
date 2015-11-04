@@ -58,7 +58,7 @@ public class BoardGUI {
 
     public final void sendInput(String input) {
         // check what the input is and generate an output from that
-        if ("OK".equals(input)) {
+        if (input.contains("OK")) {
             // wait for move
             gameStarted = true;
             System.out.println("\"OK\" command received.");
@@ -67,7 +67,7 @@ public class BoardGUI {
             gameStarted = true;
             System.out.println("Board configuration received.");
             displayBoard(input);
-        } else if ("ILLEGAL".equals(input)) {
+        } else if (input.contains("ILLEGAL")) {
             // illegal move, must request input again
             System.out.println("\"ILLEGAL\" command received.");
             playerMessage.setText("In move was invalid, please try again.");
@@ -397,7 +397,7 @@ public class BoardGUI {
         String temp;
         String[] lines = board.split(System.getProperty("line.separator"));
         searchInx = lines[0].indexOf(':');
-        searchInx2 = lines[0].indexOf('\t', searchInx);
+        searchInx2 = lines[0].indexOf('\t', searchInx+1);
         searchInx += 2;
         temp = lines[0].substring(searchInx, searchInx2);
         currentTurn.setText("Turn: " + temp);
