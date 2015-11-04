@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 /*
  ************************************************************************
  **    BoardGUI    ********************************************************
@@ -50,7 +51,7 @@ public class BoardGUI {
     private String firstSelectedPiece = "";
     private String output = "";
     //private boolean outputReady = false;
-    private boolean gameStarted = false;
+    private boolean gameStarted = true;
     private Object lock;
     private int whitePieces = 0;
     private int blackPieces = 0;
@@ -59,51 +60,36 @@ public class BoardGUI {
         initializeGUI();
     }
 
-    public final void sendInput(String input) {
+     public final void sendInput(String input) {
         // check what the input is and generate an output from that
-        if (input.contains("OKa")) {
-            // wait for move
-            gameStarted = true;
-            System.out.println("\"OK\" command received.");
-        } else if (input.contains("Current turn number:")) {
+        
+        if (input.contains("Current turn number:")||input.contains("OK")) {
             // redisplay board
             gameStarted = true;
+            playerMessage.setText("Select the piece to move.");
             System.out.println("Board configuration received.");
             displayBoard(input);
-        } else if (input.contains("ILLEGAL")) {
+        } 
+        else if (input.contains("This game's winner")) {
+            // display winner results
+            String[] lines = input.split(System.getProperty("line.separator"));
+            playerMessage.setText(lines[0] + " " + lines[1]);
+            gameStarted = false;
+            System.out.println("Showing winner results.");
+        }
+        else if (input.contains("ILLEGAL")) {
             // illegal move, must request input again
             System.out.println("\"ILLEGAL\" command received.");
             playerMessage.setText("In move was invalid, please try again.");
+        }
+        else if (input.contains("WHITE") || input.contains("BLACK")) {
+            System.out.println("\"" + input + "\" command received.");
+            playerMessage.setText("The " + input.toLowerCase() + " player won!");
         } else {
             System.out.println("Input \"" + input + "\" not recognized!");
         }
     }
 
-    /*public final void getOutput(String input) {
-     if ("OK".equals(input)) {
-     // wait for move
-     gameStarted = true;
-     System.out.println("\"OK\" command received.");
-     } else if (input.contains("Current turn number:")) {
-     // redisplay board
-     gameStarted = true;
-     System.out.println("Board configuration received.");
-     displayBoard(input);
-     } else if ("ILLEGAL".equals(input)) {
-     // illegal move, must request input again
-     System.out.println("\"ILLEGAL\" command received.");
-     playerMessage.setText("In move was invalid, please try again.");
-     } else {
-     System.out.println("Input \"" + input + "\" not recognized!");
-     }
-     String out;
-     Thread TWait = new Thread(new Runnable() {
-     public void run() {
-     getOutput();
-     }
-     });
-     TWait.start();
-     }*/
     public final String getOutput() {
         String temp = output;
         while ("".equals(temp)) {
@@ -128,6 +114,21 @@ public class BoardGUI {
                 //outputReady = true;
                 gameStarted = true;
                 System.out.println("Setting up a new game.");
+                   try {
+                    Client.osw.write(output);
+                    Client.osw.flush();
+                    output = "";
+                    BufferedReader in2 = new BufferedReader(new InputStreamReader(Client.clientSock.getInputStream()));
+                    BufferedReader br2 = new BufferedReader(in2);
+                    char[] buffer2 = new char[1000];
+                    int count2 = br2.read(buffer2, 0, 1000);
+                    String reply2 = new String(buffer2, 0, count2);
+                    System.out.println("Server:" + reply2);
+                    Client.bgui.sendInput(reply2);
+                    output = "";
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
                 //setupGame();
             }
         };
@@ -139,6 +140,21 @@ public class BoardGUI {
                 //outputReady = true;
                 gameStarted = false;
                 System.out.println("Quitting game.");
+                try {
+                    Client.osw.write(output);
+                    Client.osw.flush();
+                    output = "";
+                    BufferedReader in2 = new BufferedReader(new InputStreamReader(Client.clientSock.getInputStream()));
+                    BufferedReader br2 = new BufferedReader(in2);
+                    char[] buffer2 = new char[1000];
+                    int count2 = br2.read(buffer2, 0, 1000);
+                    String reply2 = new String(buffer2, 0, count2);
+                    System.out.println("Server:" + reply2);
+                    Client.bgui.sendInput(reply2);
+                    output = "";
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
                 // send output;
                 //System.exit(0);
             }
@@ -157,6 +173,21 @@ public class BoardGUI {
             public void actionPerformed(ActionEvent e) {
                 output = "UNDO";
                 //outputReady = true;
+                try {
+                    Client.osw.write(output);
+                    Client.osw.flush();
+                    output = "";
+                    BufferedReader in2 = new BufferedReader(new InputStreamReader(Client.clientSock.getInputStream()));
+                    BufferedReader br2 = new BufferedReader(in2);
+                    char[] buffer2 = new char[1000];
+                    int count2 = br2.read(buffer2, 0, 1000);
+                    String reply2 = new String(buffer2, 0, count2);
+                    System.out.println("Server:" + reply2);
+                    Client.bgui.sendInput(reply2);
+                    output = "";
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
                 System.out.println("Undoing last two turns.");
             }
         };
@@ -218,9 +249,9 @@ public class BoardGUI {
                         if (gameStarted) {
                             String space = Integer.toString(ii) + Integer.toString(jj);
                             moveCommand(space);
-                        } else {
-                            playerMessage.setText("Please start a new game before selecting a piece.");
-                        }
+                        } //else {
+                            //playerMessage.setText("Please start a new game before selecting a piece.");
+                        //}
                     }
                 };
                 b.addActionListener(selectSpace);
@@ -265,7 +296,7 @@ public class BoardGUI {
         if ("".equals(firstSelectedPiece)) {
             // No first piece has been selected, add to this string
 
-            playerMessage.setText("Space " + c + r + " selected.");
+            playerMessage.setText("Space " + c + r + " selected. Select the space to move it to.");
             firstSelectedPiece = space;
         } else {
             // First piece has been selected, calculate move direction
@@ -274,7 +305,7 @@ public class BoardGUI {
             int orig_c = Character.getNumericValue(firstSelectedPiece.charAt(1));
             int move_r = Character.getNumericValue(space.charAt(0));
             int move_c = Character.getNumericValue(space.charAt(1));
-            playerMessage.setText("Space " + c + r + " selected.");
+            //playerMessage.setText("Space " + c + r + " selected.");
             if (orig_r + 1 == move_r) {
                 // check if moving forward one row
                 if (orig_c == move_c) {
@@ -303,17 +334,18 @@ public class BoardGUI {
                 try {
                     Client.osw.write(output);
                     Client.osw.flush();
+                    output = "";
                     BufferedReader in2 = new BufferedReader(new InputStreamReader(Client.clientSock.getInputStream()));
                     BufferedReader br2 = new BufferedReader(in2);
-                    char[] buffer2 = new char[1000];
-                    int count2 = br2.read(buffer2, 0, 1000);
+                    char[] buffer2 = new char[1200];
+                    int count2 = br2.read(buffer2, 0, 1200);
                     String reply2 = new String(buffer2, 0, count2);
                     System.out.println("Server:" + reply2);
                     Client.bgui.sendInput(reply2);
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
-                output = "";
+                firstSelectedPiece = "";
             }
             firstSelectedPiece = "";
         }
@@ -392,15 +424,15 @@ public class BoardGUI {
     private final void displayBoard(String board) {
         // decode string
         /*
-         1  Current turn number: 1		White player's turn
+         1  Current turn number: 1      White player's turn
          2
          3
          4       A B C D E F G H
          5       _ _ _ _ _ _ _ _
          6    8 |X|X|X|X|X|X|X|X|
          7    7 |X|X|X|X|X|X|X|X|
-         8    6 |_|_|_|_|_|_|_|_|		Your total number of pieces:  16
-         9    5 |_|_|_|_|_|_|_|_|		Enemy total number of pieces: 16
+         8    6 |_|_|_|_|_|_|_|_|       Your total number of pieces:  16
+         9    5 |_|_|_|_|_|_|_|_|       Enemy total number of pieces: 16
          10   4 |_|_|_|_|_|_|_|_|
          11   3 |_|_|_|_|_|_|_|_|
          12   2 |O|O|O|O|O|O|O|O|
@@ -412,41 +444,67 @@ public class BoardGUI {
         int searchInx = 0;
         int searchInx2 = 0;
         String temp;
+        System.out.println(board);
         String[] lines = board.split(System.getProperty("line.separator"));
-        searchInx = lines[0].indexOf(':');
-        searchInx2 = lines[0].indexOf('\t', searchInx+1);
-        searchInx += 2;
-        temp = lines[0].substring(searchInx, searchInx2);
-        currentTurn.setText("Turn: " + temp);
-        searchInx = lines[0].lastIndexOf('\t');
-        searchInx2 = lines[0].lastIndexOf('n') + 1;
-        temp = lines[0].substring(searchInx, searchInx2);
-        currentPlayerTurn.setText(temp);
-        // start getting board info from lines 6 to 13
-        int bp = 0;
-        int wp = 0;
-        for (int i = 5; i < 13; ++i) {
-            int r = (i - 5);
-            int c = 0;
-            searchInx2 = 0;
-            temp = lines[i];
-            while (temp.lastIndexOf('|') - 2 != searchInx2) {
-                searchInx = temp.indexOf('|', searchInx2 + 1);
-                char space = temp.charAt(searchInx + 1);
-                addPiece(r, c, space);
-                searchInx2 = searchInx;
-                if (space == 'X') {
-                    ++bp;
-                } else if (space == 'O') {
-                    ++wp;
+        System.out.println(lines.length);
+        if(lines[0].contains("Current turn")) {
+            searchInx = lines[0].indexOf(':');
+            searchInx2 = lines[0].indexOf('\t', searchInx+1);
+            searchInx += 2;
+            temp = lines[0].substring(searchInx, searchInx2);
+            currentTurn.setText("Turn: " + temp);
+            searchInx = lines[0].lastIndexOf('\t');
+            searchInx2 = lines[0].lastIndexOf('n') + 1;
+            temp = lines[0].substring(searchInx, searchInx2);
+            currentPlayerTurn.setText(temp);
+            // start getting board info from lines 6 to 13
+            int bp = 0;
+            int wp = 0;
+            for (int i = 5; i < 13; ++i) {
+                int r = (i - 5);
+                int c = 0;
+                searchInx2 = 0;
+                temp = lines[i];
+                while (temp.lastIndexOf('|') - 2 != searchInx2) {
+                    searchInx = temp.indexOf('|', searchInx2 + 1);
+                    char space = temp.charAt(searchInx + 1);
+                    addPiece(r, c, space);
+                    searchInx2 = searchInx;
+                    if (space == 'X') {
+                        ++bp;
+                    } else if (space == 'O') {
+                        ++wp;
+                    }
+                    ++c;
                 }
-                ++c;
+            }
+            whitePieces = wp;
+            blackPieces = bp;
+            numWhitePieces.setText("White pieces: " + Integer.toString(whitePieces));
+            numBlackPieces.setText("Black pieces: " + Integer.toString(blackPieces));
+        }
+        if (lines.length > 13) {
+            // contains another board configuration
+            if (lines[13].equals("")) {
+                // ignore input
+            }
+            else {
+                System.out.println("Other player performed the move: " + lines[13]);
+                String board2 = "";
+                if (lines[15].contains("The Black player") || lines[15].contains("The White player")) {
+                    System.out.println("Showing results.");
+                    playerMessage.setText(lines[15] + " " + lines[16]);
+                    JOptionPane.showMessageDialog(Client.mainFrame,lines[15] + " " + lines[16] );
+                    System.exit(0);
+                }
+                else {
+                    for (int i = 15; i < lines.length; ++i) {
+                        board2 += lines[i] + "\n";
+                    }
+                    displayBoard(board2);
+                }
             }
         }
-        whitePieces = wp;
-        blackPieces = bp;
-        numWhitePieces.setText("White pieces: " + Integer.toString(whitePieces));
-        numBlackPieces.setText("Black pieces: " + Integer.toString(blackPieces));
     }
 
     /*public void openGUI() {

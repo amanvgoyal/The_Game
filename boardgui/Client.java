@@ -30,7 +30,7 @@ import java.net.UnknownHostException;
 
 public class Client {
 
-    private JFrame mainFrame;
+    public static JFrame mainFrame;
     private JLabel statusLabel;
     private JPanel controlPanel;
     private JLabel msglabel;
@@ -114,23 +114,23 @@ public class Client {
                     osw.flush();
                     BufferedReader in1 = new BufferedReader(new InputStreamReader(clientSock.getInputStream()));
                     BufferedReader br1 = new BufferedReader(in1);
-                    char[] buffer1 = new char[10];
-                    int count1 = br1.read(buffer1, 0, 10);
+                    char[] buffer1 = new char[1000];
+                    int count1 = br1.read(buffer1, 0, 1000);
                     String reply1 = new String(buffer1, 0, count1);
                     System.out.println("Server:" + reply1);
                     osw.write("display" + "\n");
                     osw.flush();
                     BufferedReader in = new BufferedReader(new InputStreamReader(clientSock.getInputStream()));
                     BufferedReader br = new BufferedReader(in);
-                    char[] buffer = new char[1000];
-                    int count = br.read(buffer, 0, 1000);
+                    char[] buffer = new char[1200];
+                    int count = br.read(buffer, 0, 1200);
                     String reply = new String(buffer, 0, count);
                     System.out.println("Server:" + reply);
                     bgui.sendInput(reply);
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
-
+                mainFrame.setSize(800,800);
                 cardLayout.show(panel, "Game");
             }
         });

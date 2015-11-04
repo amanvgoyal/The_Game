@@ -1,223 +1,112 @@
-[2015-11-03.22:18:52]	INFO:     Board:	Log file created successfully.
-[2015-11-03.22:18:52]	INFO:     init:	Adding the pieces to the board.
-[2015-11-03.22:19:11]	INFO:     output_board:	Outputting board. . .
-[2015-11-03.22:19:15]	INFO:     move_piece:	Moving piece. . .
-[2015-11-03.22:19:15]	INFO:     check_move:	Checking move. . .
-[2015-11-03.22:19:15]	INFO:     check_move:	Forward move is valid.
-[2015-11-03.22:19:15]	INFO:     check_game:	Checking victory conditions . . .
-[2015-11-03.22:19:15]	INFO:     check_game:	No victory conditions were met.
-[2015-11-03.22:19:15]	INFO:     end_turn:	Switching turns; it is the black player's turn now.
-[2015-11-03.22:19:15]	INFO:     move_piece:	Moving piece. . .
-[2015-11-03.22:19:15]	INFO:     check_move:	Checking move. . .
-[2015-11-03.22:19:15]	INFO:     check_move:	Diagonally right move is valid.
-[2015-11-03.22:19:15]	INFO:     output_board:	Outputting board. . .
-[2015-11-03.22:19:15]	INFO:     check_game:	Checking victory conditions . . .
-[2015-11-03.22:19:15]	INFO:     check_game:	No victory conditions were met.
-[2015-11-03.22:19:15]	INFO:     end_turn:	Switching turns; it is the white player's turn now.
-[2015-11-03.22:19:15]	INFO:     output_board:	Outputting board. . .
-[2015-11-03.22:19:22]	INFO:     move_piece:	Moving piece. . .
-[2015-11-03.22:19:22]	INFO:     check_move:	Checking move. . .
-[2015-11-03.22:19:22]	INFO:     check_move:	Forward move is valid.
-[2015-11-03.22:19:22]	INFO:     check_game:	Checking victory conditions . . .
-[2015-11-03.22:19:22]	INFO:     check_game:	No victory conditions were met.
-[2015-11-03.22:19:22]	INFO:     end_turn:	Switching turns; it is the black player's turn now.
-[2015-11-03.22:19:22]	INFO:     move_piece:	Moving piece. . .
-[2015-11-03.22:19:22]	INFO:     check_move:	Checking move. . .
-[2015-11-03.22:19:22]	INFO:     check_move:	Diagonally right move is valid.
-[2015-11-03.22:19:22]	INFO:     output_board:	Outputting board. . .
-[2015-11-03.22:19:22]	INFO:     check_game:	Checking victory conditions . . .
-[2015-11-03.22:19:22]	INFO:     check_game:	No victory conditions were met.
-[2015-11-03.22:19:22]	INFO:     end_turn:	Switching turns; it is the white player's turn now.
-[2015-11-03.22:19:22]	INFO:     output_board:	Outputting board. . .
-[2015-11-03.22:19:49]	INFO:     move_piece:	Moving piece. . .
-[2015-11-03.22:19:49]	INFO:     check_move:	Checking move. . .
-[2015-11-03.22:19:49]	INFO:     check_move:	Forward move is valid.
-[2015-11-03.22:19:49]	INFO:     check_game:	Checking victory conditions . . .
-[2015-11-03.22:19:49]	INFO:     check_game:	No victory conditions were met.
-[2015-11-03.22:19:49]	INFO:     end_turn:	Switching turns; it is the black player's turn now.
-[2015-11-03.22:19:49]	INFO:     move_piece:	Moving piece. . .
-[2015-11-03.22:19:49]	INFO:     check_move:	Checking move. . .
-[2015-11-03.22:19:49]	INFO:     check_move:	Diagonally left move is valid.
-[2015-11-03.22:19:49]	INFO:     output_board:	Outputting board. . .
-[2015-11-03.22:19:49]	INFO:     check_game:	Checking victory conditions . . .
-[2015-11-03.22:19:49]	INFO:     check_game:	No victory conditions were met.
-[2015-11-03.22:19:49]	INFO:     end_turn:	Switching turns; it is the white player's turn now.
-[2015-11-03.22:19:49]	INFO:     output_board:	Outputting board. . .
-[2015-11-03.22:19:51]	INFO:     move_piece:	Moving piece. . .
-[2015-11-03.22:19:51]	INFO:     check_move:	Checking move. . .
-[2015-11-03.22:19:51]	INFO:     check_move:	Forward move is valid.
-[2015-11-03.22:19:51]	INFO:     check_game:	Checking victory conditions . . .
-[2015-11-03.22:19:51]	INFO:     check_game:	No victory conditions were met.
-[2015-11-03.22:19:51]	INFO:     end_turn:	Switching turns; it is the black player's turn now.
-[2015-11-03.22:19:51]	INFO:     move_piece:	Moving piece. . .
-[2015-11-03.22:19:51]	INFO:     check_move:	Checking move. . .
-[2015-11-03.22:19:51]	INFO:     check_move:	Forward move is valid.
-[2015-11-03.22:19:51]	INFO:     output_board:	Outputting board. . .
-[2015-11-03.22:19:51]	INFO:     check_game:	Checking victory conditions . . .
-[2015-11-03.22:19:51]	INFO:     check_game:	No victory conditions were met.
-[2015-11-03.22:19:51]	INFO:     end_turn:	Switching turns; it is the white player's turn now.
-[2015-11-03.22:19:51]	INFO:     output_board:	Outputting board. . .
-[2015-11-03.22:19:53]	INFO:     move_piece:	Moving piece. . .
-[2015-11-03.22:19:53]	INFO:     check_move:	Checking move. . .
-[2015-11-03.22:19:53]	INFO:     check_move:	Forward move is valid.
-[2015-11-03.22:19:53]	INFO:     check_game:	Checking victory conditions . . .
-[2015-11-03.22:19:53]	INFO:     check_game:	No victory conditions were met.
-[2015-11-03.22:19:53]	INFO:     end_turn:	Switching turns; it is the black player's turn now.
-[2015-11-03.22:19:53]	INFO:     move_piece:	Moving piece. . .
-[2015-11-03.22:19:53]	INFO:     check_move:	Checking move. . .
-[2015-11-03.22:19:53]	INFO:     check_move:	Diagonally left move is valid.
-[2015-11-03.22:19:53]	INFO:     output_board:	Outputting board. . .
-[2015-11-03.22:19:53]	INFO:     check_game:	Checking victory conditions . . .
-[2015-11-03.22:19:53]	INFO:     check_game:	No victory conditions were met.
-[2015-11-03.22:19:53]	INFO:     end_turn:	Switching turns; it is the white player's turn now.
-[2015-11-03.22:19:53]	INFO:     output_board:	Outputting board. . .
-[2015-11-03.22:19:54]	INFO:     move_piece:	Moving piece. . .
-[2015-11-03.22:19:54]	INFO:     check_move:	Checking move. . .
-[2015-11-03.22:19:54]	INFO:     check_move:	Forward move is valid.
-[2015-11-03.22:19:54]	INFO:     check_game:	Checking victory conditions . . .
-[2015-11-03.22:19:54]	INFO:     check_game:	No victory conditions were met.
-[2015-11-03.22:19:54]	INFO:     end_turn:	Switching turns; it is the black player's turn now.
-[2015-11-03.22:19:54]	INFO:     move_piece:	Moving piece. . .
-[2015-11-03.22:19:54]	INFO:     check_move:	Checking move. . .
-[2015-11-03.22:19:54]	INFO:     check_move:	Forward move is valid.
-[2015-11-03.22:19:54]	INFO:     output_board:	Outputting board. . .
-[2015-11-03.22:19:54]	INFO:     check_game:	Checking victory conditions . . .
-[2015-11-03.22:19:54]	INFO:     check_game:	No victory conditions were met.
-[2015-11-03.22:19:54]	INFO:     end_turn:	Switching turns; it is the white player's turn now.
-[2015-11-03.22:19:54]	INFO:     output_board:	Outputting board. . .
-[2015-11-03.22:19:56]	INFO:     move_piece:	Moving piece. . .
-[2015-11-03.22:19:56]	INFO:     check_move:	Checking move. . .
-[2015-11-03.22:19:56]	INFO:     check_move:	Forward move is valid.
-[2015-11-03.22:19:56]	INFO:     check_game:	Checking victory conditions . . .
-[2015-11-03.22:19:56]	INFO:     check_game:	No victory conditions were met.
-[2015-11-03.22:19:56]	INFO:     end_turn:	Switching turns; it is the black player's turn now.
-[2015-11-03.22:19:56]	INFO:     move_piece:	Moving piece. . .
-[2015-11-03.22:19:56]	INFO:     check_move:	Checking move. . .
-[2015-11-03.22:19:56]	INFO:     check_move:	Diagonally right move is valid.
-[2015-11-03.22:19:56]	INFO:     output_board:	Outputting board. . .
-[2015-11-03.22:19:56]	INFO:     check_game:	Checking victory conditions . . .
-[2015-11-03.22:19:56]	INFO:     check_game:	No victory conditions were met.
-[2015-11-03.22:19:56]	INFO:     end_turn:	Switching turns; it is the white player's turn now.
-[2015-11-03.22:19:56]	INFO:     output_board:	Outputting board. . .
-[2015-11-03.22:19:57]	WARNING:  move_piece:	There is no piece at3F
-[2015-11-03.22:20:01]	INFO:     move_piece:	Moving piece. . .
-[2015-11-03.22:20:01]	INFO:     check_move:	Checking move. . .
-[2015-11-03.22:20:01]	INFO:     check_move:	Diagonally left move is valid.
-[2015-11-03.22:20:01]	INFO:     check_game:	Checking victory conditions . . .
-[2015-11-03.22:20:01]	INFO:     check_game:	No victory conditions were met.
-[2015-11-03.22:20:01]	INFO:     end_turn:	Switching turns; it is the black player's turn now.
-[2015-11-03.22:20:01]	INFO:     move_piece:	Moving piece. . .
-[2015-11-03.22:20:01]	INFO:     check_move:	Checking move. . .
-[2015-11-03.22:20:01]	INFO:     check_move:	Diagonally left move is valid. enemy piece will be captured.
-[2015-11-03.22:20:01]	INFO:     output_board:	Outputting board. . .
-[2015-11-03.22:20:01]	INFO:     check_game:	Checking victory conditions . . .
-[2015-11-03.22:20:01]	INFO:     check_game:	No victory conditions were met.
-[2015-11-03.22:20:01]	INFO:     end_turn:	Switching turns; it is the white player's turn now.
-[2015-11-03.22:20:01]	INFO:     output_board:	Outputting board. . .
-[2015-11-03.22:20:04]	WARNING:  move_piece:	There is no piece at4F
-[2015-11-03.22:20:07]	INFO:     move_piece:	Moving piece. . .
-[2015-11-03.22:20:07]	INFO:     check_move:	Checking move. . .
-[2015-11-03.22:20:07]	INFO:     check_move:	Forward move is valid.
-[2015-11-03.22:20:07]	INFO:     check_game:	Checking victory conditions . . .
-[2015-11-03.22:20:07]	INFO:     check_game:	No victory conditions were met.
-[2015-11-03.22:20:07]	INFO:     end_turn:	Switching turns; it is the black player's turn now.
-[2015-11-03.22:20:07]	INFO:     move_piece:	Moving piece. . .
-[2015-11-03.22:20:07]	INFO:     check_move:	Checking move. . .
-[2015-11-03.22:20:07]	INFO:     check_move:	Diagonally left move is valid. enemy piece will be captured.
-[2015-11-03.22:20:07]	INFO:     output_board:	Outputting board. . .
-[2015-11-03.22:20:07]	INFO:     check_game:	Checking victory conditions . . .
-[2015-11-03.22:20:07]	INFO:     check_game:	No victory conditions were met.
-[2015-11-03.22:20:07]	INFO:     end_turn:	Switching turns; it is the white player's turn now.
-[2015-11-03.22:20:07]	INFO:     output_board:	Outputting board. . .
-[2015-11-03.22:20:31]	INFO:     move_piece:	Moving piece. . .
-[2015-11-03.22:20:31]	INFO:     check_move:	Checking move. . .
-[2015-11-03.22:20:31]	INFO:     check_move:	Forward move is valid.
-[2015-11-03.22:20:31]	INFO:     check_game:	Checking victory conditions . . .
-[2015-11-03.22:20:31]	INFO:     check_game:	No victory conditions were met.
-[2015-11-03.22:20:31]	INFO:     end_turn:	Switching turns; it is the black player's turn now.
-[2015-11-03.22:20:31]	INFO:     move_piece:	Moving piece. . .
-[2015-11-03.22:20:31]	INFO:     check_move:	Checking move. . .
-[2015-11-03.22:20:31]	INFO:     check_move:	Diagonally left move is valid. enemy piece will be captured.
-[2015-11-03.22:20:31]	INFO:     output_board:	Outputting board. . .
-[2015-11-03.22:20:31]	INFO:     check_game:	Checking victory conditions . . .
-[2015-11-03.22:20:31]	INFO:     check_game:	No victory conditions were met.
-[2015-11-03.22:20:31]	INFO:     end_turn:	Switching turns; it is the white player's turn now.
-[2015-11-03.22:20:31]	INFO:     output_board:	Outputting board. . .
-[2015-11-03.22:20:38]	INFO:     move_piece:	Moving piece. . .
-[2015-11-03.22:20:38]	INFO:     check_move:	Checking move. . .
-[2015-11-03.22:20:38]	INFO:     check_move:	Forward move is valid.
-[2015-11-03.22:20:38]	INFO:     check_game:	Checking victory conditions . . .
-[2015-11-03.22:20:38]	INFO:     check_game:	No victory conditions were met.
-[2015-11-03.22:20:38]	INFO:     end_turn:	Switching turns; it is the black player's turn now.
-[2015-11-03.22:20:38]	INFO:     move_piece:	Moving piece. . .
-[2015-11-03.22:20:38]	INFO:     check_move:	Checking move. . .
-[2015-11-03.22:20:38]	INFO:     check_move:	Forward move is valid.
-[2015-11-03.22:20:38]	INFO:     output_board:	Outputting board. . .
-[2015-11-03.22:20:38]	INFO:     check_game:	Checking victory conditions . . .
-[2015-11-03.22:20:38]	INFO:     check_game:	No victory conditions were met.
-[2015-11-03.22:20:38]	INFO:     end_turn:	Switching turns; it is the white player's turn now.
-[2015-11-03.22:20:38]	INFO:     output_board:	Outputting board. . .
-[2015-11-03.22:20:40]	INFO:     move_piece:	Moving piece. . .
-[2015-11-03.22:20:40]	INFO:     check_move:	Checking move. . .
-[2015-11-03.22:20:40]	INFO:     check_move:	Forward move is valid.
-[2015-11-03.22:20:40]	INFO:     check_game:	Checking victory conditions . . .
-[2015-11-03.22:20:40]	INFO:     check_game:	No victory conditions were met.
-[2015-11-03.22:20:40]	INFO:     end_turn:	Switching turns; it is the black player's turn now.
-[2015-11-03.22:20:40]	INFO:     move_piece:	Moving piece. . .
-[2015-11-03.22:20:40]	INFO:     check_move:	Checking move. . .
-[2015-11-03.22:20:40]	INFO:     check_move:	Diagonally right move is valid; enemy piece will be captured.
-[2015-11-03.22:20:40]	INFO:     output_board:	Outputting board. . .
-[2015-11-03.22:20:40]	INFO:     check_game:	Checking victory conditions . . .
-[2015-11-03.22:20:40]	INFO:     check_game:	No victory conditions were met.
-[2015-11-03.22:20:40]	INFO:     end_turn:	Switching turns; it is the white player's turn now.
-[2015-11-03.22:20:40]	INFO:     output_board:	Outputting board. . .
-[2015-11-03.22:20:41]	INFO:     move_piece:	Moving piece. . .
-[2015-11-03.22:20:41]	INFO:     check_move:	Checking move. . .
-[2015-11-03.22:20:41]	INFO:     check_move:	Forward move is valid.
-[2015-11-03.22:20:41]	INFO:     check_game:	Checking victory conditions . . .
-[2015-11-03.22:20:41]	INFO:     check_game:	No victory conditions were met.
-[2015-11-03.22:20:41]	INFO:     end_turn:	Switching turns; it is the black player's turn now.
-[2015-11-03.22:20:41]	INFO:     move_piece:	Moving piece. . .
-[2015-11-03.22:20:41]	INFO:     check_move:	Checking move. . .
-[2015-11-03.22:20:41]	INFO:     check_move:	Diagonally right move is valid.
-[2015-11-03.22:20:41]	INFO:     output_board:	Outputting board. . .
-[2015-11-03.22:20:41]	INFO:     check_game:	Checking victory conditions . . .
-[2015-11-03.22:20:41]	INFO:     check_game:	No victory conditions were met.
-[2015-11-03.22:20:41]	INFO:     end_turn:	Switching turns; it is the white player's turn now.
-[2015-11-03.22:20:41]	INFO:     output_board:	Outputting board. . .
-[2015-11-03.22:20:42]	INFO:     move_piece:	Moving piece. . .
-[2015-11-03.22:20:42]	INFO:     check_move:	Checking move. . .
-[2015-11-03.22:20:42]	INFO:     check_move:	Forward move is valid.
-[2015-11-03.22:20:42]	INFO:     check_game:	Checking victory conditions . . .
-[2015-11-03.22:20:42]	INFO:     check_game:	No victory conditions were met.
-[2015-11-03.22:20:42]	INFO:     end_turn:	Switching turns; it is the black player's turn now.
-[2015-11-03.22:20:42]	INFO:     move_piece:	Moving piece. . .
-[2015-11-03.22:20:42]	INFO:     check_move:	Checking move. . .
-[2015-11-03.22:20:42]	INFO:     check_move:	Diagonally right move is valid.
-[2015-11-03.22:20:42]	INFO:     output_board:	Outputting board. . .
-[2015-11-03.22:20:42]	INFO:     check_game:	Checking victory conditions . . .
-[2015-11-03.22:20:42]	INFO:     check_game:	No victory conditions were met.
-[2015-11-03.22:20:42]	INFO:     end_turn:	Switching turns; it is the white player's turn now.
-[2015-11-03.22:20:42]	INFO:     output_board:	Outputting board. . .
-[2015-11-03.22:20:43]	INFO:     move_piece:	Moving piece. . .
-[2015-11-03.22:20:43]	INFO:     check_move:	Checking move. . .
-[2015-11-03.22:20:43]	INFO:     check_move:	Forward move is valid.
-[2015-11-03.22:20:43]	INFO:     check_game:	Checking victory conditions . . .
-[2015-11-03.22:20:43]	INFO:     check_game:	No victory conditions were met.
-[2015-11-03.22:20:43]	INFO:     end_turn:	Switching turns; it is the black player's turn now.
-[2015-11-03.22:20:43]	INFO:     move_piece:	Moving piece. . .
-[2015-11-03.22:20:43]	INFO:     check_move:	Checking move. . .
-[2015-11-03.22:20:43]	INFO:     check_move:	Diagonally right move is valid; enemy piece will be captured.
-[2015-11-03.22:20:43]	INFO:     output_board:	Outputting board. . .
-[2015-11-03.22:20:43]	INFO:     check_game:	Checking victory conditions . . .
-[2015-11-03.22:20:43]	INFO:     check_game:	No victory conditions were met.
-[2015-11-03.22:20:43]	INFO:     end_turn:	Switching turns; it is the white player's turn now.
-[2015-11-03.22:20:43]	INFO:     output_board:	Outputting board. . .
-[2015-11-03.22:20:44]	INFO:     move_piece:	Moving piece. . .
-[2015-11-03.22:20:44]	INFO:     check_move:	Checking move. . .
-[2015-11-03.22:20:44]	INFO:     check_move:	Diagonally left move is valid. enemy piece will be captured.
-[2015-11-03.22:20:44]	INFO:     check_game:	Checking victory conditions . . .
-[2015-11-03.22:20:44]	INFO:     check_game:	No victory conditions were met.
-[2015-11-03.22:20:44]	INFO:     end_turn:	Switching turns; it is the black player's turn now.
-[2015-11-03.22:20:44]	INFO:     move_piece:	Moving piece. . .
-[2015-11-03.22:20:44
+[2015-11-04.00:25:07]	INFO:     Board:	Log file created successfully.
+[2015-11-04.00:25:07]	INFO:     init:	Adding the pieces to the board.
+[2015-11-04.00:25:25]	INFO:     output_board:	Outputting board. . .
+[2015-11-04.00:25:27]	INFO:     move_piece:	Moving piece. . .
+[2015-11-04.00:25:27]	INFO:     check_move:	Checking move. . .
+[2015-11-04.00:25:27]	INFO:     check_move:	Forward move is valid.
+[2015-11-04.00:25:27]	INFO:     check_game:	Checking victory conditions . . .
+[2015-11-04.00:25:27]	INFO:     check_game:	No victory conditions were met.
+[2015-11-04.00:25:27]	INFO:     end_turn:	Switching turns; it is the black player's turn now.
+[2015-11-04.00:25:27]	INFO:     move_piece:	Moving piece. . .
+[2015-11-04.00:25:27]	INFO:     check_move:	Checking move. . .
+[2015-11-04.00:25:27]	INFO:     check_move:	Diagonally right move is valid.
+[2015-11-04.00:25:27]	INFO:     output_board:	Outputting board. . .
+[2015-11-04.00:25:27]	INFO:     check_game:	Checking victory conditions . . .
+[2015-11-04.00:25:27]	INFO:     check_game:	No victory conditions were met.
+[2015-11-04.00:25:27]	INFO:     end_turn:	Switching turns; it is the white player's turn now.
+[2015-11-04.00:25:27]	INFO:     output_board:	Outputting board. . .
+[2015-11-04.00:25:28]	WARNING:  move_piece:	There is no piece at2A
+[2015-11-04.00:25:29]	INFO:     move_piece:	Moving piece. . .
+[2015-11-04.00:25:29]	INFO:     check_move:	Checking move. . .
+[2015-11-04.00:25:29]	INFO:     check_move:	Forward move is valid.
+[2015-11-04.00:25:29]	INFO:     check_game:	Checking victory conditions . . .
+[2015-11-04.00:25:29]	INFO:     check_game:	No victory conditions were met.
+[2015-11-04.00:25:29]	INFO:     end_turn:	Switching turns; it is the black player's turn now.
+[2015-11-04.00:25:29]	INFO:     move_piece:	Moving piece. . .
+[2015-11-04.00:25:29]	INFO:     check_move:	Checking move. . .
+[2015-11-04.00:25:29]	INFO:     check_move:	Forward move is valid.
+[2015-11-04.00:25:29]	INFO:     output_board:	Outputting board. . .
+[2015-11-04.00:25:29]	INFO:     check_game:	Checking victory conditions . . .
+[2015-11-04.00:25:29]	INFO:     check_game:	No victory conditions were met.
+[2015-11-04.00:25:29]	INFO:     end_turn:	Switching turns; it is the white player's turn now.
+[2015-11-04.00:25:29]	INFO:     output_board:	Outputting board. . .
+[2015-11-04.00:25:30]	WARNING:  move_piece:	There is no piece at2B
+[2015-11-04.00:25:31]	INFO:     move_piece:	Moving piece. . .
+[2015-11-04.00:25:31]	INFO:     check_move:	Checking move. . .
+[2015-11-04.00:25:31]	INFO:     check_move:	Forward move is valid.
+[2015-11-04.00:25:31]	INFO:     check_game:	Checking victory conditions . . .
+[2015-11-04.00:25:31]	INFO:     check_game:	No victory conditions were met.
+[2015-11-04.00:25:31]	INFO:     end_turn:	Switching turns; it is the black player's turn now.
+[2015-11-04.00:25:31]	INFO:     move_piece:	Moving piece. . .
+[2015-11-04.00:25:31]	INFO:     check_move:	Checking move. . .
+[2015-11-04.00:25:31]	INFO:     check_move:	Forward move is valid.
+[2015-11-04.00:25:31]	INFO:     output_board:	Outputting board. . .
+[2015-11-04.00:25:31]	INFO:     check_game:	Checking victory conditions . . .
+[2015-11-04.00:25:31]	INFO:     check_game:	No victory conditions were met.
+[2015-11-04.00:25:31]	INFO:     end_turn:	Switching turns; it is the white player's turn now.
+[2015-11-04.00:25:31]	INFO:     output_board:	Outputting board. . .
+[2015-11-04.00:25:33]	INFO:     move_piece:	Moving piece. . .
+[2015-11-04.00:25:33]	INFO:     check_move:	Checking move. . .
+[2015-11-04.00:25:33]	INFO:     check_move:	Forward move is valid.
+[2015-11-04.00:25:33]	INFO:     check_game:	Checking victory conditions . . .
+[2015-11-04.00:25:33]	INFO:     check_game:	No victory conditions were met.
+[2015-11-04.00:25:33]	INFO:     end_turn:	Switching turns; it is the black player's turn now.
+[2015-11-04.00:25:33]	INFO:     move_piece:	Moving piece. . .
+[2015-11-04.00:25:33]	INFO:     check_move:	Checking move. . .
+[2015-11-04.00:25:33]	INFO:     check_move:	Diagonally right move is valid; enemy piece will be captured.
+[2015-11-04.00:25:33]	INFO:     output_board:	Outputting board. . .
+[2015-11-04.00:25:33]	INFO:     check_game:	Checking victory conditions . . .
+[2015-11-04.00:25:33]	INFO:     check_game:	No victory conditions were met.
+[2015-11-04.00:25:33]	INFO:     end_turn:	Switching turns; it is the white player's turn now.
+[2015-11-04.00:25:33]	INFO:     output_board:	Outputting board. . .
+[2015-11-04.00:25:34]	INFO:     move_piece:	Moving piece. . .
+[2015-11-04.00:25:34]	INFO:     check_move:	Checking move. . .
+[2015-11-04.00:25:34]	INFO:     check_move:	Forward move is valid.
+[2015-11-04.00:25:34]	INFO:     check_game:	Checking victory conditions . . .
+[2015-11-04.00:25:34]	INFO:     check_game:	No victory conditions were met.
+[2015-11-04.00:25:34]	INFO:     end_turn:	Switching turns; it is the black player's turn now.
+[2015-11-04.00:25:34]	INFO:     move_piece:	Moving piece. . .
+[2015-11-04.00:25:34]	INFO:     check_move:	Checking move. . .
+[2015-11-04.00:25:34]	INFO:     check_move:	Diagonally right move is valid; enemy piece will be captured.
+[2015-11-04.00:25:34]	INFO:     output_board:	Outputting board. . .
+[2015-11-04.00:25:34]	INFO:     check_game:	Checking victory conditions . . .
+[2015-11-04.00:25:34]	INFO:     check_game:	No victory conditions were met.
+[2015-11-04.00:25:34]	INFO:     end_turn:	Switching turns; it is the white player's turn now.
+[2015-11-04.00:25:34]	INFO:     output_board:	Outputting board. . .
+[2015-11-04.00:25:36]	INFO:     move_piece:	Moving piece. . .
+[2015-11-04.00:25:36]	INFO:     check_move:	Checking move. . .
+[2015-11-04.00:25:36]	INFO:     check_move:	Forward move is valid.
+[2015-11-04.00:25:36]	INFO:     check_game:	Checking victory conditions . . .
+[2015-11-04.00:25:36]	INFO:     check_game:	No victory conditions were met.
+[2015-11-04.00:25:36]	INFO:     end_turn:	Switching turns; it is the black player's turn now.
+[2015-11-04.00:25:36]	INFO:     move_piece:	Moving piece. . .
+[2015-11-04.00:25:36]	INFO:     check_move:	Checking move. . .
+[2015-11-04.00:25:36]	INFO:     check_move:	Diagonally left move is valid.
+[2015-11-04.00:25:36]	INFO:     output_board:	Outputting board. . .
+[2015-11-04.00:25:36]	INFO:     check_game:	Checking victory conditions . . .
+[2015-11-04.00:25:36]	INFO:     check_game:	No victory conditions were met.
+[2015-11-04.00:25:36]	INFO:     end_turn:	Switching turns; it is the white player's turn now.
+[2015-11-04.00:25:36]	INFO:     output_board:	Outputting board. . .
+[2015-11-04.00:25:37]	INFO:     move_piece:	Moving piece. . .
+[2015-11-04.00:25:37]	INFO:     check_move:	Checking move. . .
+[2015-11-04.00:25:37]	INFO:     check_move:	Forward move is valid.
+[2015-11-04.00:25:37]	INFO:     check_game:	Checking victory conditions . . .
+[2015-11-04.00:25:37]	INFO:     check_game:	No victory conditions were met.
+[2015-11-04.00:25:37]	INFO:     end_turn:	Switching turns; it is the black player's turn now.
+[2015-11-04.00:25:37]	INFO:     move_piece:	Moving piece. . .
+[2015-11-04.00:25:37]	INFO:     check_move:	Checking move. . .
+[2015-11-04.00:25:37]	INFO:     check_move:	Diagonally left move is valid. enemy piece will be captured.
+[2015-11-04.00:25:37]	INFO:     output_board:	Outputting board. . .
+[2015-11-04.00:25:37]	INFO:     check_game:	Checking victory conditions . . .
+[2015-11-04.00:25:37]	INFO:     check_game:	No victory conditions were met.
+[2015-11-04.00:25:37]	INFO:     end_turn:	Switching turns; it is the white player's turn now.
+[2015-11-04.00:25:37]	INFO:     output_board:	Outputting board. . .
+[2015-11-04.00:25:39]	INFO:     move_piece:	Moving piece. . .
+[2015-11-04.00:25:39]	INFO:     check_move:	Checking move. . .
+[2015-11-04.00:25:39]	INFO:     check_move:	Forward move is valid.
+[2015-11-04.00:25:39]	INFO:     check_game:	Checking victory conditions . . .
+[2015-11-04.00:25:39]	INFO:     check_game:	No victory conditions were met.
+[2015-11-04.00:25:39]	INFO:     end_turn:	Switching turns; it is the black player's turn now.
+[2015-11-04.00:25:39]	INFO:     move_piece:	Moving piece. . .
+[2015-11-04.00:25:39]	INFO:     check_move:	Checking move. . .
+[2015-11-04.00:25:39]	INFO:     check_move
